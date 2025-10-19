@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+actor Utilisateur
+actor Visiteur
+Actor Administrateur
+
+Visiteur --> (Se connecter)
+Visiteur --> (S'inscrire)
+Visiteur --> (Rechercher un livre)
+Visiteur --> (Voir détails d'un livre)
+Utilisateur --> (Voir détails d'un livre)
+Utilisateur --> (Rechercher un livre)
+Utilisateur --> (Changer mot de passe)
+Utilisateur --> (Se déconnecter)
+
+rectangle "Collection personnelle" {
+Utilisateur --> (Basculer visibilité d'un livre)
+Utilisateur --> (Ajouter un livre)
+Utilisateur --> (Supprimer un livre)
+}
+
+rectangle "Collection d'un autre utilisateur" {
+Visiteur --> (Voir)
+Utilisateur --> (Voir)
+}
+
+Administrateur --> (changer mot de passe tous Utilisateurs)
+Administrateur --> (changer nom de profile tous Utilisateurs)
+
+@enduml

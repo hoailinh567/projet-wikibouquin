@@ -1,0 +1,24 @@
+@startuml
+actor Utilisateur
+participant "Front Web" as UI
+participant "Service Backend" as BACK
+participant "Serveur Cache" as CACHE
+participant "API Externe Livres" as EXT
+
+Utilisateur -> UI : Accéder à une page de détails d'un livre
+UI -> BACK : GET /book/{isbn}
+BACK -> CACHE : GET {isbn}
+CACHE --> BACK : absent
+BACK -> EXT : GET /books?isbn=...
+EXT --> BACK : 200 (métadonnées)
+BACK -> CACHE: sauvegarde métadonnées
+BACK --> UI: Métadonnées du livre demandé (json)
+UI --> Utilisateur : Livre affiché
+
+Utilisateur -> UI : Accéder à une page de détails d'un livre
+UI -> BACK : GET /book/{isbn}
+BACK -> CACHE : GET {isbn}
+CACHE --> BACK : présent, retourne les métadonnées
+BACK --> UI: Métadonnées du livre demandé (json)
+UI --> Utilisateur : Livre affiché
+@enduml
