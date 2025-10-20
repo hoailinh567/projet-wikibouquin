@@ -168,7 +168,7 @@ CREATE INDEX idx_posseder_collection_id ON posseder(collection_id);
 -- Association contenir
 CREATE INDEX idx_contenir_collection_id ON contenir(collection_id);
 CREATE INDEX idx_contenir_livre_isbn ON contenir(livre_isbn);
-CREATE INDEX idx_contenir_statut_visibilite ON contenir(statut_visibilite);
+CREATE INDEX idx_contenir_is_visible ON contenir(is_visible);
 CREATE INDEX idx_contenir_date_ajout ON contenir(date_ajout);
 ```
 
@@ -192,7 +192,7 @@ CREATE INDEX idx_contenir_date_ajout ON contenir(date_ajout);
 - Données optionnelles : Validation si présentes
 
 **Association contenir :**
-- statut_visibilite : Valeurs autorisées uniquement ('public', 'prive')
+- is_visible : BOOLEAN (true = public, false = privé)
 - Contraintes d'intégrité référentielle strictes
 
 ---
@@ -227,8 +227,7 @@ CREATE INDEX idx_contenir_date_ajout ON contenir(date_ajout);
 1. **Séparation collection** : Permet l'évolution vers collections multiples
 2. **ISBN comme clé primaire** : Identifiant naturel unique des livres selon le MCD
 3. **Relations 1:1 utilisateur-collection** : Simplicité pour le MVP
-4. **Enum pour statut_visibilite** : Contrôle strict des valeurs
-5. **Timestamps UTC** : Gestion cohérente des fuseaux horaires
+4. **Timestamps UTC** : Gestion cohérente des fuseaux horaires
 
 ### Considérations de performance
 
