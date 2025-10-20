@@ -1,0 +1,31 @@
+erDiagram
+Utilisateur ||--|{ Collection : possede
+Collection ||--o{ Contenu : contient
+Livre ||--o{ Contenu : reference
+Utilisateur }o--|| Role : has
+Utilisateur {
+  INT id PK
+  STRING email
+  STRING mot_de_passe_hash
+  STRING nom_profil
+  DATETIME date_creation
+  INT role_id FK
+}
+Role {
+  INT id PK
+  STRING nom
+}
+Collection {
+  INT id PK
+  INT utilisateur_id
+  DATETIME date_creation
+}
+Livre {
+  STRING isbn PK
+}
+Contenu {
+  INT collection_id
+  STRING isbn
+  DATETIME date_ajout
+  STRING statut_visibilite
+}
