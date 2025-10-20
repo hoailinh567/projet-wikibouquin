@@ -103,14 +103,6 @@ L'application sera compatible avec les navigateurs modernes suivants :
 
 La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](ROUTES.md).
 
-Le Dictionnaire de données est disponible ici : [DICTIONNAIRE_DONNEES.md](DICTIONNAIRE_DONNEES.md)
-
-### Diagramme de séquence
-
-Accéder à la page d'un livre avec cache "chaud" et "froid".
-
-![Diagramme de séquence](schemas/sequence-get-book-cache.svg)
-
 ## User Stories
 
 ### Visiteur
@@ -136,6 +128,20 @@ Accéder à la page d'un livre avec cache "chaud" et "froid".
 - En tant qu'administrateur, je veux changer le mot de passe de n'importe quel utilisateur afin d'aider un utilisateur bloqué.
 - En tant qu'administrateur, je veux changer le nom de profile d'un utilisateur afin de sécurisé mon site si un nom d'utilisateur est innaproprié ou si un utlisateur a besoin d'aide.
 
-#### UML
+## Documents de conception
+
+### Le diagramme ERD (Entité-Relation-Diagram)
+![schéma de la base de données](schemas/ERD.png)
+
+### Un diagramme de séquence d'une fonctionnalité complexe
+Accéder à la page d'un livre avec cache "chaud" et "froid".
+
+![Diagramme de séquence](schemas/sequence-get-book-cache.svg)
+
+### UML
 
 ![Diagramme UML](schemas/diagramme-user-stories.svg)
+
+### Le Dictionnaire de données : liste des entités et de leurs attributs
+[DICTIONNAIRE_DONNEES.md](DICTIONNAIRE_DONNEES.md)
+
