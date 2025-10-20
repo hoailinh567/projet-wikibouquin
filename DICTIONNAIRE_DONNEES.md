@@ -18,11 +18,14 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 | `mot_de_passe_hash` | VARCHAR(255) | NOT NULL | Mot de passe chiffré (hash) |
 | `nom_profil` | VARCHAR(50) | UNIQUE, NOT NULL | Nom de profil public de l'utilisateur |
 | `date_creation` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date de création du compte |
+| `role_id` | INT | FOREIGN KEY, NOT NULL | Référence vers le rôle de l'utilisateur (`role(id)`) |
 
 **Règles métier :**
 - L'email doit être unique dans le système
 - Le nom_profil doit être unique et servir pour les URLs publiques
 - Le mot de passe doit être hashé avant stockage
+
+- Un utilisateur possède exactement 1 rôle, référencé par `role_id`.
 
 ---
 
@@ -60,7 +63,7 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 ## 🔗 Associations (tables de liaison)
 
 ### 🏠 Association : `posseder`
-*Relation 1:1 entre utilisateur et collection*
+*Relation 1:N entre utilisateur et collection*
 
 | Attribut | Type | Contraintes | Description |
 |----------|------|-------------|-------------|
@@ -70,7 +73,8 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 **Contraintes :**
 - `FOREIGN KEY(utilisateur_id) REFERENCES utilisateur(id) ON DELETE CASCADE`
 - `FOREIGN KEY(collection_id) REFERENCES collection(id) ON DELETE CASCADE`
-- `UNIQUE(utilisateur_id)` : Un utilisateur ne peut posséder qu'une collection
+- `UNIQUE(utilisateur_id)` : Un utilisateur ne peut posséder qu'une collection pour le moment
+    Après le MVP : 1 UTILISATEUR pourra posséder plusieurs COLLECTIONS
 - `UNIQUE(collection_id)` : Une collection n'appartient qu'à un utilisateur
 
 ---
@@ -103,13 +107,13 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 ### Relations principales selon le MCD
 
 ```
-utilisateur (1) ←→ (1) collection via POSSEDER
+utilisateur (1) ←→ (N) collection via POSSEDER
 collection (1) ←→ (N) livre via CONTENIR
 utilisateur ←→ livre (relation indirecte via collection)
 ```
 
 
-- Un **utilisateur** possède **exactement 1 collection** (relation 1:1)
+- Un **utilisateur** possède **1 à N collection** (relation 1:N)
 - Une **collection** appartient à **exactement 1 utilisateur** (relation 1:1)
 - Une **collection** peut contenir **0 à N livres**
 - Un **livre** peut être dans **0 à N collections** (différents utilisateurs)
@@ -127,18 +131,15 @@ utilisateur ←→ livre (relation indirecte via collection)
 | `date_creation` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date de création du rôle |
 
 **Description :**
-- L'entité `role` centralise les profils fonctionnels du système. Elle est liée aux utilisateurs via l'association `AVOIR_ROLE` (MCD : AVOIR_ROLE, 11 UTILISATEUR, 1N ROLE).
+- L'entité `role` centralise les profils fonctionnels du système. Dans le modèle actuel, chaque `utilisateur` référence un seul rôle via la colonne `role_id` (FK vers `role(id)`).
 
-### Association : `avoir_role`
-*Relation 1:N entre `utilisateur` et `role`*
+### 🎯 Rôle utilisateur (modèle à rôle unique)
 
-| Attribut | Type | Contraintes | Description |
-|----------|------|-------------|-------------|
-| `date_attribution` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date d'attribution du rôle |
+Chaque utilisateur possède un seul rôle référencé directement par la colonne `role_id` dans la table `utilisateur`.
+
 **Contraintes et règles métier :**
-- `FOREIGN KEY(utilisateur_id) REFERENCES utilisateur(id) ON DELETE CASCADE`
 - `FOREIGN KEY(role_id) REFERENCES role(id) ON DELETE RESTRICT`
-- Un utilisateur peut avoir 0..N rôles (ex : `editeur` + `moderateur`), mais le MCD indique 1N côté ROLE, donc l'implémentation permet plusieurs rôles par utilisateur pour plus de souplesse.
+- La colonne `role_id` est NOT NULL : chaque utilisateur doit avoir exactement un rôle.
 - Les rôles sont gérés par des administrateurs. Certains rôles (ex: `admin`) confèrent des permissions étendues et doivent être attribués avec précaution.
 
 - `administrateur` : accès complet (gestion des utilisateurs, gestion des rôles, modération, configuration, etc.)
@@ -152,6 +153,7 @@ utilisateur ←→ livre (relation indirecte via collection)
 -- Table utilisateur
 CREATE INDEX idx_utilisateur_email ON utilisateur(email);
 CREATE INDEX idx_utilisateur_nom_profil ON utilisateur(nom_profil);
+CREATE INDEX idx_utilisateur_role_id ON utilisateur(role_id);
 
 -- Table collection
 CREATE INDEX idx_collection_date_creation ON collection(date_creation);
