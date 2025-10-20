@@ -1,30 +1,62 @@
 @startuml
 left to right direction
-actor Utilisateur
+
+' Acteurs
 actor Visiteur
-Actor Administrateur
+actor Utilisateur
+actor Administrateur
 
-Visiteur --> (Se connecter)
-Visiteur --> (S'inscrire)
-Visiteur --> (Rechercher un livre)
-Visiteur --> (Voir détails d'un livre)
-Utilisateur --> (Voir détails d'un livre)
-Utilisateur --> (Rechercher un livre)
-Utilisateur --> (Changer mot de passe)
-Utilisateur --> (Se déconnecter)
+' Généralisation : un Utilisateur est un Visiteur (peut faire tout ce que fait un Visiteur)
+Utilisateur --|> Visiteur
+' L'administrateur est un type spécial d'utilisateur
+Administrateur --|> Utilisateur
 
-rectangle "Collection personnelle" {
-Utilisateur --> (Basculer visibilité d'un livre)
-Utilisateur --> (Ajouter un livre)
-Utilisateur --> (Supprimer un livre)
+' Bordure du système
+rectangle "Système WikiBouquin" {
+    ' Cas d'utilisation (aliasés pour des relations plus claires)
+    usecase "Inscription" as UC_Inscrire
+    usecase "Se connecter" as UC_SeConnecter
+    usecase "Mot de passe oublie" as UC_MDP_Oublie
+    usecase "Authentification" as UC_Auth
+    usecase "Authentification Admin" as UC_AuthAdmin
+    usecase "Se deconnecter" as UC_SeDeconnecter
+    usecase "Rechercher un livre" as UC_Rechercher
+    usecase "Voir details d'un livre" as UC_VoirDetails
+    usecase "Consulter collection publique" as UC_ConsulterPublique
+    rectangle "Ma Collection" {
+        usecase "Consulter ma collection" as UC_ConsulterMoi
+        usecase "Ajouter un livre" as UC_Ajouter
+        usecase "Supprimer un livre" as UC_Supprimer
+        usecase "Changer visibilite d'un livre" as UC_Visibilite
+    }
+    usecase "Changer mon mot de passe" as UC_ChangerMDP
+    rectangle "Backoffice" {
+        usecase "Reinitialiser mot de passe d'un utilisateur" as UC_ReinitMDP
+        usecase "Modifier profil utilisateur" as UC_ModifProfil
+    }
 }
 
-rectangle "Collection d'un autre utilisateur" {
-Visiteur --> (Voir)
-Utilisateur --> (Voir)
-}
+' Relations principales acteurs -> cas d'utilisation
+Visiteur --> UC_Inscrire
+Visiteur --> UC_SeConnecter
+Visiteur --> UC_Rechercher
+Visiteur --> UC_VoirDetails
+Visiteur --> UC_ConsulterPublique
 
-Administrateur --> (changer mot de passe tous Utilisateurs)
-Administrateur --> (changer nom de profile tous Utilisateurs)
+Administrateur ..> UC_ReinitMDP: <<include>>
+Administrateur ..> UC_ModifProfil: <<include>>
+
+' Relations d'include / extend
+' Le cas Mot de passe oublie etend Se connecter
+UC_MDP_Oublie ..> UC_SeConnecter : <<extend>>
+
+' Les actions qui necessitent une authentification incluent Authentification
+Utilisateur ..> UC_Auth : <<include>>
+UC_Auth ..> UC_ConsulterMoi : <<include>>
+UC_Auth ..> UC_Ajouter : <<include>>
+UC_Auth ..> UC_Supprimer : <<include>>
+UC_Auth ..> UC_Visibilite : <<include>>
+UC_Auth ..> UC_ChangerMDP : <<include>>
+UC_Auth ..> UC_SeDeconnecter : <<include>>
 
 @enduml
