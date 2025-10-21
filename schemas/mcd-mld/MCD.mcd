@@ -1,11 +1,11 @@
-AVOIR, 0N ROLE, 11 UTILISATEUR
-ROLE: id, nom, date_creation
-:
-
 UTILISATEUR: id, email, mot_de_passe_hash, nom_profil, date_creation, role_id
-:
-LIVRE: isbn
-
 POSSEDER, 1N UTILISATEUR, 11 COLLECTION
 COLLECTION: id, date_creation
-CONTENIR, 0N COLLECTION, 11 LIVRE: date_ajout, is_visible
+
+AVOIR, 0N ROLE, 11 UTILISATEUR
+LIVRE: isbn, date_ajout, is_visible
+CONTENIR, 0N COLLECTION, 11 LIVRE
+
+ROLE: id, nom, date_creation
+:
+:

@@ -1,16 +1,16 @@
 %%mocodo
-:::
-ROLE: id, nom, date_creation
-:::
-
-
 :
 UTILISATEUR: id, email, mot_de_passe_hash, nom_profil, date_creation, role_id, #id 2 > ROLE > id
 :::
-LIVRE: isbn, #id > COLLECTION > id, date_ajout, is_visible
+COLLECTION: id, date_creation, #id 2 > UTILISATEUR > id
 :
 
 
 :::
-COLLECTION: id, date_creation, #id 2 > UTILISATEUR > id
+LIVRE: isbn, date_ajout, is_visible, #id > COLLECTION > id
 :::
+
+
+:
+ROLE: id, nom, date_creation
+:::::

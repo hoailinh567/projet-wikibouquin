@@ -11,7 +11,13 @@ Les utilisateurs ont également la possibilité de choisir la visibilité de cha
 La cible principale du projet regroupe les passionnés de lecture, les étudiants, les chercheurs et toute personne souhaitant organiser ou partager ses livres préférés.
 L’interface sera conçue pour être simple, intuitive et totalement responsive, garantissant une expérience fluide sur ordinateur et smartphone.
 
-Les principaux risques concernent la gestion du volume massif de données, la performance du moteur de recherche et la protection des comptes utilisateurs.
+Analyse des risques :
+| Risque principal                   | Description                                                                                   | Mesures prévues / Remédiation                                  | Probabilité | Impact  | Priorité |
+|------------------------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------|------------|---------|----------|
+| Gestion du volume massif de données | Le système pourrait rencontrer des difficultés à stocker et traiter un grand nombre de livres et collections. | Utilisation de bases de données optimisées et performantes.   | Élevée     | Élevé   | Haute    |
+| Performance du moteur de recherche  | Les recherches pourraient devenir lentes avec l’augmentation du nombre de livres ou d’utilisateurs. | Optimisation des index et requêtes, utilisation de caches.    | Moyenne    | Élevé   | Moyenne-Haute |
+| Protection des comptes utilisateurs | Risque de compromission des données sensibles des utilisateurs (emails, mots de passe).      | Chiffrement renforcé des informations sensibles, sauvegardes régulières. | Moyenne    | Élevé   | Haute    |
+
 Pour y remédier, le projet prévoit l’utilisation de bases de données optimisées, de sauvegardes régulières et d’un chiffrement renforcé des informations sensibles.
 
 ## Fonctionnalités
@@ -131,7 +137,7 @@ La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](ROU
 ## Documents de conception
 
 ### Le diagramme ERD (Entité-Relation-Diagram)
-![schéma de la base de données](schemas/ERD.png)
+![schéma de la base de données](schemas/erd.png)
 
 ### Un diagramme de séquence d'une fonctionnalité complexe
 Accéder à la page d'un livre avec cache "chaud" et "froid".

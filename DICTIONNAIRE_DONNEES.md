@@ -36,11 +36,14 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 |----------|------|-------------|-------------|
 | `id` | INT | PRIMARY KEY, AUTO_INCREMENT | Identifiant unique de la collection |
 | `date_creation` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date de création de la collection |
+| `utilisateur_id` | INT | NOT NULL, FOREIGN KEY REFERENCES utilisateur(id) ON DELETE CASCADE |Identifiant de l’utilisateur propriétaire de la collection |
 
 **Règles métier :**
 - Une collection appartient à un seul utilisateur (relation 1:1 avec POSSEDER)
 - Dans le MVP, chaque utilisateur a une collection unique
 - Extension possible : collections multiples par utilisateur
+
+- La suppression d’un utilisateur entraîne automatiquement celle de ses collections grâce à la contrainte ON DELETE CASCADE.
 
 ---
 
@@ -49,6 +52,9 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 | Attribut | Type | Contraintes | Description |
 |----------|------|-------------|-------------|
 | `isbn` | VARCHAR(17) | PRIMARY KEY | ISBN du livre (format ISBN-10 ou ISBN-13) |
+| `date_ajout` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date d’ajout du livre dans la collection |
+| `is_visible` | BOOLEAN | NOT NULL, DEFAULT TRUE | Indique si le livre est visible publiquement ou non |
+| `collection_id` | INT | NOT NULL, FOREIGN KEY REFERENCES collection(id) ON DELETE CASCADE | Identifiant de la collection à laquelle appartient le livre |
 
 **Note :** Toutes les autres informations (titre, auteur, éditeur, etc.) sont récupérées dynamiquement via l'API externe [OpenLibrary](https://openlibrary.org/developers/api) lors de l'affichage ou de la recherche. Elles ne sont pas stockées dans la base locale.
 
@@ -57,48 +63,6 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 - Seul l'ISBN est obligatoire, les autres données sont enrichies depuis l'API
 - Les données proviennent de l'API OpenLibrary
 - Le cache permet d'optimiser les performances
-
----
-
-## 🔗 Associations (tables de liaison)
-
-### 🏠 Association : `posseder`
-*Relation 1:N entre utilisateur et collection*
-
-| Attribut | Type | Contraintes | Description |
-|----------|------|-------------|-------------|
-| `utilisateur_id` | INT | FOREIGN KEY, UNIQUE, NOT NULL | Référence vers l'utilisateur |
-| `collection_id` | INT | FOREIGN KEY, UNIQUE, NOT NULL | Référence vers la collection |
-
-**Contraintes :**
-- `FOREIGN KEY(utilisateur_id) REFERENCES utilisateur(id) ON DELETE CASCADE`
-- `FOREIGN KEY(collection_id) REFERENCES collection(id) ON DELETE CASCADE`
-- `UNIQUE(utilisateur_id)` : Un utilisateur ne peut posséder qu'une collection pour le moment
-    Après le MVP : 1 UTILISATEUR pourra posséder plusieurs COLLECTIONS
-- `UNIQUE(collection_id)` : Une collection n'appartient qu'à un utilisateur
-
----
-
-### 📖 Association : `contenir`
-*Relation 0:N entre collection et livre*
-
-| Attribut | Type | Contraintes | Description |
-|----------|------|-------------|-------------|
-| `collection_id` | INT | FOREIGN KEY, NOT NULL | Référence vers la collection |
-| `livre_isbn` | VARCHAR(17) | FOREIGN KEY, NOT NULL | Référence vers le livre (ISBN) |
-| `date_ajout` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date d'ajout du livre à la collection |
-| `is_visible` | BOOLEAN | NOT NULL, DEFAULT true | Livre visible dans la collection (true = public, false = privé) |
-
-**Contraintes :**
-- `PRIMARY KEY(collection_id, livre_isbn)` : Un livre ne peut être qu'une fois dans une collection
-- `FOREIGN KEY(collection_id) REFERENCES collection(id) ON DELETE CASCADE`
-- `FOREIGN KEY(livre_isbn) REFERENCES livre(isbn) ON DELETE CASCADE`
-
-**Règles métier :**
-- Une collection peut contenir 0 à N livres
-- Un livre peut être dans plusieurs collections (différents utilisateurs)
-- Par défaut, les livres sont visibles (is_visible = true)
-- La date_ajout permet de trier par ordre d'ajout
 
 ---
 
@@ -156,24 +120,15 @@ CREATE INDEX idx_utilisateur_nom_profil ON utilisateur(nom_profil);
 CREATE INDEX idx_utilisateur_role_id ON utilisateur(role_id);
 
 -- Table collection
-CREATE INDEX idx_collection_date_creation ON collection(date_creation);
+CREATE INDEX IF NOT EXISTS idx_collection_utilisateur_id ON collection(utilisateur_id);
+CREATE INDEX IF NOT EXISTS idx_collection_date_creation ON collection(date_creation);
 
 -- Table livre
-CREATE INDEX idx_livre_title ON livre(title);
-CREATE INDEX idx_livre_author ON livre(author);
-CREATE INDEX idx_livre_cached_at ON livre(cached_at);
+CREATE INDEX IF NOT EXISTS idx_livre_collection_id ON livre(collection_id);
 
--- Association posseder
-CREATE INDEX idx_posseder_utilisateur_id ON posseder(utilisateur_id);
-CREATE INDEX idx_posseder_collection_id ON posseder(collection_id);
-
--- Association contenir
-CREATE INDEX idx_contenir_collection_id ON contenir(collection_id);
-CREATE INDEX idx_contenir_livre_isbn ON contenir(livre_isbn);
-CREATE INDEX idx_contenir_is_visible ON contenir(is_visible);
-CREATE INDEX idx_contenir_date_ajout ON contenir(date_ajout);
+-- Table role
+CREATE UNIQUE INDEX IF NOT EXISTS uq_role_nom ON role(nom);
 ```
-
 ---
 
 ## 🛡️ Contraintes de sécurité
