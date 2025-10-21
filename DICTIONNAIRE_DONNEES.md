@@ -51,18 +51,17 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 
 | Attribut | Type | Contraintes | Description |
 |----------|------|-------------|-------------|
-| `isbn` | VARCHAR(17) | PRIMARY KEY | ISBN du livre (format ISBN-10 ou ISBN-13) |
+| `isbn` | VARCHAR(17) | NOT NULL | ISBN du livre (format ISBN-10 ou ISBN-13). Partie de la clé primaire composite avec `collection_id`. |
 | `date_ajout` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date d’ajout du livre dans la collection |
 | `is_visible` | BOOLEAN | NOT NULL, DEFAULT TRUE | Indique si le livre est visible publiquement ou non |
-| `collection_id` | INT | NOT NULL, FOREIGN KEY REFERENCES collection(id) ON DELETE CASCADE | Identifiant de la collection à laquelle appartient le livre |
+| `collection_id` | INT | NOT NULL, FOREIGN KEY REFERENCES collection(id) ON DELETE CASCADE | Identifiant de la collection à laquelle appartient le livre. Partie de la clé primaire composite avec `isbn`. |
 
 **Note :** Toutes les autres informations (titre, auteur, éditeur, etc.) sont récupérées dynamiquement via l'API externe [OpenLibrary](https://openlibrary.org/developers/api) lors de l'affichage ou de la recherche. Elles ne sont pas stockées dans la base locale.
-
 **Règles métier :**
-- L'ISBN sert de clé primaire selon le MCD
-- Seul l'ISBN est obligatoire, les autres données sont enrichies depuis l'API
-- Les données proviennent de l'API OpenLibrary
-- Le cache permet d'optimiser les performances
+- La clé primaire est composite : (`isbn`, `collection_id`) pour permettre d'avoir le même ISBN dans plusieurs collections distinctes.
+- L'ISBN et le `collection_id` sont obligatoires pour identifier un enregistrement de `livre`.
+- Les données proviennent de l'API OpenLibrary.
+- Le cache permet d'optimiser les performances.
 
 ---
 
@@ -80,7 +79,7 @@ utilisateur ←→ livre (relation indirecte via collection)
 - Un **utilisateur** possède **1 à N collection** (relation 1:N)
 - Une **collection** appartient à **exactement 1 utilisateur** (relation 1:1)
 - Une **collection** peut contenir **0 à N livres**
-- Un **livre** peut être dans **0 à N collections** (différents utilisateurs)
+- Un **livre** est contenu dans exactement **1 collection**
 
 ---
 
@@ -124,6 +123,7 @@ CREATE INDEX IF NOT EXISTS idx_collection_utilisateur_id ON collection(utilisate
 CREATE INDEX IF NOT EXISTS idx_collection_date_creation ON collection(date_creation);
 
 -- Table livre
+-- Avec clé primaire composite (isbn, collection_id)
 CREATE INDEX IF NOT EXISTS idx_livre_collection_id ON livre(collection_id);
 
 -- Table role
