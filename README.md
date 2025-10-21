@@ -11,7 +11,7 @@ Les utilisateurs ont également la possibilité de choisir la visibilité de cha
 La cible principale du projet regroupe les passionnés de lecture, les étudiants, les chercheurs et toute personne souhaitant organiser ou partager ses livres préférés.
 L’interface sera conçue pour être simple, intuitive et totalement responsive, garantissant une expérience fluide sur ordinateur et smartphone.
 
-Analyse des risques :
+Analyse des risques : 
 | Risque principal                   | Description                                                                                   | Mesures prévues / Remédiation                                  | Probabilité | Impact  | Priorité |
 |------------------------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------|------------|---------|----------|
 | Gestion du volume massif de données | Le système pourrait rencontrer des difficultés à stocker et traiter un grand nombre de livres et collections. | Utilisation de bases de données optimisées et performantes.   | Élevée     | Élevé   | Haute    |
@@ -150,6 +150,10 @@ Accéder à la page d'un livre avec cache "chaud" et "froid".
 
 ### Le Dictionnaire de données : liste des entités et de leurs attributs
 [DICTIONNAIRE_DONNEES.md](DICTIONNAIRE_DONNEES.md)
+
+### Diagramme de l'architecture de l'application 
+
+![architecture](schemas/architecture.png)
 
 ## Élément Graphique
 

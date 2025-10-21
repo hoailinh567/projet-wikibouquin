@@ -1,0 +1,76 @@
+@startuml
+title Architecture - WikiBouquin
+
+' Deployment nodes
+node "Client (Browser)" as client {
+  artifact "React (TypeScript)"
+}
+
+node "Reverse Proxy" as nginx {
+  artifact "Nginx / Traefik"
+}
+
+node "Application Server" as app {
+  artifact "Node.js / Express"
+}
+
+database "PostgreSQL" as db
+queue "Redis (Cache)" as redis
+
+node "External API" as openlib {
+  artifact "OpenLibrary API"
+}
+
+' Connections
+client --> nginx : HTTPS
+nginx --> app : HTTP (proxied)
+app --> db : SQL (pg)
+app --> redis : GET/SET (cache)
+app --> openlib : HTTPS (third-party API)
+
+' Optional: background jobs
+node "Worker(s)" as worker {
+  artifact "Node.js worker / BullMQ"
+}
+worker --> redis : PUB/SUB / queues
+worker --> db : SQL
+app --> worker : enqueue jobs
+
+' Docker
+folder "Docker / Docker Compose" as docker {
+  [nginx]
+  [app]
+  [db]
+  [redis]
+}
+
+note right of app
+  Scalability:
+  - horizontal scaling behind load balancer
+  - stateless app servers
+  - shared Redis for cache and queues
+end note
+
+note left of db
+  Persistence:
+  - backups
+  - replication (primary/replica)
+end note
+
+@startuml
+title Architecture - WikiBouquin
+
+actor "Frontend\n(React/TypeScript)" as Frontend
+node "Backend\n(Node.js / Express)" as Backend
+database "PostgreSQL" as Postgres
+queue "Redis (cache)" as Redis
+node "External API\nOpenLibrary" as OpenLib
+
+Frontend --> Backend : HTTPS
+Backend --> Postgres : SQL
+Backend --> Redis : GET/SET (cache)
+Backend --> OpenLib : HTTPS (third-party API)
+
+
+@enduml
+
