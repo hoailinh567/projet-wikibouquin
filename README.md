@@ -145,3 +145,12 @@ Accéder à la page d'un livre avec cache "chaud" et "froid".
 ### Le Dictionnaire de données : liste des entités et de leurs attributs
 [DICTIONNAIRE_DONNEES.md](DICTIONNAIRE_DONNEES.md)
 
+## Élément Graphique
+
+### Wireframe
+
+### Maquette
+encours ...
+
+### Charte Graphique
+![Charte Graphique](charteGraphique.pdf)
