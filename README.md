@@ -18,8 +18,6 @@ Analyse des risques :
 | Performance du moteur de recherche  | Les recherches pourraient devenir lentes avec l’augmentation du nombre de livres ou d’utilisateurs. | Optimisation des index et requêtes, utilisation de caches.    | Moyenne    | Élevé   | Moyenne-Haute |
 | Protection des comptes utilisateurs | Risque de compromission des données sensibles des utilisateurs (emails, mots de passe).      | Chiffrement renforcé des informations sensibles, sauvegardes régulières. | Moyenne    | Élevé   | Haute    |
 
-Pour y remédier, le projet prévoit l’utilisation de bases de données optimisées, de sauvegardes régulières et d’un chiffrement renforcé des informations sensibles.
-
 ## Fonctionnalités
 
 ### MVP
@@ -157,7 +155,7 @@ Accéder à la page d'un livre avec cache "chaud" et "froid".
 
 ## Élément Graphique
 
-### Wireframe
+### Wireframes
 
 ### Maquette
 encours ...
