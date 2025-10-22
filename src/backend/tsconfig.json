@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",               // Node 25 supporte ES2022 nativement
+    "module": "NodeNext",             // ES Modules natifs pour Node 25
+    "moduleResolution": "NodeNext",   // résolution correcte des modules
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
