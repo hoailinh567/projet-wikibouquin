@@ -105,7 +105,7 @@ L'application sera compatible avec les navigateurs modernes suivants :
 
 ## Arborescence
 
-La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](ROUTES.md).
+La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](./conception/ROUTES.md).
 
 ## User Stories
 
@@ -135,30 +135,32 @@ La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](ROU
 ## Documents de conception
 
 ### Le diagramme ERD (Entité-Relation-Diagram)
-![schéma de la base de données](schemas/erd.png)
+![schéma de la base de données](./conception/schemas/erd.png)
 
 ### Un diagramme de séquence d'une fonctionnalité complexe
 Accéder à la page d'un livre avec cache "chaud" et "froid".
 
-![Diagramme de séquence](schemas/sequence-get-book-cache.svg)
+![Diagramme de séquence](./conception/schemas/sequence-get-book-cache.svg)
 
 ### UML
 
-![Diagramme UML](schemas/diagramme-user-stories.svg)
+![Diagramme UML](./conception/schemas/diagramme-user-stories.svg)
 
 ### Le Dictionnaire de données : liste des entités et de leurs attributs
-[DICTIONNAIRE_DONNEES.md](DICTIONNAIRE_DONNEES.md)
+[DICTIONNAIRE_DONNEES.md](./conception/DICTIONNAIRE_DONNEES.md)
 
 ### Diagramme de l'architecture de l'application 
 
-![architecture](schemas/architecture.png)
+![architecture](./conception/schemas/architecture.png)
 
 ## Élément Graphique
 
 ### Wireframes
 
+![wireframes](./conception/wireframes)
+
 ### Maquette
-encours ...
+en cours ...
 
 ### Charte Graphique
-![Charte Graphique](charteGraphique.pdf)
+![Charte Graphique](./conception/charteGraphique.pdf)
