@@ -1,6 +1,6 @@
 function Header() {
   return (
-    <header className="mb-2 p-3">
+    <header className="mb-2 p-3 bg-[#f5f0eb]">
       <div className="flex justify-between items-center font-playfair-sc text-lg font-bold mb-3">
         <div className="flex gap-4">
           <a href="#">Nouveautés</a>
@@ -35,13 +35,11 @@ function Header() {
 
         {/* Barre de recherche */}
         <div className="flex w-full max-w-[800px]">
-          {/* Input */}
           <input
             type="text"
             placeholder="Rechercher un livre, un auteur..."
-            className="grow border border-gray-300 rounded-l-full px-4 py-2 focus:outline-none text-sm font-playfair"
+            className="grow border bg-gray-50 border-gray-300 rounded-l-full px-4 py-2 focus:outline-none text-sm font-playfair"
           />
-          {/* Bouton intégré */}
           <button className="flex items-center justify-center bg-[#6C7A89] px-4 py-2 rounded-r-full hover:bg-[#07315f] transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
