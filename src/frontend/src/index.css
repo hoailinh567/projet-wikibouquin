@@ -4,8 +4,22 @@
 @theme {
   --font-playfair-sc: 'Playfair Display SC', serif;
   --font-playfair: 'Playfair Display', serif;
+  --color-primary: #2E3945;
+  --color-hover: #1365BD;
 }
 
-html {
+html, body {
     font-family: var(--font-playfair);
+    color: var(--color-primary);
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair-sc);
+  color: var(--color-primary);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-hover);
+  transition: color 0.2s ease;
 }
