@@ -48,7 +48,6 @@ function BookDetails(Props: { isbn: string | undefined }) {
   return (
     <div className="grow max-w-6xl mx-auto p-5 mt-8 font-playfair">
       <div className="flex flex-col md:flex-row gap-6">
-        
         <div className="flex flex-col items-center gap-3 w-full md:w-1/3">
           <img
             src={data.cover}
@@ -70,7 +69,10 @@ function BookDetails(Props: { isbn: string | undefined }) {
             <span>Nombre de pages :</span> {data.number_of_pages}
           </p>
           <p className="text-base">
-            <span>IBSN :</span> {Props.isbn}
+            <span>IBSN 10 :</span> {data.isbn_10}
+          </p>
+          <p className="text-base">
+            <span>IBSN 13 :</span> {data.isbn_13}
           </p>
         </div>
       </div>
