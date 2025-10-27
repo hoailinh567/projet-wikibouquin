@@ -14,7 +14,7 @@ function BookDetails(Props: { isbn: string | undefined }) {
 
   const [data, setData] = useState<Book>({} as Book);
   const [loading, setLoading] = useState<Boolean>(true);
-  const [error, setError] = useState<String | null>(null);
+  const [error, setError] = useState<Boolean>(false);
 
   // Function to fetch book details from the API, definition of the function BUT NOT LAUNCHING IT
   const fetchBookDetails = async () => {
@@ -23,11 +23,14 @@ function BookDetails(Props: { isbn: string | undefined }) {
       const response = await fetch(
         `http://localhost:3000/api/book/${Props.isbn}`
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       setData(await response.json());
     } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Un problème est survenu"
-      );
+      setError(true);
     }
     setLoading(false);
   };
@@ -38,11 +41,28 @@ function BookDetails(Props: { isbn: string | undefined }) {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className="p-5 grid h-full place-items-center text-center">
+        <div>
+          <img
+            src="/public/error.jpg"
+            alt="Erreur de requête"
+            className="mx-auto w-70 h-70 object-contain mb-4"
+          />
+          <p className="text-xl font-semibold text-red-500">
+            Un problème est survenu - essayez plus tard !
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
