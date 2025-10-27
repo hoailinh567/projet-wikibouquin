@@ -9,6 +9,17 @@ const openlibraryClient = {
     const data = await response.json();
     return data;
   },
+
+  async getAuthorByKey(authorKey: string) {
+    const response = await fetch(`https://openlibrary.org/author/${authorKey}.json`, {
+      headers: { "User-Agent": "Wikibouquin/1.0 (hoai-linh.nguyen@oclock.school)" },
+    });
+    if (!response.ok) {
+      throw new Error(`Auteur non trouvé pour la clé: ${authorKey}`);
+    }
+    const data = await response.json();
+    return data;
+  }
 };
 
 export default openlibraryClient;

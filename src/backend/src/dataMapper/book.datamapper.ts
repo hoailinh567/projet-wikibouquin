@@ -1,5 +1,6 @@
 import openlibraryClient from "../client/openlibrary";
 import { get, set } from "../redis";
+import authorDataMapper from "./author.datamapper";
 
 type Book = {
     title: string;
@@ -25,9 +26,18 @@ const bookDataMapper = {
         // Sinon, on récupère les données depuis OpenLibrary
         const rawBook = await openlibraryClient.getBookByIsbn(isbn);
 
+        let authorName = "Auteur inconnu";
+        // récupération le nom de l'auteur dans la derniere partie après le dernier "/"
+        if (rawBook.authors && rawBook.authors.length > 0) {
+            let authorKey = rawBook.authors[0].key.split("/").pop();
+            const author = await authorDataMapper.getAuthorByKey(authorKey)
+            authorName = author.name;
+        }
+
+
         const book: Book = {
             title: rawBook.title,
-            authors: rawBook.authors ? rawBook.authors.map((a: any) => a.name || a.key) : [],
+            authors: [authorName],
             publish_date: rawBook.publish_date || "",
             isbn_10: rawBook.isbn_10 || [],
             isbn_13: rawBook.isbn_13 || [],
