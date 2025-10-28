@@ -14,7 +14,6 @@ type Book = {
 
 const bookDataMapper = {
     async getBookByIsbn(isbn: string): Promise<Book> {
-
         // Tentative de récupération depuis le cache Redis
         const bookFromCache = await get<Book>(`book:${isbn}`);
 
@@ -26,18 +25,21 @@ const bookDataMapper = {
         // Sinon, on récupère les données depuis OpenLibrary
         const rawBook = await openlibraryClient.getBookByIsbn(isbn);
 
-        let authorName = "Auteur inconnu";
-        // récupération le nom de l'auteur dans la derniere partie après le dernier "/"
-        if (rawBook.authors && rawBook.authors.length > 0) {
-            let authorKey = rawBook.authors[0].key.split("/").pop();
-            const author = await authorDataMapper.getAuthorByKey(authorKey)
-            authorName = author.name;
+        let authors = ["Auteur inconnu(e)"];
+        // S'il y a d'authors, on récupére le nom de l'auteur dans la derniere partie après le dernier "/"
+        if (rawBook.authors) {
+            authors = [];
+            for (const rawAuthor of rawBook.authors) {
+                const authorKey = rawAuthor.key.split("/").pop();
+                // Attends le résultat de getAuthorByKey avant de continuer
+                const author = await authorDataMapper.getAuthorByKey(authorKey);
+                authors.push(author.name);
+            }
         }
-
 
         const book: Book = {
             title: rawBook.title,
-            authors: [authorName],
+            authors: authors,
             publish_date: rawBook.publish_date || "",
             isbn_10: rawBook.isbn_10 || [],
             isbn_13: rawBook.isbn_13 || [],

@@ -15,7 +15,7 @@ const bookController = {
 
     try {
       const book = await bookDataMapper.getBookByIsbn(isbn);
-      res.json(book);
+      res.json(book); // 200 OK par défaut, envoi la réponse au format JSON.
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
         return res.status(404).json({ message: "Livre non trouvé" });
