@@ -80,20 +80,32 @@ function BookDetails(Props: { isbn: string | undefined }) {
         <div className="flex flex-col text-right gap-2 w-full">
           <h3 className="text-2xl font-bold md:text-3xl mb-2">{data.title}</h3>
           <p className="text-base">
-            <span>Auteur :</span> Nom de l'auteur
+            <span className="font-bold">
+              {data.authors.length === 1 ? "Auteur" : "Auteurs"} :{" "}
+            </span>
+            {data.authors.join(", ")}
           </p>
           <p className="text-base">
-            <span>Date de création :</span> {data.publish_date}
+            <span className="font-bold">Date de création :</span>{" "}
+            {data.publish_date}
           </p>
           <p className="text-base">
-            <span>Nombre de pages :</span> {data.number_of_pages}
+            <span className="font-bold">Nombre de pages :</span>{" "}
+            {data.number_of_pages}
           </p>
-          <p className="text-base">
-            <span>IBSN 10 :</span> {data.isbn_10}
-          </p>
-          <p className="text-base">
-            <span>IBSN 13 :</span> {data.isbn_13}
-          </p>
+          {data.isbn_10?.length > 0 && (
+            <p className="text-base">
+              <span className="font-bold">ISBN 10 :</span>{" "}
+              {data.isbn_10.join(", ")}
+            </p>
+          )}
+
+          {data.isbn_13?.length > 0 && (
+            <p className="text-base">
+              <span className="font-bold">ISBN 13 :</span>{" "}
+              {data.isbn_13.join(", ")}
+            </p>
+          )}
         </div>
       </div>
     </div>
