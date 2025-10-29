@@ -1,6 +1,7 @@
 import openlibraryClient from "../client/openlibrary";
 import { get, set } from "../redis";
 import authorDataMapper from "./author.datamapper";
+import workDataMapper from "./work.datamapper";
 
 type Book = {
     title: string;
@@ -10,6 +11,7 @@ type Book = {
     isbn_13: string[];
     number_of_pages: number;
     cover: string;
+    description: string;
 };
 
 const bookDataMapper = {
@@ -37,6 +39,18 @@ const bookDataMapper = {
             }
         }
 
+        let description = "Aucune description disponible.";
+        // S'il y a une description, on la récupère:
+        if (rawBook.description) {
+            description = rawBook.description.value;
+        // Sinon, on continue à chercher dans les works associés
+        } else if (rawBook.works && rawBook.works.length > 0) {
+            const workKey = rawBook.works[0].key.split("/").pop();
+            // Attends le resultat de getWorkByKey avant de continuer
+            const work = await workDataMapper.getWorkByKey(workKey);
+            description = work.description;
+        }
+
         const book: Book = {
             title: rawBook.title,
             authors: authors,
@@ -45,6 +59,7 @@ const bookDataMapper = {
             isbn_13: rawBook.isbn_13 || [],
             number_of_pages: rawBook.number_of_pages || 0,
             cover: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
+            description: description,
         };
 
         // Stockage du livre dans le cache Redis avec un TTL de 1 mois
