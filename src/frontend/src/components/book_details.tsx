@@ -10,6 +10,7 @@ function BookDetails(Props: { isbn: string | undefined }) {
     isbn_13: string[];
     number_of_pages: number;
     cover: string;
+    description: string;
   };
 
   const [data, setData] = useState<Book>({} as Book);
@@ -106,6 +107,10 @@ function BookDetails(Props: { isbn: string | undefined }) {
               {data.isbn_13.join(", ")}
             </p>
           )}
+
+          <p className="text-base">
+            <span className="font-bold">Description : </span>{data.description}
+          </p>
         </div>
       </div>
     </div>
