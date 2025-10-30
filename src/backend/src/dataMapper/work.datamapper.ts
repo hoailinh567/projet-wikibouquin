@@ -15,8 +15,14 @@ const workDataMapper = {
 
         const rawWork = await openlibraryClient.getWorkByKey(key);
 
+        let description = "Aucune description disponible";
+
+        if (rawWork.description && rawWork.description.value) {
+            description = rawWork.description.value
+        }
+
         const work: Work = {
-            description: rawWork.description.value || "Aucune description disponible"
+            description: description
         };
 
         // Stockage description du work dans le cache Redis avec un TTL de 1 mois
