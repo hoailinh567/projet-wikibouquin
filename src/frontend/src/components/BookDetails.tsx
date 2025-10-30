@@ -88,12 +88,12 @@ function BookDetails() {
             {data.authors.join(", ")}
           </p>
           <p className="text-base">
-            <span className="font-bold">Date de création :</span>{" "}
+            <span className="font-bold">Date de publication :</span>{" "}
             {data.publish_date}
           </p>
           <p className="text-base">
             <span className="font-bold">Nombre de pages :</span>{" "}
-            {data.number_of_pages}
+            {data.number_of_pages === 0 ? "Inconnu" : data.number_of_pages}
           </p>
           {data.isbn_10?.length > 0 && (
             <p className="text-base">
