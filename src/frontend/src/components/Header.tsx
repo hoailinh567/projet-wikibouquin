@@ -19,19 +19,16 @@ function Header() {
         </div>
       </div>
 
-      {/*logo + nom à gauche, barre de recherche à droite */}
-      <div className="flex justify-between items-center">
-        {/* Logo + texte du logo */}
-        <div className="flex items-center gap-2">
+      {/*logo + nom à gauche*/}
+      <div className="flex justify-between items-center text-[#6B5B4C]">
+        <a href="/" className="flex items-center gap-2">
           <img
             src="/logo.jpg"
             alt="logo WikiBouquin"
-            className="h-10 w-10 rounded-full object-cover"
+            className="h-10 w-10 rounded-full object-cover inline"
           />
-          <h1 className="text-3xl font-bold font-playfair-sc text-[#6B5B4C]">
-            <a href="#">Wiki Bouquin</a>
-          </h1>
-        </div>
+          <h1 className="text-3xl font-bold font-playfair-sc">Wiki Bouquin</h1>
+        </a>
 
         {/* Barre de recherche */}
         <div className="flex w-full max-w-[800px]">
@@ -45,13 +42,13 @@ function Header() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="#fff"
               className="size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
               />
             </svg>

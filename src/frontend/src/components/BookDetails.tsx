@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import CollectionButton from "./collection_button";
+import CollectionButton from "./CollectionButton";
+import { useParams } from "react-router";
 
-function BookDetails(Props: { isbn: string | undefined }) {
+function BookDetails() {
+  let { isbn } = useParams();
+
   type Book = {
     title: string;
     authors: string[];
@@ -21,9 +24,7 @@ function BookDetails(Props: { isbn: string | undefined }) {
   const fetchBookDetails = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/book/${Props.isbn}`
-      );
+      const response = await fetch(`http://localhost:3000/api/book/${isbn}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -109,7 +110,8 @@ function BookDetails(Props: { isbn: string | undefined }) {
           )}
 
           <p className="text-base">
-            <span className="font-bold">Description : </span>{data.description}
+            <span className="font-bold">Description : </span>
+            {data.description}
           </p>
         </div>
       </div>

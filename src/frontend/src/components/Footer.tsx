@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer className="mt-2 p-1 bg-[#f5f0eb] shadow-inner font-playfair-sc text-[#6B5B4C]">
+    <footer className="mt-2 p-3 bg-[#f5f0eb] shadow-inner font-playfair-sc text-[#6B5B4C]">
       <div className="flex justify-center items-center gap-6 text-xs">
         <a
           href="/mentions-legales"
