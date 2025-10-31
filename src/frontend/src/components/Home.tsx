@@ -24,12 +24,14 @@ function Home() {
             Coup de coeur <span className="text-red-500">🩷</span>
           </h1>
           <Card
-            title="Le Secret de l'amulette"
-            pictureUrl="https://covers.openlibrary.org/b/id/3078455-M.jpg"
+            title="Alice au pays des merveilles"
+            pictureUrl="https://covers.openlibrary.org/b/id/12389745-M.jpg"
+            isbn="2800679816"
           />
           <Card
-            title="Le Secret de l'amulette"
-            pictureUrl="https://covers.openlibrary.org/b/id/3078455-M.jpg"
+            title="Harry Potter à l'école des sorciers"
+            pictureUrl="https://covers.openlibrary.org/b/id/8494529-M.jpg"
+            isbn="2070584623"
           />
         </div>
       </div>

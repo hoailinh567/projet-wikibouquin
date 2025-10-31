@@ -1,6 +1,6 @@
 function Header() {
   return (
-    <header className="mb-2 p-3 bg-[#f5f0eb]">
+    <header className="p-3 bg-[#f5f0eb]">
       <div className="flex justify-between items-center font-playfair-sc text-lg font-bold mb-3">
         <div className="flex gap-4">
           <a href="#">Nouveautés</a>

@@ -3,6 +3,7 @@ import BookDetails from "./BookDetails";
 import Footer from "./Footer";
 import Header from "./Header";
 import Home from "./Home";
+import SignUp from "./SignUp";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/book/:isbn" element={<BookDetails />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </main>
       <Footer />

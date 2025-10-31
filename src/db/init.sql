@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"id" SERIAL PRIMARY KEY,
 	"email" VARCHAR(255) NOT NULL UNIQUE,
 	"password_hash" VARCHAR(255) NOT NULL,
-	"display_name" VARCHAR(50) NOT NULL UNIQUE,
+	"username" VARCHAR(50) NOT NULL UNIQUE,
     "role_id" INT NOT NULL REFERENCES "role"("id") ON DELETE RESTRICT,
 	"created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"updated_at" TIMESTAMPTZ NULL
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS "book" (
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_user_email ON "user"("email");
-CREATE INDEX IF NOT EXISTS idx_user_display_name ON "user"("display_name");
+CREATE INDEX IF NOT EXISTS idx_user_username ON "user"("username");
 CREATE INDEX IF NOT EXISTS idx_user_role_id ON "user"("role_id");
 
 CREATE INDEX IF NOT EXISTS idx_collection_user_id ON "collection"("user_id");
