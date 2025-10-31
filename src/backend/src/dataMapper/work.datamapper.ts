@@ -1,5 +1,5 @@
-import openlibraryClient from "../client/openlibrary";
-import { get, set } from "../redis";
+import openlibraryClient from "../client/openlibrary.ts";
+import { get, set } from "../utils/redis.ts";
 
 type Work = {
     description: string;

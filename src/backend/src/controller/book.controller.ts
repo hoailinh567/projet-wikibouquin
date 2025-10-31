@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
-import { isValidIsbn } from "../validation/book.validator";
-import bookDataMapper from "../dataMapper/book.datamapper";
+import { isValidIsbn } from "../validation/book.validator.ts";
+import bookDataMapper from "../dataMapper/book.datamapper.ts";
 
 const bookController = {
-  getBookByIsbn: async (req: Request, res: Response) => {
+  async getBookByIsbn(req: Request, res: Response) {
     const { isbn } = req.params;
 
     // 🔍 Validation avec Zod

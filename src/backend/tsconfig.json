@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2022",               // Node 25 supporte ES2022 nativement
-    "module": "NodeNext",             // ES Modules natifs pour Node 25
-    "moduleResolution": "NodeNext",   // résolution correcte des modules
+    "target": "esnext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
@@ -12,7 +12,9 @@
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

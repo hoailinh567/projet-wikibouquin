@@ -1,7 +1,7 @@
-import openlibraryClient from "../client/openlibrary";
-import { get, set } from "../redis";
-import authorDataMapper from "./author.datamapper";
-import workDataMapper from "./work.datamapper";
+import openlibraryClient from "../client/openlibrary.ts";
+import { get, set } from "../utils/redis.ts";
+import authorDataMapper from "./author.datamapper.ts";
+import workDataMapper from "./work.datamapper.ts";
 
 type Book = {
     title: string;
@@ -43,7 +43,7 @@ const bookDataMapper = {
         // S'il y a une description, on la récupère:
         if (rawBook.description) {
             description = rawBook.description.value;
-        // Sinon, on continue à chercher dans les works associés
+            // Sinon, on continue à chercher dans les works associés
         } else if (rawBook.works && rawBook.works.length > 0) {
             const workKey = rawBook.works[0].key.split("/").pop();
             // Attends le resultat de getWorkByKey avant de continuer
