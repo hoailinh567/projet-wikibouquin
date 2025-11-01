@@ -6,7 +6,7 @@ const bookController = {
   async getBookByIsbn(req: Request, res: Response) {
     const { isbn } = req.params;
 
-    // 🔍 Validation avec Zod
+    // Validation avec Zod
     const result = isValidIsbn.safeParse({ isbn });
     if (!result.success) {
       const message = result.error.issues[0].message;
