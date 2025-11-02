@@ -6,15 +6,10 @@ import type { SignupData } from "../validation/signup.validator.ts";
 import userDataMapper from "../dataMapper/user.datamapper.ts";
 import roleDatamapper from "../dataMapper/role.datamapper.ts";
 import { isValidSignin } from "../validation/signin.validator.ts";
+import type { PublicUser } from "../models/user.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'unsafe-secret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'unsafe-refresh-secret';
-
-interface publicUser {
-    id: number;
-    username: string;
-    role_id: number;
-}
 
 const authController = {
     async signUp(req: Request, res: Response) {
@@ -114,7 +109,7 @@ const authController = {
         }
 
         // Recrée le même User sans le PW
-        const publicUser = { id: user.id, username: user.username, role_id: user.role_id };
+        const publicUser: PublicUser = { id: user.id, username: user.username, role_id: user.role_id };
 
         // Si tout va bien, créer JWT et Refresh JWT
         // Puis envoyer les 2 au frontend dans un cookie HttpOnly et sameSite + res.json()
@@ -162,7 +157,7 @@ const authController = {
         }
 
         try {
-            const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as publicUser
+            const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as PublicUser
 
             const newAccesToken = jwt.sign(
                 { id: decoded.id, username: decoded.username, role_id: decoded.role_id },
