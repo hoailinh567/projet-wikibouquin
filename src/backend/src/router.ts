@@ -6,5 +6,6 @@ const router = Router();
 
 router.get('/api/book/:isbn', bookController.getBookByIsbn);
 router.post('/api/signup', authController.signUp);
+router.post('/api/signin', authController.signIn);
 
 export default router;

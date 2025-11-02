@@ -7,20 +7,22 @@ interface NewUser {
     role_id: number;
 }
 
-interface CreatedUser {
+interface User {
     id: number;
     username: string;
     email: string;
+    password_hash: string;
     role_id: number;
 }
 
 const userDataMapper = {
     async isEmailAlreadyUsed(email: string): Promise<boolean> {
         const { rows } = await client.query(
-            `SELECT COUNT(id)::int AS used FROM "user" WHERE email = $1`,
+            `SELECT COUNT(id)::int AS count FROM "user" WHERE email = $1`,
             [email]
         );
-        return (rows[0]?.used ?? 0) > 0;
+
+        return Boolean(rows?.[0]?.count);
     },
 
     async isUsernameAlreadyUsed(username: string): Promise<boolean> {
@@ -31,7 +33,7 @@ const userDataMapper = {
         return (rows[0]?.used ?? 0) > 0;
     },
 
-    async create({ username, email, password_hash, role_id }: NewUser): Promise<CreatedUser> {
+    async create({ username, email, password_hash, role_id }: NewUser): Promise<User> {
         const { rows } = await client.query(
             `
             INSERT INTO "user" (username, email, password_hash, role_id)
@@ -42,6 +44,18 @@ const userDataMapper = {
         );
         return rows[0];
     },
+
+    async getUserByEmail(email: string): Promise<User> {
+        const { rows } = await client.query(
+            `
+            SELECT * FROM "user"
+            WHERE email = $1;
+            `,
+            [email]
+        );
+
+        return rows[0];
+    }
 };
 
 export default userDataMapper;
