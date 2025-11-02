@@ -7,6 +7,14 @@ import userDataMapper from "../dataMapper/user.datamapper.ts";
 import roleDatamapper from "../dataMapper/role.datamapper.ts";
 import { isValidSignin } from "../validation/signin.validator.ts";
 
+const JWT_SECRET = process.env.JWT_SECRET || 'unsafe-secret';
+const REFRESH_SECRET = process.env.REFRESH_SECRET || 'unsafe-refresh-secret';
+
+interface publicUser {
+    id: number;
+    username: string;
+    role_id: number;
+}
 
 const authController = {
     async signUp(req: Request, res: Response) {
@@ -75,13 +83,6 @@ const authController = {
                 .send({ error: "Une erreur interne est survenue." });
         }
 
-        // vérifier si l'username n'est pas déjà pris
-        // si tout ça c'est ok, préparer les données pour l'enregistrement en bdd (postgres)
-        // encoder le password pour qu'il ne soit plus visible en clair
-        // finalement, envoyer la réponse au frontend que tout s'est bien passé
-        // comme on n'a pas de login pour le moment juste un "ok" (200)
-        // lorsqu'on aura un système de login, on pourra connecter l'utilisateur et
-        // renvoyer son token jwt => options : mettre dans cookies et HTTP only/ same site = strict 
     },
 
     async signIn(req: Request, res: Response) {
@@ -104,7 +105,7 @@ const authController = {
 
         // Vérifier pw récupéré de body est le même avec le password_has dans BDD?
         const isPasswordOk = await argon2.verify(user.password_hash, password)
-        // Sinon, retourn error
+        // Si c'est pas OK, retourn error
         if (!isPasswordOk) {
             return res
                 .status(403)
@@ -112,16 +113,14 @@ const authController = {
                 .send({ error: "Mot de passe incorrect." });
         }
 
-        if (!process.env.JWT_SECRET) {
-            throw new Error('JWT_SECRET is not defined');
-        }
-        // recrée le même User sans le PW
-        const publicUser = { id: user.id, email: user.email, username: user.username, role_id: user.role_id };
+        // Recrée le même User sans le PW
+        const publicUser = { id: user.id, username: user.username, role_id: user.role_id };
 
-        // Si tout va bien, créer JWT et puis envoyer à frontend
+        // Si tout va bien, créer JWT et Refresh JWT
+        // Puis envoyer les 2 au frontend dans un cookie HttpOnly et sameSite + res.json()
         const accessToken = jwt.sign(
             publicUser,
-            process.env.JWT_SECRET,
+            JWT_SECRET,
             { expiresIn: '15m' }
         );
 
@@ -130,14 +129,61 @@ const authController = {
             accessToken,
             {
                 httpOnly: true,
-                sameSite: true,
+                sameSite: 'strict',
                 maxAge: 15 * 60 * 1000 // 15min = 15 x 60 (s) x 1000 (ms)
             }
+        )
+
+        // RefreshToken pour demander un nouveau accessToken s'il a dépassé 15min
+        // Créer le refreshToken et l'envoyer au frontend de la même façon
+        const refreshToken = jwt.sign(
+            publicUser,
+            REFRESH_SECRET,
+            { expiresIn: '30d' }
+        );
+
+        res.cookie(
+            'refreshToken',
+            refreshToken,
+            { httpOnly: true, sameSite: 'strict', maxAge: 30 * 24 * 60 * 60 * 1000 }
         )
 
         res.json({
             user: publicUser,
         })
+    },
+
+    async refresh(req: Request, res: Response) {
+        // Récupréré refreshToken crée après log in
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(401).json({ error: 'no refresh token' })
+        }
+
+        try {
+            const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as publicUser
+
+            const newAccesToken = jwt.sign(
+                { id: decoded.id, username: decoded.username, role_id: decoded.role_id },
+                JWT_SECRET,
+                { expiresIn: '15m' }
+            )
+
+            res.cookie(
+                'accessToken',
+                newAccesToken,
+                {
+                    httpOnly: true,
+                    sameSite: 'strict',
+                    maxAge: 15 * 60 * 1000 // 15min = 15 x 60 (s) x 1000 (ms)
+                }
+            );
+
+            res.json({ success: true })
+        } catch (err) {
+            return res.status(401).json({ error: 'invalid refresh token' });
+        }
     }
 }
 
