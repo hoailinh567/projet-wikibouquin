@@ -124,7 +124,7 @@ const authController = {
             accessToken,
             {
                 httpOnly: true,
-                sameSite: 'strict',
+                sameSite: 'lax', // 'lax' permet les cookies entre ports différents en dev
                 maxAge: 15 * 60 * 1000 // 15min = 15 x 60 (s) x 1000 (ms)
             }
         )
@@ -140,7 +140,7 @@ const authController = {
         res.cookie(
             'refreshToken',
             refreshToken,
-            { httpOnly: true, sameSite: 'strict', maxAge: 30 * 24 * 60 * 60 * 1000 }
+            { httpOnly: true, sameSite: 'lax', maxAge: 30 * 24 * 60 * 60 * 1000 }
         )
 
         res.json({
@@ -170,7 +170,7 @@ const authController = {
                 newAccesToken,
                 {
                     httpOnly: true,
-                    sameSite: 'strict',
+                    sameSite: 'lax',
                     maxAge: 15 * 60 * 1000 // 15min = 15 x 60 (s) x 1000 (ms)
                 }
             );
