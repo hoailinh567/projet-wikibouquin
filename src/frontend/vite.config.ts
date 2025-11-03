@@ -8,4 +8,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    host: 'localhost', // Force l'utilisation de localhost pour les cookies
+    port: 5173,
+  }
 })
