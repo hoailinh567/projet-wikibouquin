@@ -10,6 +10,7 @@ router.get('/api/book/:isbn', bookController.getBookByIsbn);
 router.post('/api/signup', authController.signUp);
 router.post('/api/signin', authController.signIn);
 router.post('/api/refresh', authController.refresh);
+router.post('/api/logout', authController.logout);
 router.get('/api/my-profile', authenticate, profileController.getMyProfile);
 
 

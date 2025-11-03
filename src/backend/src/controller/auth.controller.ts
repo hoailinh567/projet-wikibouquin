@@ -179,6 +179,21 @@ const authController = {
         } catch (err) {
             return res.status(401).json({ error: 'invalid refresh token' });
         }
+    },
+
+    async logout(req: Request, res: Response) {
+        // Supprimer les cookies accessToken et refreshToken
+        res.clearCookie('accessToken', {
+            httpOnly: true,
+            sameSite: 'lax'
+        });
+
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            sameSite: 'lax'
+        });
+
+        res.json({ success: true, message: 'Déconnexion réussie' });
     }
 }
 
