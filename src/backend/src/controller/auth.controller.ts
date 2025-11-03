@@ -90,7 +90,7 @@ const authController = {
         const { email, password } = signInData.data as SignupData;
         // Récupérer le user de BDD
         const user = await userDataMapper.getUserByEmail(email)
-        // Vérifier si c'est User?, sinon retourne error
+        // Vérifier si c'est User? sinon retourne error
         if (!user) {
             return res
                 .status(403)
