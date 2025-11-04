@@ -7,6 +7,7 @@ import userDataMapper from "../dataMapper/user.datamapper.ts";
 import roleDatamapper from "../dataMapper/role.datamapper.ts";
 import { isValidSignin } from "../validation/signin.validator.ts";
 import type { PublicUser } from "../models/user.ts";
+import collectionDataMapper from "../dataMapper/collection.datamapper.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'unsafe-secret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'unsafe-refresh-secret';
@@ -57,6 +58,9 @@ const authController = {
                 role_id: roleUser.id
             });
 
+            // Création de la collection
+            const newCollection = await collectionDataMapper.create(newUser.id)
+
             // Réponse JSON
             return res
                 .status(201)
@@ -68,6 +72,7 @@ const authController = {
                         username: newUser.username,
                         email: newUser.email,
                     },
+                    collection: newCollection
                 });
 
         } catch (error) {
@@ -108,8 +113,10 @@ const authController = {
                 .send({ error: "Mot de passe incorrect." });
         }
 
+        const CollectionIds = await collectionDataMapper.getCollectionsIdByUserId(user.id)
+
         // Recrée le même User sans le PW
-        const publicUser: PublicUser = { id: user.id, username: user.username, role_id: user.role_id };
+        const publicUser: PublicUser = { id: user.id, username: user.username, role_id: user.role_id, collection_ids: CollectionIds };
 
         // Si tout va bien, créer JWT et Refresh JWT
         // Puis envoyer les 2 au frontend dans un cookie HttpOnly et sameSite + res.json()
@@ -181,7 +188,7 @@ const authController = {
         }
     },
 
-    async logout(req: Request, res: Response) {
+    async logout(_req: Request, res: Response) {
         // Supprimer les cookies accessToken et refreshToken
         res.clearCookie('accessToken', {
             httpOnly: true,
