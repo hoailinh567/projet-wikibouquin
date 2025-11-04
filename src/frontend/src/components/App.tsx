@@ -6,6 +6,8 @@ import Home from "./Home";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import MyProfile from "./MyProfile";
+import UserProfile from "./UserProfile";
+import MyCollection from "./MyCollection";
 import { AuthProvider } from "../context/AuthContext";
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/my-collection" element={<MyCollection />} />
+            <Route path="/profile/:username" element={<UserProfile />} />
           </Routes>
         </main>
         <Footer />

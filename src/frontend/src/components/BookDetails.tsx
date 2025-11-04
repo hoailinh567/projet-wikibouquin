@@ -76,7 +76,7 @@ function BookDetails() {
             alt="Titre du livre"
             className="w-full md:w-full h-auto rounded-lg object-cover"
           />
-          <CollectionButton />
+          <CollectionButton isbn={data.isbn_10[0]} />
         </div>
 
         <div className="flex flex-col text-right gap-2 w-full">
