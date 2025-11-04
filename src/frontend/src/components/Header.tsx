@@ -53,7 +53,7 @@ function Header() {
             {isAuthenticated ? (
               <>
                 <a
-                  href="/my-profile"
+                  href="/profile/HoaiLinh"
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Mon profil
