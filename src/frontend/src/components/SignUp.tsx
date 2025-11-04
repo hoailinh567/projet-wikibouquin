@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 function SignUp() {
   const [username, setUsername] = useState("");
@@ -7,13 +8,14 @@ function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const navigate = useNavigate();
 
   const validateEmail = (email: string) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: { [key: string]: string } = {};
@@ -36,23 +38,37 @@ function SignUp() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      alert("Formulaire soumis avec succès !");
-      // envoyer les données au serveur
+      const response = await fetch("http://localhost:3000/api/signup", {
+        method: "POST",
+        body: JSON.stringify({ username, email, password, confirmPassword }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      navigate("/signin");
     }
   };
 
   return (
-    <div className="flex justify-center items-start bg-[url('/bg-signup.jpg')] bg-center bg-no-repeat bg-cover min-h-screen pt-10">
-      <div className="rounded-2xl shadow-2xl p-8 w-full max-w-md bg-white">
+    <div className="flex justify-center items-start bg-[url('/bg-signup.jpg')] bg-center bg-no-repeat bg-cover min-h-screen pt-8 md:pt-10 lg:pt-16 px-4">
+      <div className="rounded-2xl shadow-2xl p-6 md:p-8 w-full max-w-md bg-white">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-[#6B5B4C]">Sign Up</h2>
-          <p className="text-gray-600 mt-2">Créer votre compte ici</p>
+          <h2 className="text-xl md:text-2xl font-bold text-[#6B5B4C]">
+            Sign Up
+          </h2>
+          <p className="text-sm md:text-base text-gray-600 mt-2">
+            Créer votre compte ici
+          </p>
         </div>
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label
-              className="mb-1 font-semibold text-gray-700"
+              className="mb-1 font-semibold text-sm md:text-base text-gray-700"
               htmlFor="username"
             >
               Nom d'utilisateur
@@ -63,19 +79,24 @@ function SignUp() {
               placeholder="Entrez votre nom"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className={`border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
                 errors.username
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
               }`}
             />
             {errors.username && (
-              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+              <p className="text-red-500 text-xs md:text-sm mt-1">
+                {errors.username}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col">
-            <label className="mb-1 font-semibold text-gray-700" htmlFor="email">
+            <label
+              className="mb-1 font-semibold text-sm md:text-base text-gray-700"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -84,20 +105,22 @@ function SignUp() {
               placeholder="Entrez votre email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
                 errors.email
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
               }`}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              <p className="text-red-500 text-xs md:text-sm mt-1">
+                {errors.email}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col">
             <label
-              className="mb-1 font-semibold text-gray-700"
+              className="mb-1 font-semibold text-sm md:text-base text-gray-700"
               htmlFor="password"
             >
               Mot de passe
@@ -108,20 +131,22 @@ function SignUp() {
               placeholder="Entrez votre mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
                 errors.password
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
               }`}
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              <p className="text-red-500 text-xs md:text-sm mt-1">
+                {errors.password}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col">
             <label
-              className="mb-1 font-semibold text-gray-700"
+              className="mb-1 font-semibold text-sm md:text-base text-gray-700"
               htmlFor="confirmPassword"
             >
               Confirmer le mot de passe
@@ -132,32 +157,32 @@ function SignUp() {
               placeholder="Confirmez votre mot de passe"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
                 errors.confirmPassword
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
               }`}
             />
             {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs md:text-sm mt-1">
                 {errors.confirmPassword}
               </p>
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-start gap-2">
             <input
               id="terms"
               type="checkbox"
               checked={terms}
               onChange={(e) => setTerms(e.target.checked)}
-              className={`w-4 h-4 rounded focus:ring-2 ${
+              className={`w-4 h-4 mt-1 rounded focus:ring-2 ${
                 errors.terms
                   ? "text-red-500 focus:ring-red-400"
                   : "text-blue-600 focus:ring-blue-400"
               }`}
             />
-            <label htmlFor="terms" className="text-sm text-gray-600">
+            <label htmlFor="terms" className="text-xs md:text-sm text-gray-600">
               J'accepte{" "}
               <a href="#" className="hover:underline font-bold">
                 les conditions d'utilisation
@@ -165,12 +190,14 @@ function SignUp() {
             </label>
           </div>
           {errors.terms && (
-            <p className="text-red-500 text-sm mt-1">{errors.terms}</p>
+            <p className="text-red-500 text-xs md:text-sm mt-1">
+              {errors.terms}
+            </p>
           )}
 
           <button
             type="submit"
-            className="bg-[#6C7A89] text-white font-semibold py-2 rounded-lg hover:bg-[#07315f] transition cursor-pointer"
+            className="bg-[#6C7A89] text-white font-semibold py-2 text-sm md:text-base rounded-lg hover:bg-[#07315f] transition cursor-pointer"
           >
             S'inscrire
           </button>

@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 function Header() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const popupRef = useRef(null);
   const { user, logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   // Fermer le popup si clic à l'extérieur
   useEffect(() => {
@@ -20,27 +22,27 @@ function Header() {
   }, []);
 
   return (
-    <header className="p-3 bg-[#f5f0eb]">
-      <div className="flex justify-between items-center font-playfair-sc text-lg font-bold mb-3">
-        <div className="flex gap-4">
-          <a href="#">Nouveautés</a>
-          <a href="#">Qui sommes-nous ?</a>
+    <header className="p-3 md:p-4 bg-[#f5f0eb]">
+      <div className="flex justify-between items-center font-playfair-sc text-sm md:text-lg font-bold mb-3">
+        <div className="flex gap-2 md:gap-4">
+          <a href="#" className="hover:text-[#07315f] transition">Nouveautés</a>
+          <a href="#" className="hover:text-[#07315f] transition hidden sm:block">Qui sommes-nous ?</a>
         </div>
 
         <div className="relative flex items-center gap-2" ref={popupRef}>
           <button
             onClick={() => setIsPopupOpen(!isPopupOpen)}
-            className="flex items-center gap-2 focus:outline-none"
+            className="flex items-center gap-2 focus:outline-none hover:opacity-80 transition"
           >
             <img
               src="/icon_profile.jpg"
               alt="icone profile"
-              className="h-8 w-8 rounded-full object-cover border border-gray-300 inline-block"
+              className="h-6 w-6 md:h-8 md:w-8 rounded-full object-cover border border-gray-300 inline-block"
             />
-            {isAuthenticated && user ? user.username : "Mon profil"}
+            <span className="hidden sm:inline">{isAuthenticated && user ? user.username : "Mon profil"}</span>
           </button>
           <div
-            className={`absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded shadow-lg z-50 transform transition-all duration-200 ease-out
+            className={`absolute top-full right-0 mt-2 min-w-fit whitespace-nowrap bg-white border border-gray-300 rounded shadow-lg z-50 transform transition-all duration-200 ease-out
               ${
                 isPopupOpen
                   ? "opacity-100 scale-100"
@@ -52,16 +54,23 @@ function Header() {
               <>
                 <a
                   href="/my-profile"
-                  className="block px-4 py-2 hover:bg-gray-100 transition"
+                  className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Mon profil
                 </a>
+                <a
+                  href="/my-collection"
+                  className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
+                >
+                  Gérer ma collection
+                </a>
                 <button
-                  onClick={() => {
-                    logout();
+                  onClick={async () => {
                     setIsPopupOpen(false);
+                    await logout();
+                    navigate("/");
                   }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Déconnexion
                 </button>
@@ -70,13 +79,13 @@ function Header() {
               <>
                 <a
                   href="/signin"
-                  className="block px-4 py-2 hover:bg-gray-100 transition"
+                  className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Connexion
                 </a>
                 <a
                   href="/signup"
-                  className="block px-4 py-2 hover:bg-gray-100 transition"
+                  className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Inscription
                 </a>
@@ -86,32 +95,31 @@ function Header() {
         </div>
       </div>
 
-      {/*logo + nom à gauche*/}
-      <div className="flex justify-between items-center text-[#6B5B4C]">
+      {/* Logo + Barre de recherche */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 text-[#6B5B4C]">
         <a href="/" className="flex items-center gap-2">
           <img
             src="/logo.jpg"
             alt="logo WikiBouquin"
-            className="h-10 w-10 rounded-full object-cover inline"
+            className="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover inline"
           />
-          <h1 className="text-3xl font-bold font-playfair-sc">Wiki Bouquin</h1>
+          <h1 className="text-xl md:text-3xl font-bold font-playfair-sc whitespace-nowrap">Wiki Bouquin</h1>
         </a>
-
-        {/* Barre de recherche */}
-        <div className="flex w-full max-w-[800px]">
+        
+        <div className="flex w-full md:max-w-[600px] lg:max-w-[800px]">
           <input
             type="text"
             placeholder="Rechercher un livre, un auteur..."
-            className="grow border bg-gray-50 border-gray-300 rounded-l-full px-4 py-2 focus:outline-none text-sm font-playfair"
+            className="grow border bg-gray-50 border-gray-300 rounded-l-full px-3 md:px-4 py-2 focus:outline-none text-xs md:text-sm font-playfair"
           />
-          <button className="flex items-center justify-center bg-[#6C7A89] px-4 py-2 rounded-r-full hover:bg-[#07315f] transition">
+          <button className="flex items-center justify-center bg-[#6C7A89] px-3 md:px-4 py-2 rounded-r-full hover:bg-[#07315f] transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="#fff"
-              className="size-6"
+              className="w-5 h-5 md:w-6 md:h-6"
             >
               <path
                 strokeLinecap="round"
