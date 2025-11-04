@@ -4,11 +4,10 @@ import { useNavigate } from "react-router";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 type Book = {
-  id: number;
   title: string;
   author: string;
   cover: string;
-  isbn: string;
+  isbn_10: string[];
   isPublic: boolean;
 };
 
@@ -52,7 +51,7 @@ function MyCollection() {
     }
   }, [authLoading, isAuthenticated, navigate]);
 
-  const toggleVisibility = async (clickedBookId: number) => {
+  const toggleVisibility = async (clickedBookIsbn: string) => {
     // TODO: Appel API pour changer la visibilité
     // await fetchWithAuth(`http://localhost:3000/api/books/${bookId}/visibility`, {
     //   method: 'PATCH',
@@ -61,12 +60,14 @@ function MyCollection() {
 
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
-        book.id === clickedBookId ? { ...book, isPublic: !book.isPublic } : book
+        book.isbn_10[0] === clickedBookIsbn
+          ? { ...book, isPublic: !book.isPublic }
+          : book
       )
     );
   };
 
-  const deleteBook = async (clickedBookId: number) => {
+  const deleteBook = async (clickedBookIsbn: string) => {
     if (!confirm("Confirmer la supression")) {
       return;
     }
@@ -77,7 +78,8 @@ function MyCollection() {
     // });
 
     setBooks(
-      (currentBooks) => currentBooks.filter((book) => book.id !== clickedBookId) // Si True: on garde. False: enlève
+      (currentBooks) =>
+        currentBooks.filter((book) => book.isbn_10[0] !== clickedBookIsbn) // Si True: on garde. False: enlève
     );
   };
 
@@ -142,7 +144,7 @@ function MyCollection() {
               <tbody>
                 {books.map((book, index) => (
                   <tr
-                    key={book.id}
+                    key={book.isbn_10[0]}
                     className={`${
                       index % 2 === 0 ? "bg-[#f5f0eb]" : "bg-white"
                     } border-b border-gray-200 hover:bg-gray-100 transition`}
@@ -167,7 +169,7 @@ function MyCollection() {
                             {book.isPublic ? "Public" : "Privé"}
                           </span>
                           <button
-                            onClick={() => toggleVisibility(book.id)}
+                            onClick={() => toggleVisibility(book.isbn_10[0])}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${
                               book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
                             }`}
@@ -184,7 +186,7 @@ function MyCollection() {
                         </div>
 
                         <button
-                          onClick={() => deleteBook(book.id)}
+                          onClick={() => deleteBook(book.isbn_10[0])}
                           className="bg-red-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-red-600 transition"
                         >
                           Supprimer
@@ -201,7 +203,7 @@ function MyCollection() {
           <div className="md:hidden space-y-4">
             {books.map((book) => (
               <div
-                key={book.id}
+                key={book.isbn_10[0]}
                 className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
               >
                 <div className="flex gap-4 mb-4">
@@ -224,7 +226,7 @@ function MyCollection() {
                         {book.isPublic ? "Public" : "Privé"}
                       </span>
                       <button
-                        onClick={() => toggleVisibility(book.id)}
+                        onClick={() => toggleVisibility(book.isbn_10[0])}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                           book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
                         }`}
@@ -239,7 +241,7 @@ function MyCollection() {
                   </div>
 
                   <button
-                    onClick={() => deleteBook(book.id)}
+                    onClick={() => deleteBook(book.isbn_10[0])}
                     className="w-full bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition"
                   >
                     Supprimer
