@@ -55,7 +55,19 @@ const userDataMapper = {
         );
 
         return rows[0];
-    }
+    },
+
+    async getUserByUsername(username: string): Promise<User> {
+        const { rows } = await client.query(
+            `
+            SELECT * FROM "user"
+            WHERE username = $1;
+            `,
+            [username]
+        );
+
+        return rows[0];
+    },
 };
 
 export default userDataMapper;

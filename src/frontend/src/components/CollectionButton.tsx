@@ -4,12 +4,12 @@ import { useAuth } from "../context/AuthContext";
 
 function CollectionButton(Props: { isbn: string }) {
   const { user, isAuthenticated } = useAuth();
-  const [bookAdded, setBookAdded] = useState<Boolean>(false);
+  const [bookAdded, setBookAdded] = useState<boolean>(false);
 
   // add book
   const addBookToCollection = async () => {
     const response = await fetchWithAuth(
-      `http://localhost:3000/api/my-collection/add`,
+      `http://localhost:3000/api/edit-my-collection/add`,
       {
         method: "POST",
         body: JSON.stringify({

@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Utiliser fetchWithAuth qui gère automatiquement le refresh du token
       const response = await fetchWithAuth(
-        "http://localhost:3000/api/my-profile"
+        "http://localhost:3000/api/me"
       );
 
       if (response.ok) {

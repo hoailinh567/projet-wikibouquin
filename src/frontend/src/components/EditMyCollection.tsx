@@ -11,7 +11,7 @@ type Book = {
   isPublic: boolean;
 };
 
-function MyCollection() {
+function EditMyCollection() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
@@ -22,7 +22,7 @@ function MyCollection() {
     setLoading(true);
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3000/api/my-collection`
+        `http://localhost:3000/api/edit-my-collection`
       );
       if (!response.ok) {
         if (response.status === 401) {
@@ -256,4 +256,4 @@ function MyCollection() {
   );
 }
 
-export default MyCollection;
+export default EditMyCollection;

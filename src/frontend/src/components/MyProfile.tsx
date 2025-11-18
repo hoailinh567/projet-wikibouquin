@@ -13,7 +13,7 @@ function MyProfile() {
   const myProfile = async () => {
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3000/api/my-profile`,
+        `http://localhost:3000/api/me`,
         {
           headers: { "Content-Type": "application/json" },
         }

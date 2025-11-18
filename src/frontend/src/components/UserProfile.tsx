@@ -5,15 +5,11 @@ import Card from "./Card";
 type Book = {
   id: number;
   title: string;
-  author: string;
   cover: string;
   isbn: string;
 };
 
-type UserProfileData = {
-  username: string;
-  publicBooks: Book[];
-};
+type UserProfileData = Book[]
 
 function UserProfile() {
   const { username } = useParams<{ username: string }>();
@@ -24,105 +20,15 @@ function UserProfile() {
   const fetchUserProfile = async () => {
     setLoading(true);
     try {
-      // TODO: Remplacer par l'appel API réel
-      // const response = await fetch(`http://localhost:3000/api/profile/${username}`);
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! Status: ${response.status}`);
-      // }
-      // const userData = await response.json();
-      // setData(userData);
+      // appel API pour récupérer les données du profil utilisateur
+      const response = await fetch(`http://localhost:3000/api/profile/${username}`, {credentials: 'include'});
+      
+      if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-      // Données de placeholder pour le moment
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simule un délai réseau
-      setData({
-        username: username || "Utilisateur",
-        publicBooks: [
-          {
-            id: 1,
-            title: "Alice au pays des merveilles",
-            author: "Lewis Carroll",
-            cover: "https://covers.openlibrary.org/b/id/12389745-M.jpg",
-            isbn: "2800679816",
-          },
-          {
-            id: 2,
-            title: "Harry Potter à l'école des sorciers",
-            author: "J.K. Rowling",
-            cover: "https://covers.openlibrary.org/b/id/8494529-M.jpg",
-            isbn: "2070584623",
-          },
-          {
-            id: 3,
-            title: "Le Petit Prince",
-            author: "Antoine de Saint-Exupéry",
-            cover: "https://covers.openlibrary.org/b/id/8231143-M.jpg",
-            isbn: "0156012197",
-          },
-          {
-            id: 4,
-            title: "1984",
-            author: "George Orwell",
-            cover: "https://covers.openlibrary.org/b/id/7222246-M.jpg",
-            isbn: "0451524934",
-          },
-          {
-            id: 5,
-            title: "Le Seigneur des Anneaux",
-            author: "J.R.R. Tolkien",
-            cover: "https://covers.openlibrary.org/b/id/8504094-M.jpg",
-            isbn: "0618640150",
-          },
-          {
-            id: 6,
-            title: "Orgueil et Préjugés",
-            author: "Jane Austen",
-            cover: "https://covers.openlibrary.org/b/id/8235657-M.jpg",
-            isbn: "0141439513",
-          },
-          {
-            id: 7,
-            title: "Les Misérables",
-            author: "Victor Hugo",
-            cover: "https://covers.openlibrary.org/b/id/8300605-M.jpg",
-            isbn: "0140444300",
-          },
-          {
-            id: 8,
-            title: "Le Comte de Monte-Cristo",
-            author: "Alexandre Dumas",
-            cover: "https://covers.openlibrary.org/b/id/8156473-M.jpg",
-            isbn: "0140449264",
-          },
-          {
-            id: 9,
-            title: "L'Étranger",
-            author: "Albert Camus",
-            cover: "https://covers.openlibrary.org/b/id/8221039-M.jpg",
-            isbn: "2070360024",
-          },
-          {
-            id: 10,
-            title: "Le Meilleur des mondes",
-            author: "Aldous Huxley",
-            cover: "https://covers.openlibrary.org/b/id/8238640-M.jpg",
-            isbn: "0060850523",
-          },
-          {
-            id: 11,
-            title: "Fahrenheit 451",
-            author: "Ray Bradbury",
-            cover: "https://covers.openlibrary.org/b/id/8156453-M.jpg",
-            isbn: "1451673264",
-          },
-          {
-            id: 12,
-            title: "Dracula",
-            author: "Bram Stoker",
-            cover: "https://covers.openlibrary.org/b/id/8231091-M.jpg",
-            isbn: "0141439846",
-          },
-        ],
-      });
+      const userData = await response.json();
+      setData(userData);
     } catch (err) {
       console.error(err);
       setError(true);
@@ -163,12 +69,12 @@ function UserProfile() {
   return (
     <div className="grow max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">
       {/* Titre de la collection */}
-      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-playfair-sc text-[#6B5B4C] mb-6 md:mb-8 text-center">
-        La Collection de <span className="text-[#07315f]">{data.username}</span>
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-playfair-sc text-[#6B5B4C] mb-6 md:mb-8 text-center">
+        La Collection de <span className=" font-bold text-[#6B5B4C]">{username}</span>
       </h1>
 
       {/* Grille de livres */}
-      {data.publicBooks.length === 0 ? (
+      {data.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-lg md:text-xl text-gray-600">
             Cet utilisateur n'a pas encore de livres publics dans sa collection.
@@ -176,7 +82,7 @@ function UserProfile() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8 lg:gap-10 justify-items-center">
-          {data.publicBooks.map((book) => (
+          {data.map((book) => (
             <Card
               key={book.id}
               title={book.title}
@@ -190,7 +96,7 @@ function UserProfile() {
       {/* Message informatif */}
       <div className="mt-8 md:mt-12 p-4 md:p-6 bg-[#f5f0eb] rounded-lg text-center">
         <p className="text-sm md:text-base text-[#6B5B4C]">
-          Seuls les livres publics de la collection de {data.username} sont affichés ici.
+          Seuls les livres publics de la collection de {username} sont affichés ici.
         </p>
       </div>
     </div>

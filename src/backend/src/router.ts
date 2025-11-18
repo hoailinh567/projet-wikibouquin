@@ -17,13 +17,14 @@ router.post('/api/logout', authController.logout);
 router.get('/api/book/:isbn', bookController.getBookByIsbn);
 
 // User
-router.get('/api/my-profile', authenticate, profileController.getMyProfile);
+router.get('/api/me', authenticate, profileController.getMyProfile);
+router.get('/api/profile/:username', profileController.getUserProfile);
 
 // Collection
-router.get('/api/my-collection', authenticate, collectionController.manageMyCollection);
-router.post('/api/my-collection/add', authenticate, collectionController.addBook);
-router.delete('/api/my-collection/delete', authenticate, collectionController.deleteBook);
-router.patch('/api/my-collection/update-visibility', authenticate, collectionController.updateVisibility)
+router.get('/api/edit-my-collection', authenticate, collectionController.manageMyCollection);
+router.post('/api/edit-my-collection/add', authenticate, collectionController.addBook);
+router.delete('/api/edit-my-collection/delete', authenticate, collectionController.deleteBook);
+router.patch('/api/edit-my-collection/update-visibility', authenticate, collectionController.updateVisibility)
 
 
 export default router;

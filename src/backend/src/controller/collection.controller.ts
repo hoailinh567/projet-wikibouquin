@@ -19,7 +19,7 @@ const collectionController = {
             return res.status(404).json({ error: "no books in collection" })
         }
 
-        var bookCollectionWithDetails = [];
+        let bookCollectionWithDetails = [];
 
         for (const book of collection.books) {
             const bookDetails = await bookDataMapper.getBookByIsbn(book.isbn)

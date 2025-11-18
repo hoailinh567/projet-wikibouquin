@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 function Header() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -52,18 +53,24 @@ function Header() {
           >
             {isAuthenticated ? (
               <>
-                <a
-                  href="/profile/HoaiLinh"
+                <Link
+                  to="/me"
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
-                  Mon profil
-                </a>
-                <a
-                  href="/my-collection"
+                  Mon compte
+                </Link>
+                <Link
+                  to={`/profile/${user?.username}`}
+                  className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
+                >
+                  Mon profil public
+                </Link>
+                <Link
+                  to="/edit-my-collection"
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Gérer ma collection
-                </a>
+                </Link>
                 <button
                   onClick={async () => {
                     setIsPopupOpen(false);
