@@ -12,6 +12,7 @@ interface User {
   username: string;
   role_id: number;
   collection_ids: number[];
+  books: { isbn: string, collection_id: number }[];
 }
 
 interface AuthContextType {
