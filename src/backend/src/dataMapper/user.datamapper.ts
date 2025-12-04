@@ -44,7 +44,8 @@ const userDataMapper = {
         );
         return rows[0];
     },
-
+    
+    // get user by email for login
     async getUserByEmail(email: string): Promise<User> {
         const { rows } = await client.query(
             `
@@ -57,6 +58,7 @@ const userDataMapper = {
         return rows[0];
     },
 
+    // pour avoir le profil public d'un utilisateur via son username
     async getUserByUsername(username: string): Promise<User> {
         const { rows } = await client.query(
             `

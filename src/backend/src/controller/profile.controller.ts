@@ -2,9 +2,9 @@ import type { Request, Response } from "express";
 import userDataMapper from "../dataMapper/user.datamapper.ts";
 import collectionDataMapper from "../dataMapper/collection.datamapper.ts";
 import bookDataMapper from "../dataMapper/book.datamapper.ts";
-import { is } from "zod/locales";
 
 const profileController = {
+    // Récupère le profil de l'utilisateur connecté pour le page "Mon compte"
     getMyProfile(req: Request, res: Response) {
         const user = req.user
         if (!user) {
@@ -14,6 +14,7 @@ const profileController = {
         res.json(user);
     },
 
+    // Récupère le profil d'un utilisateur par son username pour la page "Profil public"
     async getUserProfile(req: Request, res: Response) {
         const { username } = req.params;
         const user = await userDataMapper.getUserByUsername(username);
