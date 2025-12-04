@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CollectionButton from "./CollectionButton";
 import { useParams } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 function BookDetails() {
   let { isbn } = useParams();
@@ -19,6 +20,7 @@ function BookDetails() {
   const [data, setData] = useState<Book>({} as Book);
   const [loading, setLoading] = useState<Boolean>(true);
   const [error, setError] = useState<Boolean>(false);
+  const { user } = useAuth();
 
   // Function to fetch book details from the API, definition of the function BUT NOT LAUNCHING IT
   const fetchBookDetails = async () => {
@@ -36,6 +38,9 @@ function BookDetails() {
     }
     setLoading(false);
   };
+
+  const hasBook = user?.books?.some((book => book.isbn === isbn));
+  console.log(hasBook)
 
   useEffect(() => {
     // Fetch book details using the ISBN from Props
@@ -76,7 +81,7 @@ function BookDetails() {
             alt="Titre du livre"
             className="w-full md:w-full h-auto rounded-lg object-cover"
           />
-          <CollectionButton isbn={data.isbn_10[0]} />
+          <CollectionButton hasBook={hasBook} isbn={data.isbn_10[0]} />
         </div>
 
         <div className="flex flex-col text-right gap-2 w-full">

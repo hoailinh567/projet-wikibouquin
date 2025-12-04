@@ -54,7 +54,7 @@ function Header() {
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/me"
+                  to="/account"
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Mon compte
