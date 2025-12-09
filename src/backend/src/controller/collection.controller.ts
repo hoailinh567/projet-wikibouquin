@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import collectionDataMapper from "../dataMapper/collection.datamapper.ts";
 import { addOrDeleteBookRequest } from "../validation/collection.validator.ts";
 import bookDataMapper from "../dataMapper/book.datamapper.ts";
+import { isValidIsbn } from "../validation/book.validator.ts";
 
 const collectionController = {
     async manageMyCollection(req: Request, res: Response) {
@@ -77,9 +78,41 @@ const collectionController = {
         return res.json(isDeleted);
     },
 
+    // Vérifier si un livre est déjà dans la collection: Boolean pour savoir si on affiche "ajouter" ou "retirer"
+    async hasBook(req: Request, res: Response) {
+    const user = req.user;
+    if (!user) {
+        return res.status(500).json({ error: "no user" });
+    }
+
+    const { isbn } = req.params;
+
+    // Validation ISBN
+    const result = isValidIsbn.safeParse({ isbn });
+    if (!result.success) {
+        const message = result.error.issues[0].message;
+        return res.status(400).json({ message });
+    }
+
+    try {
+        const bookInCollection = await collectionDataMapper.hasBookInUserCollection(
+            isbn,
+            user.id
+        );
+
+        // bookInCollection doit être un boolean
+        return res.json(!!bookInCollection);  
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+
+    /* Mettre à jour la visibilité de la collection: publique/privée
     async updateVisibility(req: Request, res: Response) {
 
-    },
+    }, */
 }
 
 export default collectionController;

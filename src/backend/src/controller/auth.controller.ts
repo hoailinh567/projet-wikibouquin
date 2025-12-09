@@ -103,7 +103,7 @@ const authController = {
                 .send({ error: "Mot de passe incorrect." });
         }
 
-        // Vérifier pw récupéré de body est le même avec le password_has dans BDD?
+        // Vérifier pw récupéré de body est le même avec le password_hash dans BDD?
         const isPasswordOk = await argon2.verify(user.password_hash, password)
         // Si c'est pas OK, retourn error
         if (!isPasswordOk) {

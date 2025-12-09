@@ -24,7 +24,8 @@ router.get('/api/profile/:username', profileController.getUserProfile);
 router.get('/api/edit-my-collection', authenticate, collectionController.manageMyCollection);
 router.post('/api/edit-my-collection/add', authenticate, collectionController.addBook);
 router.delete('/api/edit-my-collection/delete', authenticate, collectionController.deleteBook);
-router.patch('/api/edit-my-collection/update-visibility', authenticate, collectionController.updateVisibility)
+router.get('/api/has-book/:isbn', authenticate, collectionController.hasBook);
+//router.patch('/api/edit-my-collection/update-visibility', authenticate, collectionController.updateVisibility)
 
 
 export default router;

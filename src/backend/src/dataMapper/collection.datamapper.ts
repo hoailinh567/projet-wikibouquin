@@ -94,6 +94,20 @@ const collectionDataMapper = {
         return rows[0];
     },
 
+    // Vérifie si un livre est dans une collection de l'utilisateur
+    async hasBookInUserCollection(isbn: string, collectionId: number): Promise<boolean> {
+        const { rows } = await client.query(
+            `
+            SELECT COUNT(*) AS count
+            FROM "book"
+            WHERE isbn=$1 AND collection_id=$2
+            `,
+            [isbn, collectionId]
+        )
+
+        return parseInt(rows[0].count, 10) > 0;
+    },
+
     async toggleBookVisility(isbn: string, collectionId: number, newVisibility: boolean): Promise<BookInCollection> {
         const { rows } = await client.query(
             `
