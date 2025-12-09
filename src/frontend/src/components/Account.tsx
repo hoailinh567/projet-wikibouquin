@@ -102,7 +102,7 @@ function Account() {
 
           <button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="bg-[#6C7A89] w-full py-2 text-white rounded-lg hover:bg-[#07315f] transition"
           >
             Mettre à jour le mot de passe
           </button>

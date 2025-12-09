@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router";
-import { Link } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Header() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -44,10 +44,9 @@ function Header() {
           </button>
           <div
             className={`absolute top-full right-0 mt-2 min-w-fit whitespace-nowrap bg-white border border-gray-300 rounded shadow-lg z-50 transform transition-all duration-200 ease-out
-              ${
-                isPopupOpen
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-95 pointer-events-none"
+              ${isPopupOpen
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none"
               }
             `}
           >
@@ -84,18 +83,18 @@ function Header() {
               </>
             ) : (
               <>
-                <a
-                  href="/signin"
+                <Link
+                  to="/signin"
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Connexion
-                </a>
-                <a
-                  href="/signup"
+                </Link>
+                <Link
+                  to="/signup"
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Inscription
-                </a>
+                </Link>
               </>
             )}
           </div>
@@ -112,7 +111,7 @@ function Header() {
           />
           <h1 className="text-xl md:text-3xl font-bold font-playfair-sc whitespace-nowrap">Wiki Bouquin</h1>
         </a>
-        
+
         <div className="flex w-full md:max-w-[600px] lg:max-w-[800px]">
           <input
             type="text"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
   const [username, setUsername] = useState("");
@@ -79,11 +79,10 @@ function SignUp() {
               placeholder="Entrez votre nom"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
-                errors.username
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${errors.username
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
-              }`}
+                }`}
             />
             {errors.username && (
               <p className="text-red-500 text-xs md:text-sm mt-1">
@@ -105,11 +104,10 @@ function SignUp() {
               placeholder="Entrez votre email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
-                errors.email
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${errors.email
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
-              }`}
+                }`}
             />
             {errors.email && (
               <p className="text-red-500 text-xs md:text-sm mt-1">
@@ -131,11 +129,10 @@ function SignUp() {
               placeholder="Entrez votre mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
-                errors.password
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${errors.password
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
-              }`}
+                }`}
             />
             {errors.password && (
               <p className="text-red-500 text-xs md:text-sm mt-1">
@@ -157,11 +154,10 @@ function SignUp() {
               placeholder="Confirmez votre mot de passe"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${
-                errors.confirmPassword
+              className={`border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:ring-2 ${errors.confirmPassword
                   ? "border-red-500 focus:ring-red-400"
                   : "border-gray-300 focus:ring-blue-400"
-              }`}
+                }`}
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-xs md:text-sm mt-1">
@@ -176,11 +172,10 @@ function SignUp() {
               type="checkbox"
               checked={terms}
               onChange={(e) => setTerms(e.target.checked)}
-              className={`w-4 h-4 mt-1 rounded focus:ring-2 ${
-                errors.terms
+              className={`w-4 h-4 mt-1 rounded focus:ring-2 ${errors.terms
                   ? "text-red-500 focus:ring-red-400"
                   : "text-blue-600 focus:ring-blue-400"
-              }`}
+                }`}
             />
             <label htmlFor="terms" className="text-xs md:text-sm text-gray-600">
               J'accepte{" "}

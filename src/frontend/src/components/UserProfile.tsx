@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import Card from "./Card";
 
 type Book = {
@@ -21,10 +21,10 @@ function UserProfile() {
     setLoading(true);
     try {
       // appel API pour récupérer les données du profil utilisateur
-      const response = await fetch(`http://localhost:3000/api/profile/${username}`, {credentials: 'include'});
-      
+      const response = await fetch(`http://localhost:3000/api/profile/${username}`, { credentials: 'include' });
+
       if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const userData = await response.json();

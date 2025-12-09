@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CollectionButton from "./CollectionButton";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function BookDetails() {
@@ -39,13 +39,35 @@ function BookDetails() {
     setLoading(false);
   };
 
-  const hasBook = user?.books?.some((book => book.isbn === isbn));
-  console.log(hasBook)
+  // Choisir l'ISBN principal : privilégier isbn_13 si disponible
+  const primaryIsbn = data?.isbn_13?.[0] ?? data?.isbn_10?.[0] ?? isbn;
+
+  // Vérifie si l'utilisateur a déjà le livre en comparant les différents formats d'ISBN
+  const formatIsbn =
+    user?.books?.some(
+      (book) =>
+        book.isbn === isbn ||
+        book.isbn === data?.isbn_10?.[0] ||
+        book.isbn === data?.isbn_13?.[0]
+    ) ?? false;
+  console.log("formatIsbn:", formatIsbn);
+
+  // demander au state user s'il a déjà ce livre dans sa collection
+  const hasBook = user?.books?.some(((book) => {
+    
+    return book.isbn === isbn
+  }));
+  console.log("hasBook:", hasBook, "primaryIsbn:", primaryIsbn, "data:", data, "isbn:", isbn);
 
   useEffect(() => {
     // Fetch book details using the ISBN from Props
     fetchBookDetails();
   }, []);
+
+  const isbns = useMemo(() => {
+    return [primaryIsbn]
+  }, [primaryIsbn]);
+  console.log("primaryIsbn in BookDetails:", isbns);
 
   if (loading) {
     return (
@@ -81,7 +103,7 @@ function BookDetails() {
             alt="Titre du livre"
             className="w-full md:w-full h-auto rounded-lg object-cover"
           />
-          <CollectionButton hasBook={hasBook} isbn={data.isbn_10[0]} />
+          <CollectionButton hasBook={hasBook} isbn={isbns} />
         </div>
 
         <div className="flex flex-col text-right gap-2 w-full">

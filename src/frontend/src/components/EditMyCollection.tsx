@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 type Book = {
@@ -145,9 +145,8 @@ function EditMyCollection() {
                 {books.map((book, index) => (
                   <tr
                     key={book.isbn_10[0]}
-                    className={`${
-                      index % 2 === 0 ? "bg-[#f5f0eb]" : "bg-white"
-                    } border-b border-gray-200 hover:bg-gray-100 transition`}
+                    className={`${index % 2 === 0 ? "bg-[#f5f0eb]" : "bg-white"
+                      } border-b border-gray-200 hover:bg-gray-100 transition`}
                   >
                     <td className="p-3 md:p-4">
                       <img
@@ -170,17 +169,15 @@ function EditMyCollection() {
                           </span>
                           <button
                             onClick={() => toggleVisibility(book.isbn_10[0])}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${
-                              book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
-                            }`}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
+                              }`}
                             aria-label="Toggle visibility"
                           >
                             <span
-                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                book.isPublic
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.isPublic
                                   ? "translate-x-6"
                                   : "translate-x-1"
-                              }`}
+                                }`}
                             />
                           </button>
                         </div>
@@ -227,14 +224,12 @@ function EditMyCollection() {
                       </span>
                       <button
                         onClick={() => toggleVisibility(book.isbn_10[0])}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                          book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            book.isPublic ? "translate-x-6" : "translate-x-1"
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.isPublic ? "translate-x-6" : "translate-x-1"
+                            }`}
                         />
                       </button>
                     </div>
