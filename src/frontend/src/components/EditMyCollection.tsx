@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 type Book = {
   title: string;
   author: string;
   cover: string;
-  isbn_10: string[];
+  isbn: string;
   isPublic: boolean;
 };
 
 function EditMyCollection() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isLoading: authLoading} = useAuth();
   const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,7 +60,7 @@ function EditMyCollection() {
 
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
-        book.isbn_10[0] === clickedBookIsbn
+        book.isbn === clickedBookIsbn
           ? { ...book, isPublic: !book.isPublic }
           : book
       )
@@ -79,7 +79,7 @@ function EditMyCollection() {
 
     setBooks(
       (currentBooks) =>
-        currentBooks.filter((book) => book.isbn_10[0] !== clickedBookIsbn) // Si True: on garde. False: enlève
+        currentBooks.filter((book) => book.isbn !== clickedBookIsbn) // Si True: on garde. False: enlève
     );
   };
 
@@ -144,16 +144,18 @@ function EditMyCollection() {
               <tbody>
                 {books.map((book, index) => (
                   <tr
-                    key={book.isbn_10[0]}
+                    key={book.isbn}
                     className={`${index % 2 === 0 ? "bg-[#f5f0eb]" : "bg-white"
                       } border-b border-gray-200 hover:bg-gray-100 transition`}
                   >
                     <td className="p-3 md:p-4">
+                      <Link to={`/book/${book.isbn}`}>
                       <img
                         src={book.cover}
                         alt={book.title}
                         className="w-16 h-20 md:w-20 md:h-28 object-cover rounded shadow"
                       />
+                      </Link>
                     </td>
                     <td className="p-3 md:p-4 font-semibold text-sm md:text-base">
                       {book.title}
@@ -168,7 +170,7 @@ function EditMyCollection() {
                             {book.isPublic ? "Public" : "Privé"}
                           </span>
                           <button
-                            onClick={() => toggleVisibility(book.isbn_10[0])}
+                            onClick={() => toggleVisibility(book.isbn)}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
                               }`}
                             aria-label="Toggle visibility"
@@ -183,7 +185,7 @@ function EditMyCollection() {
                         </div>
 
                         <button
-                          onClick={() => deleteBook(book.isbn_10[0])}
+                          onClick={() => deleteBook(book.isbn)}
                           className="bg-red-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-semibold hover:bg-red-600 transition"
                         >
                           Supprimer
@@ -200,7 +202,7 @@ function EditMyCollection() {
           <div className="md:hidden space-y-4">
             {books.map((book) => (
               <div
-                key={book.isbn_10[0]}
+                key={book.isbn}
                 className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
               >
                 <div className="flex gap-4 mb-4">
@@ -223,7 +225,7 @@ function EditMyCollection() {
                         {book.isPublic ? "Public" : "Privé"}
                       </span>
                       <button
-                        onClick={() => toggleVisibility(book.isbn_10[0])}
+                        onClick={() => toggleVisibility(book.isbn)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
                           }`}
                       >
@@ -236,7 +238,7 @@ function EditMyCollection() {
                   </div>
 
                   <button
-                    onClick={() => deleteBook(book.isbn_10[0])}
+                    onClick={() => deleteBook(book.isbn)}
                     className="w-full bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition"
                   >
                     Supprimer

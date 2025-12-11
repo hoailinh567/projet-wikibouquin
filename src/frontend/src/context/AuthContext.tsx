@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Données utilisateur récupérées:", data);
         setUser(data);
       } else {
         setUser(null);
