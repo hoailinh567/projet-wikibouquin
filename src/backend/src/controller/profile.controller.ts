@@ -41,7 +41,7 @@ const profileController = {
                 id: i,
                 title: bookDetails.title,
                 cover: bookDetails.cover,
-                isbn: bookDetails.isbn_10[0],
+                isbn: bookDetails.isbn,
             });
             i++;
         }

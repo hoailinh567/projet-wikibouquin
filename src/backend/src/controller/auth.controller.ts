@@ -114,10 +114,9 @@ const authController = {
         }
 
         const CollectionIds = await collectionDataMapper.getCollectionsIdByUserId(user.id)
-        const books = await collectionDataMapper.getCollectionByUserId(user.id);
 
         // Recrée le même User sans le PW
-        const publicUser: PublicUser = { id: user.id, username: user.username, email: user.email, role_id: user.role_id, collection_ids: CollectionIds, books: books?.books || [] };
+        const publicUser: PublicUser = { id: user.id, username: user.username, email: user.email, role_id: user.role_id, collection_ids: CollectionIds};
 
         // Si tout va bien, créer JWT et Refresh JWT
         // Puis envoyer les 2 au frontend dans un cookie HttpOnly et sameSite + res.json()

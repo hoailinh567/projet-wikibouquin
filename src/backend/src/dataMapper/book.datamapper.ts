@@ -7,8 +7,7 @@ type Book = {
     title: string;
     authors: string[];
     publish_date: string;
-    isbn_10: string[];
-    isbn_13: string[];
+    isbn: string;
     number_of_pages: number;
     cover: string;
     description: string;
@@ -51,12 +50,15 @@ const bookDataMapper = {
             description = work.description;
         }
 
+        if (rawBook.isbn_10 === undefined || rawBook.isbn_10.length === 0) {
+            throw new Error("ISBN not found for the book.");
+        }
+
         const book: Book = {
             title: rawBook.title,
             authors: authors,
             publish_date: rawBook.publish_date || "",
-            isbn_10: rawBook.isbn_10 || [],
-            isbn_13: rawBook.isbn_13 || [],
+            isbn: rawBook.isbn_10[0],
             number_of_pages: rawBook.number_of_pages || 0,
             cover: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
             description: description,
