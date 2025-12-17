@@ -1,5 +1,6 @@
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   hasBook?: boolean;
@@ -9,10 +10,9 @@ type Props = {
 
 function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   console.log(user);
-
-  if (!isAuthenticated) return null;
 
   // add book
   const addBookToCollection = async () => {
@@ -63,16 +63,25 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
     }
   };
 
+  const handleUnauthClick = () => {
+    // redirect to signin (you can change to "/signup" if you prefer)
+    navigate("/signin", { state: { from: `/book/${isbn ?? ""}` } });
+  };
+  
   return (
     <>
-      {isAuthenticated && (
-        <button
-          onClick={hasBook ? removeBookFromCollection : addBookToCollection}
-          className="bg-[#6C7A89] text-white px-4 py-2 rounded hover:bg-[#07315f] transition cursor-pointer"
-        >
-          {hasBook ? "Retirer de ma collection" : "Ajouter à ma collection"}
-        </button>
-      )}
+      <button
+        onClick={
+          isAuthenticated
+            ? hasBook
+              ? removeBookFromCollection
+              : addBookToCollection
+            : handleUnauthClick
+        }
+        className="bg-[#6C7A89] text-white px-4 py-2 rounded hover:bg-[#07315f] transition cursor-pointer"
+      >
+        {hasBook ? "Retirer de ma collection" : "Ajouter à ma collection"}
+      </button>
     </>
   );
 }
