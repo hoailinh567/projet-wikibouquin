@@ -12,7 +12,7 @@ type Book = {
 };
 
 function EditMyCollection() {
-  const { isAuthenticated, isLoading: authLoading} = useAuth();
+  const { isAuthenticated, isLoading: authLoading, user} = useAuth();
   const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -72,16 +72,33 @@ function EditMyCollection() {
       return;
     }
 
-    // TODO: Appel API pour supprimer le livre
-    // await fetchWithAuth(`http://localhost:3000/api/books/${bookId}`, {
-    //   method: 'DELETE'
-    // });
-
-    setBooks(
-      (currentBooks) =>
-        currentBooks.filter((book) => book.isbn !== clickedBookIsbn) // Si True: on garde. False: enlève
+    try {
+    const response = await fetchWithAuth(
+      `http://localhost:3000/api/edit-my-collection/delete`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({
+          isbn: clickedBookIsbn,
+          collection_id: user?.collection_ids[0],
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
     );
-  };
+
+    if (!response.ok) {
+      throw new Error(`Erreur API: ${response.status}`);
+    }
+
+    // Mise à jour locale après succès
+    setBooks((currentBooks) =>
+      currentBooks.filter((book) => book.isbn !== clickedBookIsbn)
+    );
+  } catch (err) {
+    console.error("Erreur lors de la suppression :", err);
+    alert("La suppression a échoué.");
+  }
+};
+
 
   if (loading) {
     return (
