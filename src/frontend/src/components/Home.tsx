@@ -30,7 +30,7 @@ function Home() {
           <h1 className="font-playfair-sc font-bold text-2xl md:text-3xl inline-flex items-center gap-2">
             Coup de coeur <span className="text-red-500">🩷</span>
           </h1>
-          <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 md:gap-6 lg:gap-8 w-full">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8 w-full">
             <Card
               title="Harry Potter à l'école des sorciers"
               pictureUrl="https://covers.openlibrary.org/b/id/8494529-M.jpg"
