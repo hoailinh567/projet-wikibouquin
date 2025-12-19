@@ -81,10 +81,12 @@ const collectionDataMapper = {
                 c.user_id,
                 b.isbn,
                 b.collection_id,
-                b.is_visible
+                b.is_visible,
+                b.created_at
             FROM "collection" c
             LEFT JOIN "book" b ON c.id = b.collection_id
             WHERE c.user_id = $1
+            ORDER BY b.created_at DESC
             `,
             [userId]
         )
