@@ -108,17 +108,18 @@ const collectionDataMapper = {
         return parseInt(rows[0].count, 10) > 0;
     },
 
-    async toggleBookVisility(isbn: string, collectionId: number, newVisibility: boolean): Promise<BookInCollection> {
+    async toggleBookVisility(isbn: string, collection_id: number, is_visible: boolean): Promise<BookInCollection> {
         const { rows } = await client.query(
             `
             UPDATE "book"
-            SET is_visible=$1
-            WHERE isbn=$2 AND collection_id=$3
+            SET is_visible = $3
+            WHERE isbn = $1 AND collection_id = $2
+            RETURNING isbn, collection_id, is_visible
             `,
-            [newVisibility, isbn, collectionId]
-        )
+            [isbn, collection_id, is_visible]
+        );
 
-        return rows[0];
+        return rows[0] ?? null;
     }
 }
 

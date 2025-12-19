@@ -25,7 +25,7 @@ router.get('/api/edit-my-collection', authenticate, collectionController.manageM
 router.post('/api/edit-my-collection/add', authenticate, collectionController.addBook);
 router.delete('/api/edit-my-collection/delete', authenticate, collectionController.deleteBook);
 router.get('/api/has-book/:isbn', authenticate, collectionController.hasBook);
-//router.patch('/api/edit-my-collection/update-visibility', authenticate, collectionController.updateVisibility)
+router.patch('/api/edit-my-collection/update-visibility', authenticate, collectionController.toggleBookVisility)
 
 
 export default router;

@@ -80,39 +80,76 @@ const collectionController = {
 
     // Vérifier si un livre est déjà dans la collection: Boolean pour savoir si on affiche "ajouter" ou "retirer"
     async hasBook(req: Request, res: Response) {
-    const user = req.user;
-    if (!user) {
-        return res.status(500).json({ error: "no user" });
+        const user = req.user;
+        if (!user) {
+            return res.status(500).json({ error: "no user" });
+        }
+
+        const { isbn } = req.params;
+
+        // Validation ISBN
+        const result = isValidIsbn.safeParse({ isbn });
+        if (!result.success) {
+            const message = result.error.issues[0].message;
+            return res.status(400).json({ message });
+        }
+
+        try {
+            const bookInCollection = await collectionDataMapper.hasBookInUserCollection(
+                isbn,
+                user.id
+            );
+
+            // bookInCollection doit être un boolean
+            return res.json(!!bookInCollection);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    },
+
+
+    // Mettre à jour la visibilité d'un livre: publique/privée
+    async toggleBookVisility(req: Request, res: Response) {
+        const user = req.user;
+        if (!user) {
+            return res.status(500).json({ error: "no user" });
+        }
+
+        const { isbn, collection_id, is_visible } = req.body;
+
+        if (typeof is_visible !== 'boolean' || typeof collection_id !== 'number' || !isbn) {
+            return res.status(400).json({ error: "Invalid request body" });
+        }
+
+
+        // Validation ISBN
+        const result = isValidIsbn.safeParse({ isbn });
+        if (!result.success) {
+            const message = result.error.issues[0].message;
+            return res.status(400).json({ message });
+        }
+
+        // Vérifier que la collection appartient bien à l'utilisateur
+        try {
+            const ownedCollectionsId = await collectionDataMapper.getCollectionsIdByUserId(user.id);
+            if (!ownedCollectionsId.includes(collection_id)) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+
+            const updatedCollection = await collectionDataMapper.toggleBookVisility(
+                isbn,
+                collection_id,
+                is_visible
+            );
+
+            return res.json(updatedCollection);
+        }
+        catch (err) {
+            console.error("toggleBookVisibility error:", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
     }
-
-    const { isbn } = req.params;
-
-    // Validation ISBN
-    const result = isValidIsbn.safeParse({ isbn });
-    if (!result.success) {
-        const message = result.error.issues[0].message;
-        return res.status(400).json({ message });
-    }
-
-    try {
-        const bookInCollection = await collectionDataMapper.hasBookInUserCollection(
-            isbn,
-            user.id
-        );
-
-        // bookInCollection doit être un boolean
-        return res.json(!!bookInCollection);  
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Internal server error" });
-    }
-}
-
-
-    /* Mettre à jour la visibilité de la collection: publique/privée
-    async updateVisibility(req: Request, res: Response) {
-
-    }, */
 }
 
 export default collectionController;

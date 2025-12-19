@@ -16,6 +16,7 @@ interface User {
 }
 
 const userDataMapper = {
+    // vérifier si l'email est déjà pris pour l'inscription
     async isEmailAlreadyUsed(email: string): Promise<boolean> {
         const { rows } = await client.query(
             `SELECT COUNT(id)::int AS count FROM "user" WHERE email = $1`,
@@ -25,6 +26,7 @@ const userDataMapper = {
         return Boolean(rows?.[0]?.count);
     },
 
+    // vérifier si le username est déjà pris pour l'inscription
     async isUsernameAlreadyUsed(username: string): Promise<boolean> {
         const { rows } = await client.query(
             `SELECT COUNT(id)::int AS used FROM "user" WHERE username = $1`,
