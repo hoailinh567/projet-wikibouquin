@@ -8,11 +8,11 @@ type Book = {
   author: string;
   cover: string;
   isbn: string;
-  isPublic: boolean;
+  is_visible: boolean;
 };
 
 function EditMyCollection() {
-  const { isAuthenticated, isLoading: authLoading, user} = useAuth();
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
   const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,6 +32,7 @@ function EditMyCollection() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
+      // console.log("Fetched collection data:", data);
       setBooks(data);
 
       setLoading(false);
@@ -52,53 +53,78 @@ function EditMyCollection() {
   }, [authLoading, isAuthenticated, navigate]);
 
   const toggleVisibility = async (clickedBookIsbn: string) => {
-    // TODO: Appel API pour changer la visibilité
-    // await fetchWithAuth(`http://localhost:3000/api/books/${bookId}/visibility`, {
-    //   method: 'PATCH',
-    //   body: JSON.stringify({ isPublic: !book.isPublic })
-    // });
+    const book = books.find((b) => b.isbn === clickedBookIsbn);
+    if (!book) return;
 
-    setBooks((currentBooks) =>
-      currentBooks.map((book) =>
-        book.isbn === clickedBookIsbn
-          ? { ...book, isPublic: !book.isPublic }
-          : book
-      )
-    );
+    const newVisibility = !book.is_visible;
+    const collectionId = user?.collection_ids[0];
+    try {
+      // Appel API pour changer la visibilité
+      const response = await fetchWithAuth(`http://localhost:3000/api/edit-my-collection/update-visibility`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isbn: clickedBookIsbn,
+          collection_id: collectionId,
+          is_visible: newVisibility,
+        }),
+
+      });
+      if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        console.error("toggleVisibility API failed:", response.status, text);
+        throw new Error(`Erreur API: ${response.status}`);
+      }
+
+      // si le backend renvoie l'objet mis à jour, utilise-le ; sinon applique le toggle local
+      const data = await response.json().catch(() => null);
+
+      setBooks((currentBooks) =>
+        currentBooks.map((b) =>
+          b.isbn === clickedBookIsbn
+            ? { ...b, is_visible: data?.is_visible ?? data?.is_visible ?? newVisibility }
+            : b
+        )
+      );
+
+    } catch (err) {
+      console.error("Erreur toggleVisibility:", err);
+      alert("Impossible de changer la visibilité pour le moment.");
+    }
   };
 
+  // Fonction de suppression d'un livre
   const deleteBook = async (clickedBookIsbn: string) => {
     if (!confirm("Confirmer la supression")) {
       return;
     }
 
     try {
-    const response = await fetchWithAuth(
-      `http://localhost:3000/api/edit-my-collection/delete`,
-      {
-        method: "DELETE",
-        body: JSON.stringify({
-          isbn: clickedBookIsbn,
-          collection_id: user?.collection_ids[0],
-        }),
-        headers: { "Content-Type": "application/json" },
+      const response = await fetchWithAuth(
+        `http://localhost:3000/api/edit-my-collection/delete`,
+        {
+          method: "DELETE",
+          body: JSON.stringify({
+            isbn: clickedBookIsbn,
+            collection_id: user?.collection_ids[0],
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erreur API: ${response.status}`);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`Erreur API: ${response.status}`);
+      // Mise à jour locale après succès
+      setBooks((currentBooks) =>
+        currentBooks.filter((book) => book.isbn !== clickedBookIsbn)
+      );
+    } catch (err) {
+      console.error("Erreur lors de la suppression :", err);
+      alert("La suppression a échoué.");
     }
-
-    // Mise à jour locale après succès
-    setBooks((currentBooks) =>
-      currentBooks.filter((book) => book.isbn !== clickedBookIsbn)
-    );
-  } catch (err) {
-    console.error("Erreur lors de la suppression :", err);
-    alert("La suppression a échoué.");
-  }
-};
-
+  };
 
   if (loading) {
     return (
@@ -167,11 +193,11 @@ function EditMyCollection() {
                   >
                     <td className="p-3 md:p-4">
                       <Link to={`/book/${book.isbn}`}>
-                      <img
-                        src={book.cover}
-                        alt={book.title}
-                        className="w-16 h-20 md:w-20 md:h-28 object-cover rounded shadow"
-                      />
+                        <img
+                          src={book.cover}
+                          alt={book.title}
+                          className="w-16 h-20 md:w-20 md:h-28 object-cover rounded shadow"
+                        />
                       </Link>
                     </td>
                     <td className="p-3 md:p-4 font-semibold text-sm md:text-base">
@@ -184,18 +210,18 @@ function EditMyCollection() {
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3">
                         <div className="flex items-center gap-2">
                           <span className="text-xs md:text-sm text-gray-600">
-                            {book.isPublic ? "Public" : "Privé"}
+                            {book.is_visible ? "Public" : "Privé"}
                           </span>
                           <button
                             onClick={() => toggleVisibility(book.isbn)}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${book.is_visible ? "bg-[#6C7A89]" : "bg-gray-300"
                               }`}
                             aria-label="Toggle visibility"
                           >
                             <span
-                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.isPublic
-                                  ? "translate-x-6"
-                                  : "translate-x-1"
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.is_visible
+                                ? "translate-x-6"
+                                : "translate-x-1"
                                 }`}
                             />
                           </button>
@@ -239,15 +265,15 @@ function EditMyCollection() {
                     <span className="text-sm text-gray-600">Visibilité</span>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-600">
-                        {book.isPublic ? "Public" : "Privé"}
+                        {book.is_visible ? "Public" : "Privé"}
                       </span>
                       <button
                         onClick={() => toggleVisibility(book.isbn)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${book.isPublic ? "bg-[#6C7A89]" : "bg-gray-300"
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${book.is_visible ? "bg-[#6C7A89]" : "bg-gray-300"
                           }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.isPublic ? "translate-x-6" : "translate-x-1"
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.is_visible ? "translate-x-6" : "translate-x-1"
                             }`}
                         />
                       </button>

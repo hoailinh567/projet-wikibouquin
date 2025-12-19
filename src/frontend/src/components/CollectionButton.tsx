@@ -12,8 +12,6 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  console.log(user);
-
   // add book
   const addBookToCollection = async () => {
     try {
