@@ -21,7 +21,7 @@ router.get('/api/me', authenticate, profileController.getMyProfile);
 router.get('/api/profile/:username', profileController.getUserProfile);
 
 // Collection
-router.get('/api/edit-my-collection', authenticate, collectionController.manageMyCollection);
+router.get('/api/edit-my-collection', authenticate, collectionController.editMyCollection);
 router.post('/api/edit-my-collection/add', authenticate, collectionController.addBook);
 router.delete('/api/edit-my-collection/delete', authenticate, collectionController.deleteBook);
 router.get('/api/has-book/:isbn', authenticate, collectionController.hasBook);

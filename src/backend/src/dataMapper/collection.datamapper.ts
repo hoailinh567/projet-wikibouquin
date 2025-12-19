@@ -9,6 +9,7 @@ type Collection = {
 type BookInCollection = {
     isbn: string;
     collection_id: number;
+    is_visible: boolean;
 }
 
 const collectionDataMapper = {
@@ -45,7 +46,42 @@ const collectionDataMapper = {
                 c.id,
                 c.user_id,
                 b.isbn,
-                b.collection_id
+                b.collection_id,
+                b.is_visible
+            FROM "collection" c
+            LEFT JOIN "book" b ON c.id = b.collection_id
+            WHERE c.user_id = $1
+            AND b.is_visible = true
+            `,
+            [userId]
+        )
+
+        if (rows.length === 0) {
+            return null;
+        }
+
+        const collection: Collection = {
+            id: rows[0].id,
+            userId: rows[0].user_id,
+            books: rows[0].isbn ? rows.map(row => ({
+                isbn: row.isbn,
+                collection_id: row.collection_id,
+                is_visible: row.is_visible
+            })) : []
+        };
+
+        return collection;
+    },
+
+    async getPrivateCollectionByUserId(userId: number): Promise<Collection | null> {
+        const { rows } = await client.query(
+            `
+            SELECT
+                c.id,
+                c.user_id,
+                b.isbn,
+                b.collection_id,
+                b.is_visible
             FROM "collection" c
             LEFT JOIN "book" b ON c.id = b.collection_id
             WHERE c.user_id = $1
@@ -62,7 +98,8 @@ const collectionDataMapper = {
             userId: rows[0].user_id,
             books: rows[0].isbn ? rows.map(row => ({
                 isbn: row.isbn,
-                collection_id: row.collection_id
+                collection_id: row.collection_id,
+                is_visible: row.is_visible
             })) : []
         };
 

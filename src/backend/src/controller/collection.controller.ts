@@ -5,13 +5,13 @@ import bookDataMapper from "../dataMapper/book.datamapper.ts";
 import { isValidIsbn } from "../validation/book.validator.ts";
 
 const collectionController = {
-    async manageMyCollection(req: Request, res: Response) {
+    async editMyCollection(req: Request, res: Response) {
         const user = req.user
         if (!user) {
             return res.status(500).json({ error: "no user" })
         }
 
-        const collection = await collectionDataMapper.getCollectionByUserId(user.id);
+        const collection = await collectionDataMapper.getPrivateCollectionByUserId(user.id);
         if (!collection) {
             return res.status(404).json({ error: "no collection" })
         }
@@ -21,13 +21,23 @@ const collectionController = {
         }
 
         let bookCollectionWithDetails = [];
+        let i = 1;
 
         for (const book of collection.books) {
             const bookDetails = await bookDataMapper.getBookByIsbn(book.isbn)
-            bookCollectionWithDetails.push(bookDetails)
+            bookCollectionWithDetails.push({
+                id: i,
+                title: bookDetails.title,
+                cover: bookDetails.cover,
+                isbn: bookDetails.isbn,
+                is_visible: book.is_visible,
+            });
+            i++;
         }
 
         res.json(bookCollectionWithDetails);
+
+        res.json(collection);
     },
 
     async addBook(req: Request, res: Response) {
