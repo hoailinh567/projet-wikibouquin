@@ -7,17 +7,14 @@ function Home() {
         {/* Section bienvenue */}
         <div className="w-full lg:basis-auto">
           <div className="flex flex-row-reverse w-full min-h-[200px] md:min-h-[300px] lg:min-h-full bg-[url('/bg-home.jpg')] bg-cover bg-center bg-no-repeat rounded-2xl p-4 md:p-6 lg:p-5">
-            <div className="w-full lg:w-1/2 text-shadow-lg text-white italic">
-              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
+            <div className="w-full lg:w-1/2 text-shadow-lg text-[#2E3945] italic">
+              <h1 className="text-xl text-center md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
                 Bienvenue !!!
               </h1>
-              <p className="text-sm md:text-base">
+              <p className="text-sm md:text-base text-left">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. In
-                error numquam, deserunt odit ipsam vitae culpa. Consequatur,
-                delectus ipsum. Fugiat sint aspernatur dicta, unde quam magnam
-                earum ad? Magni, illum?. Fugiat sint aspernatur dicta, unde quam
-                magnam earum ad? Magni Fugiat sint aspernatur dicta, unde quam
-                magnam earum ad? Magni, illum? Fugiat sint aspernatur dicta,
+                error numquam, Fugiat sint aspernatur dicta, unde quam
+                magnam earum ad? Magni Fugiat sint aspernatur dicta. Fugiat sint aspernatur dicta,
                 unde quam magnam earum ad? Magni Fugiat sint aspernatur dicta,
                 deserunt odit... voir plus
               </p>
