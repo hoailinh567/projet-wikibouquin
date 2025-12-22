@@ -27,7 +27,7 @@ function Header() {
       <div className="flex justify-between items-center font-playfair-sc text-sm md:text-lg font-bold mb-3">
         <div className="flex gap-2 md:gap-4">
           <a href="#" className="hover:text-[#07315f] transition">Nouveautés</a>
-          <a href="#" className="hover:text-[#07315f] transition hidden sm:block">Qui sommes-nous ?</a>
+          <a href="#" className="hover:text-[#07315f] transition">Qui sommes-nous ?</a>
         </div>
 
         <div className="relative flex items-center gap-2" ref={popupRef}>
@@ -54,18 +54,21 @@ function Header() {
               <>
                 <Link
                   to="/account"
+                  onClick={() => setIsPopupOpen(false)}
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Mon compte
                 </Link>
                 <Link
                   to={`/profile/${user?.username}`}
+                  onClick={() => setIsPopupOpen(false)}
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Mon profil public
                 </Link>
                 <Link
                   to="/edit-my-collection"
+                  onClick={() => setIsPopupOpen(false)}
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Gérer ma collection
