@@ -26,6 +26,7 @@ const collectionDataMapper = {
         return rows[0];
     },
 
+    // Sign In : Récupère les IDs des collections d'un utilisateur par son userId, pour l'instance qu'il a une seule collection.
     async getCollectionsIdByUserId(userId: number): Promise<number[]> {
         const { rows } = await client.query(
             `
@@ -39,6 +40,7 @@ const collectionDataMapper = {
         return rows.map(row => row.id);
     },
 
+    // Récupère la collection publique (livres visibles) d'un utilisateur par son userId
     async getCollectionByUserId(userId: number): Promise<Collection | null> {
         const { rows } = await client.query(
             `
@@ -52,6 +54,7 @@ const collectionDataMapper = {
             LEFT JOIN "book" b ON c.id = b.collection_id
             WHERE c.user_id = $1
             AND b.is_visible = true
+            ORDER BY b.created_at DESC
             `,
             [userId]
         )

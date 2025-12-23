@@ -9,14 +9,14 @@ function Home() {
           <div className="flex flex-row-reverse w-full min-h-[200px] md:min-h-[300px] lg:min-h-full bg-[url('/bg-home.jpg')] bg-cover bg-center bg-no-repeat rounded-2xl p-4 md:p-6 lg:p-5">
             <div className="w-full lg:w-1/2 text-shadow-lg text-[#2E3945] italic">
               <h1 className="text-xl text-center md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
-                Bienvenue !!!
+                Bienvenue sur WikiBouquin !
               </h1>
               <p className="text-sm md:text-base text-left">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. In
-                error numquam, Fugiat sint aspernatur dicta, unde quam
-                magnam earum ad? Magni Fugiat sint aspernatur dicta. Fugiat sint aspernatur dicta,
-                unde quam magnam earum ad? Magni Fugiat sint aspernatur dicta,
-                deserunt odit... voir plus
+                L’endroit où les livres se cachent… jusqu’à ce que vous les trouviez !
+                Recherchez vos livres préférés et ajoutez-les tranquillement à votre collection personnelle.
+                Certains livres restent bien au chaud, visibles seulement par ceux qui ont le droit.
+                Envie de partager ? Faites circuler vos coups de cœur avec les autres lecteurs.
+                Et pour une belle surprise, jetez un œil à côté … votre prochain coup de cœur vous y attend ...
               </p>
             </div>
           </div>
@@ -29,14 +29,14 @@ function Home() {
           </h1>
           <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8 w-full">
             <Card
-              title="Harry Potter à l'école des sorciers"
-              pictureUrl="https://covers.openlibrary.org/b/id/8494529-M.jpg"
-              isbn="2070584623"
+              title="Pourquoi je suis devenu une fille"
+              pictureUrl="https://covers.openlibrary.org/b/isbn/2330014880-M.jpg"
+              isbn="2330014880"
             />
             <Card
-              title="The noel diary"
-              pictureUrl="https://covers.openlibrary.org/b/id/14501384-M.jpg"
-              isbn="1501172034"
+              title="Raison et sentiments"
+              pictureUrl="https://covers.openlibrary.org/b/isbn/2909240258-M.jpg"
+              isbn="2909240258"
             />
           </div>
         </div>

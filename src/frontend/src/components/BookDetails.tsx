@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 function BookDetails() {
+  // recupérer l'isbn dans l'URL
   let { isbn } = useParams();
 
   type Book = {

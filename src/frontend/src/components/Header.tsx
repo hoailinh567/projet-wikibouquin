@@ -26,7 +26,10 @@ function Header() {
     <header className="p-3 md:p-4 bg-[#f5f0eb]">
       <div className="flex justify-between items-center font-playfair-sc text-sm md:text-lg font-bold mb-3">
         <div className="flex gap-2 md:gap-4">
-          <a href="#" className="hover:text-[#07315f] transition">Nouveautés</a>
+          <Link 
+          to="/nouveautes" className="hover:text-[#07315f] transition">
+          Nouveautés
+          </Link>
           <a href="#" className="hover:text-[#07315f] transition">Qui sommes-nous ?</a>
         </div>
 
@@ -88,12 +91,14 @@ function Header() {
               <>
                 <Link
                   to="/signin"
+                  onClick={() => setIsPopupOpen(false)}
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Connexion
                 </Link>
                 <Link
                   to="/signup"
+                  onClick={() => setIsPopupOpen(false)}
                   className="block px-4 py-2 hover:bg-gray-100 transition cursor-pointer"
                 >
                   Inscription

@@ -9,6 +9,8 @@ import UserProfile from "./UserProfile";
 import EditMyCollection from "./EditMyCollection";
 import { AuthProvider } from "../context/AuthContext";
 import Account from "./Account";
+import Research from "./Research";
+import NewArrival from "./NewArrival";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
             <Route path="/account" element={<Account />} />
             <Route path="/edit-my-collection" element={<EditMyCollection />} />
             <Route path="/profile/:username" element={<UserProfile />} />
+            <Route path="/research" element={<Research />} />
+            <Route path="/nouveautes" element={<NewArrival />} />
           </Routes>
         </main>
         <Footer />

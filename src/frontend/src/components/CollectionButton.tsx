@@ -62,7 +62,7 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   };
 
   const handleUnauthClick = () => {
-    // redirect to signin (you can change to "/signup" if you prefer)
+    // redirect to signin
     navigate("/signin", { state: { from: `/book/${isbn ?? ""}` } });
   };
   
