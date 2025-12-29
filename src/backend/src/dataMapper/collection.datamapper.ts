@@ -40,7 +40,7 @@ const collectionDataMapper = {
         return rows.map(row => row.id);
     },
 
-    // Récupère la collection publique (livres visibles) d'un utilisateur par son userId
+    // Récupère la collection publique (livres visibles) d'un utilisateur par son userId and tableau vide si aucun livre visible.
     async getCollectionByUserId(userId: number): Promise<Collection | null> {
         const { rows } = await client.query(
             `
@@ -51,9 +51,8 @@ const collectionDataMapper = {
                 b.collection_id,
                 b.is_visible
             FROM "collection" c
-            LEFT JOIN "book" b ON c.id = b.collection_id
+            LEFT JOIN "book" b ON c.id = b.collection_id AND b.is_visible = true
             WHERE c.user_id = $1
-            AND b.is_visible = true
             ORDER BY b.created_at DESC
             `,
             [userId]
