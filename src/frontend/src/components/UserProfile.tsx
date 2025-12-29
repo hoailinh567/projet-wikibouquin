@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Card from "./Card";
 
 type Book = {
@@ -13,9 +13,9 @@ type UserProfileData = Book[]
 
 function UserProfile() {
   const { username } = useParams<{ username: string }>();
+  const navigate = useNavigate();
   const [data, setData] = useState<UserProfileData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
 
   const fetchUserProfile = async () => {
     setLoading(true);
@@ -24,14 +24,19 @@ function UserProfile() {
       const response = await fetch(`http://localhost:3000/api/profile/${username}`, { credentials: 'include' });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 404) {
+          navigate("/error/404");
+          return;
+        }
+
+        if (response.status === 500) {
+          navigate("/error/500");
+          return;
+        }
       }
 
       const userData = await response.json();
       setData(userData);
-    } catch (err) {
-      console.error(err);
-      setError(true);
     } finally {
       setLoading(false);
     }
@@ -49,23 +54,6 @@ function UserProfile() {
     );
   }
 
-  if (error || !data) {
-    return (
-      <div className="p-5 grid h-full place-items-center text-center min-h-[400px]">
-        <div>
-          <img
-            src="/error.jpg"
-            alt="Erreur"
-            className="mx-auto w-48 h-48 md:w-64 md:h-64 object-contain mb-4"
-          />
-          <p className="text-xl font-semibold text-red-500">
-            Impossible de charger le profil de cet utilisateur
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="grow max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">
       {/* Titre de la collection */}
@@ -74,15 +62,15 @@ function UserProfile() {
       </h1>
 
       {/* Grille de livres */}
-      {data.length === 0 ? (
+      {!data || data.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-lg md:text-xl text-gray-600">
-            Cet utilisateur n'a pas encore de livres publics dans sa collection.
+            Aucun livre trouvé dans cette collection pour le moment.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8 lg:gap-10 justify-items-center">
-          {data.map((book) => (
+          {!data || data.map((book) => (
             <Card
               key={book.id}
               title={book.title}
@@ -92,13 +80,6 @@ function UserProfile() {
           ))}
         </div>
       )}
-
-      {/* Message informatif */}
-      <div className="mt-8 md:mt-12 p-4 md:p-6 bg-[#f5f0eb] rounded-lg text-center">
-        <p className="text-sm md:text-base text-[#6B5B4C]">
-          Seuls les livres publics de la collection de {username} sont affichés ici.
-        </p>
-      </div>
     </div>
   );
 }

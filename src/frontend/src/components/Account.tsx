@@ -10,7 +10,6 @@ type User = {
 
 function Account() {
   const [data, setData] = useState<User>({} as User);
-
   const myProfile = async () => {
     try {
       const response = await fetchWithAuth(
