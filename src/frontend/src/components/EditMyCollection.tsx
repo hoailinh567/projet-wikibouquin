@@ -249,11 +249,13 @@ function EditMyCollection() {
                 className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
               >
                 <div className="flex gap-4 mb-4">
+                  <Link to={`/book/${book.isbn}`}>
                   <img
                     src={book.cover}
                     alt={book.title}
                     className="w-20 h-28 object-cover rounded shadow shrink-0"
                   />
+                  </Link>
                   <div className="grow">
                     <h3 className="font-bold text-base mb-1">{book.title}</h3>
                     <p className="text-sm text-gray-600">{book.author}</p>
