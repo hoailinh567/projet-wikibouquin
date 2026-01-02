@@ -15,12 +15,18 @@ const bookController = {
 
     try {
       const book = await bookDataMapper.getBookByIsbn(isbn);
+      // Si le livre n'existe pas (null/undefined)
+      if (!book) {
+        return res.status(404).json({ 
+          message: `Livre avec l'ISBN ${isbn} introuvable`,
+        });
+      }
       res.json(book); // 200 OK par défaut, envoi la réponse au format JSON.
     } catch (error: any) {
+      console.error("Error in getBookByIsbn:", error);
       if (error.response && error.response.status === 404) {
-        return res.status(404).json({ message: "Livre non trouvé" });
+        return res.status(404).json({ message: `Livre avec l'ISBN ${isbn} introuvable` });
       }
-      console.error(error.message);
       res.status(500).json({ message: "Erreur serveur" });
     }
   },

@@ -4,7 +4,11 @@ const openlibraryClient = {
       headers: { "User-Agent": "Wikibouquin/1.0 (hoai-linh.nguyen@oclock.school)" },
     });
     if (!response.ok) {
-      throw new Error(`Livre non trouvé pour l'ISBN: ${isbn}`);
+      if (response.status === 404) {
+        throw { response }; // Pour gérer le 404 dans le contrôleur
+      }
+
+      throw new Error(`Erreur lors de la récupération du livre avec l'ISBN: ${isbn}`);
     }
     const data = await response.json();
     return data;

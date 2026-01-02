@@ -23,10 +23,12 @@ const bookDataMapper = {
             return bookFromCache;
         }
 
-        // Sinon, on récupère les données depuis OpenLibrary
-        const rawBook = await openlibraryClient.getBookByIsbn(isbn);
 
+
+        // Sinon, on récupère les données depuis OpenLibrary
+        let rawBook = await openlibraryClient.getBookByIsbn(isbn);
         let authors = ["Auteur inconnu(e)"];
+
         // S'il y a d'authors, on récupére le nom de l'auteur dans la derniere partie après le dernier "/"
         if (rawBook.authors) {
             authors = [];
