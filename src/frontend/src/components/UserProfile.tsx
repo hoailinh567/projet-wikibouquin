@@ -1,6 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Card from "./Card";
+import { useFetch } from "../hooks/useFetch";
+import Spinner from "./Spinner";
+import ServerError from "./Errors/ServerError";
+import NotFound from "./Errors/NotFound";
+import BadRequest from "./Errors/BadRequest";
 
 type Book = {
   id: number;
@@ -13,46 +18,16 @@ type UserProfileData = Book[]
 
 function UserProfile() {
   const { username } = useParams<{ username: string }>();
-  const navigate = useNavigate();
-  const [data, setData] = useState<UserProfileData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const fetchUserProfile = async () => {
-    setLoading(true);
-    try {
-      // appel API pour récupérer les données du profil utilisateur
-      const response = await fetch(`http://localhost:3000/api/profile/${username}`, { credentials: 'include' });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          navigate("/error/404");
-          return;
-        }
-
-        if (response.status === 500) {
-          navigate("/error/500");
-          return;
-        }
-      }
-
-      const userData = await response.json();
-      setData(userData);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, loading, error, execute } = useFetch<UserProfileData>();
 
   useEffect(() => {
-    fetchUserProfile();
-  }, [username]);
+    execute(`http://localhost:3000/api/profile/${username}`, { credentials: 'include' });
+  }, [username, execute]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  if (loading) return <Spinner />;
+  if (error?.status === 404) return <NotFound />;
+  if (error?.status === 400) return <BadRequest />;
+  if (error || !data) return <ServerError />;
 
   return (
     <div className="grow max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">

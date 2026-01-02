@@ -2,6 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import CollectionButton from "./CollectionButton";
 import { useParams } from "react-router-dom";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
+import { useFetch } from "../hooks/useFetch";
+import Spinner from "./Spinner";
+import NotFound from "./Errors/NotFound";
+import BadRequest from "./Errors/BadRequest";
+import ServerError from "./Errors/ServerError";
 
 function BookDetails() {
   // recupérer l'isbn dans l'URL
@@ -17,27 +22,8 @@ function BookDetails() {
     description: string;
   };
 
-  const [data, setData] = useState<Book>({} as Book);
-  const [loading, setLoading] = useState<Boolean>(true);
-  const [error, setError] = useState<Boolean>(false);
+  const { data, loading, error, execute } = useFetch<Book>();
   const [hasBook, setHasBook] = useState<boolean>(false);
-
-  // Function to fetch book details from the API, definition of the function BUT NOT LAUNCHING IT
-  const fetchBookDetails = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`http://localhost:3000/api/book/${isbn}`);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      setData(await response.json());
-    } catch (error) {
-      setError(true);
-    }
-    setLoading(false);
-  }, [isbn]);
 
   // Function pour vérifier qu'on a le livre ou pas
   const checkUserHasBook = useCallback(async () => {
@@ -58,34 +44,17 @@ function BookDetails() {
 
   useEffect(() => {
     // Fetch book details using the ISBN from Props
-    fetchBookDetails();
+    execute(`http://localhost:3000/api/book/${isbn}`);
+
+    // Check if the current logged in user has the book in their collection
     checkUserHasBook();
-  }, [checkUserHasBook, fetchBookDetails]);
+  }, [checkUserHasBook, execute, isbn]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  if (loading) return <Spinner />;
+  if (error?.status === 404) return <NotFound />;
+  if (error?.status === 400) return <BadRequest message={`ISBN <${isbn}> invalide`} />;
+  if (error || !data) return <ServerError />;
 
-  if (error) {
-    return (
-      <div className="p-5 grid h-full place-items-center text-center">
-        <div>
-          <img
-            src="/public/error.jpg"
-            alt="Erreur de requête"
-            className="mx-auto w-70 h-70 object-contain mb-4"
-          />
-          <p className="text-xl font-semibold text-red-500">
-            Un problème est survenu - essayez plus tard !
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="grow max-w-6xl mx-auto p-5 mt-8 font-playfair">

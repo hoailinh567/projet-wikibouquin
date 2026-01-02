@@ -11,8 +11,7 @@ import { AuthProvider } from "../context/AuthContext";
 import Account from "./Account";
 import Research from "./Research";
 import NewArrival from "./NewArrival";
-import Page404 from "./Page404";
-import Page500 from "./Page500";
+import NotFound from "./Errors/NotFound";
 
 function App() {
   return (
@@ -30,8 +29,8 @@ function App() {
             <Route path="/profile/:username" element={<UserProfile />} />
             <Route path="/research" element={<Research />} />
             <Route path="/nouveautes" element={<NewArrival />} />
-            <Route path="/error/404" element={<Page404 />} />
-            <Route path="/error/500" element={<Page500 />} />
+            {/* wildcard redirect vers /404 pour toutes les routes inconnues */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
