@@ -124,14 +124,14 @@ export default function Research() {
                     {book.isbn ? (
                       <Card
                         title={book.title}
-                        pictureUrl={book.cover || "/placeholder-book.png"}
+                        pictureUrl={book.cover || "/placeholder-book.jpg"}
                         isbn={book.isbn}
                       />
                     ) : (
                       <div className="w-full max-w-[280px] h-96 bg-[#f5f0eb] text-center border border-gray-300 rounded-lg shadow-md p-4">
                         <img
                           className="rounded-t-lg mx-auto object-contain h-48 w-full opacity-50"
-                          src={book.cover || "/placeholder-book.png"}
+                          src={book.cover || "/placeholder-book.jpg"}
                           alt={book.title}
                         />
                         <div className="p-3 md:p-5">
