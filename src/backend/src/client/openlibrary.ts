@@ -19,8 +19,11 @@ type SearchResult = {
 
 const openlibraryClient = {
   async search(params: SearchParams): Promise<SearchResult> {
+    // Add language:fre to query to filter only French editions
+    const queryWithLang = `${params.q} language:fre`;
+
     const searchParams = new URLSearchParams({
-      q: params.q,
+      q: queryWithLang,
       limit: String(params.limit || 20),
       offset: String(params.offset || 0),
       fields: "key,title,author_name,first_publish_year,isbn,cover_i",

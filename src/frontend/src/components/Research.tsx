@@ -7,8 +7,8 @@ type Book = {
   title: string;
   authors: string[];
   publishYear: number | null;
-  isbn: string | null;
-  cover: string | null;
+  isbn: string;
+  cover: string;
 };
 
 type SearchResponse = {
@@ -119,27 +119,13 @@ export default function Research() {
           ) : (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {data.books.map((book, index) => (
-                  <div key={book.isbn || `book-${index}`} className="flex justify-center">
-                    {book.isbn ? (
-                      <Card
-                        title={book.title}
-                        pictureUrl={book.cover || "/placeholder-book.jpg"}
-                        isbn={book.isbn}
-                      />
-                    ) : (
-                      <div className="w-full max-w-[280px] h-96 bg-[#f5f0eb] text-center border border-gray-300 rounded-lg shadow-md p-4">
-                        <img
-                          className="rounded-t-lg mx-auto object-contain h-48 w-full opacity-50"
-                          src={book.cover || "/placeholder-book.jpg"}
-                          alt={book.title}
-                        />
-                        <div className="p-3 md:p-5">
-                          <p className="line-clamp-2 text-base md:text-lg font-bold mb-3 md:mb-5">{book.title}</p>
-                          <p className="text-sm text-gray-500">ISBN non disponible</p>
-                        </div>
-                      </div>
-                    )}
+                {data.books.map((book) => (
+                  <div key={book.isbn} className="flex justify-center">
+                    <Card
+                      title={book.title}
+                      pictureUrl={book.cover}
+                      isbn={book.isbn}
+                    />
                   </div>
                 ))}
               </div>

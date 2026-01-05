@@ -25,22 +25,27 @@ const searchDataMapper = {
             return cachedResult;
         }
 
-        // Fetch from OpenLibrary
-        const rawResult = await openlibraryClient.search({ q: query, limit, offset });
+        // Fetch more results to compensate for filtering
+        const rawResult = await openlibraryClient.search({ q: query, limit: limit * 2, offset });
 
-        // Transform results
-        const books: SearchBook[] = rawResult.docs.map((doc) => {
-            const isbn = doc.isbn?.[0] || null;
-            return {
-                title: doc.title,
-                authors: doc.author_name || ["Auteur inconnu(e)"],
-                publishYear: doc.first_publish_year || null,
-                isbn,
-                cover: doc.cover_i
-                    ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
-                    : (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg` : null),
-            };
-        });
+        // Transform and filter results - only keep books with valid ISBN
+        const books: SearchBook[] = rawResult.docs
+            .filter((doc) => doc.isbn && doc.isbn.length > 0)
+            .slice(0, limit)
+            .map((doc) => {
+                // Find a valid ISBN (prefer ISBN-10 for OpenLibrary compatibility)
+                const isbn = doc.isbn!.find((i) => i.length === 10) || doc.isbn![0];
+                return {
+                    title: doc.title,
+                    authors: doc.author_name || ["Auteur inconnu(e)"],
+                    publishYear: doc.first_publish_year || null,
+                    isbn,
+                    // Prefer cover_i (guaranteed to exist), fallback to ISBN-based cover
+                    cover: doc.cover_i
+                        ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
+                        : `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`,
+                };
+            });
 
         const response: SearchResponse = {
             numFound: rawResult.numFound,
