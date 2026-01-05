@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { isValidIsbn } from "../validation/book.validator.ts";
 import bookDataMapper from "../dataMapper/book.datamapper.ts";
+import searchDataMapper from "../dataMapper/search.datamapper.ts";
 
 const bookController = {
   async getBookByIsbn(req: Request, res: Response) {
@@ -28,6 +29,25 @@ const bookController = {
         return res.status(404).json({ message: `Livre avec l'ISBN ${isbn} introuvable` });
       }
       res.status(500).json({ message: "Erreur serveur" });
+    }
+  },
+
+  async search(req: Request, res: Response) {
+    const { q, limit, offset } = req.query;
+
+    if (!q || typeof q !== "string" || q.trim() === "") {
+      return res.status(400).json({ message: "Le paramètre de recherche 'q' est requis" });
+    }
+
+    const parsedLimit = Math.min(Math.max(parseInt(String(limit)) || 20, 1), 100);
+    const parsedOffset = Math.max(parseInt(String(offset)) || 0, 0);
+
+    try {
+      const result = await searchDataMapper.search(q.trim(), parsedLimit, parsedOffset);
+      res.json(result);
+    } catch (error) {
+      console.error("Error in search:", error);
+      res.status(500).json({ message: "Erreur serveur lors de la recherche" });
     }
   },
 };

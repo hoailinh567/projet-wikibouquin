@@ -14,6 +14,7 @@ router.post('/api/refresh', authController.refresh);
 router.post('/api/logout', authController.logout);
 
 // App
+router.get('/api/search', bookController.search);
 router.get('/api/book/:isbn', bookController.getBookByIsbn);
 
 // User

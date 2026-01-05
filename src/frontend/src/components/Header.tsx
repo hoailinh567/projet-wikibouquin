@@ -5,9 +5,17 @@ import { Link } from "react-router-dom";
 
 function Header() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const popupRef = useRef(null);
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/research?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   // Fermer le popup si clic à l'extérieur
   useEffect(() => {
@@ -120,13 +128,15 @@ function Header() {
           <h1 className="text-xl md:text-3xl font-bold font-playfair-sc whitespace-nowrap">Wiki Bouquin</h1>
         </a>
 
-        <div className="flex w-full md:max-w-[600px] lg:max-w-[800px]">
+        <form onSubmit={handleSearch} className="flex w-full md:max-w-[600px] lg:max-w-[800px]">
           <input
             type="text"
             placeholder="Rechercher un livre, un auteur..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="grow border bg-gray-50 border-gray-300 rounded-l-full px-3 md:px-4 py-2 focus:outline-none text-xs md:text-sm font-playfair"
           />
-          <button className="flex items-center justify-center bg-[#6C7A89] px-3 md:px-4 py-2 rounded-r-full hover:bg-[#07315f] transition">
+          <button type="submit" className="flex items-center justify-center bg-[#6C7A89] px-3 md:px-4 py-2 rounded-r-full hover:bg-[#07315f] transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -142,7 +152,7 @@ function Header() {
               />
             </svg>
           </button>
-        </div>
+        </form>
       </div>
     </header>
   );
