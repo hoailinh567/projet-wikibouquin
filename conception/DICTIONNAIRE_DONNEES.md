@@ -145,7 +145,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_role_nom ON role(nom);
 - date_creation : Timestamp UTC valide
 
 **Entité livre :**
-- isbn : Format ISBN-10 ou ISBN-13 valide
+- isbn : Format ISBN-10
 - Données optionnelles : Validation si présentes
 
 **Association contenir :**

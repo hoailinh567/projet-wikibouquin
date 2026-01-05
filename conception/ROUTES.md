@@ -164,7 +164,7 @@ Response 200:
   "data": {
     "books": [
       {
-        "isbn": "978-2-123456-78-9",
+        "isbn": "9001708528",
         "title": "Le Petit Prince",
         "author": "Antoine de Saint-Exupéry",
         "publisher": "Gallimard",
@@ -193,14 +193,14 @@ Response 200:
   "success": true,
   "data": {
     "book": {
-      "isbn": "978-2-123456-78-9",
+      "isbn": "9001708528",
       "title": "Le Petit Prince",
       "author": "Antoine de Saint-Exupéry",
       "publisher": "Gallimard",
       "publishedDate": "1943",
       "description": "Un conte poétique et philosophique...",
       "cover": "https://covers.example.com/cover.jpg",
-      "pageCount": 96,
+      "pageCount": 100,
       "categories": ["Fiction", "Jeunesse"],
       "language": "fr"
     }
@@ -250,7 +250,7 @@ Response 200:
     },
     "collection": [
       {
-        "isbn": "978-2-123456-78-9",
+        "isbn": "9001708528",
         "title": "Le Petit Prince",
         "author": "Antoine de Saint-Exupéry",
         "cover": "https://covers.example.com/cover.jpg",
@@ -269,7 +269,7 @@ Authorization: Bearer {token}
 Content-Type: application/json
 
 {
-  "isbn": "978-2-123456-78-9",
+  "isbn": "9001708528",
   "isPublic": true
 }
 
@@ -280,7 +280,7 @@ Response 201:
   "data": {
     "collectionItem": {
       "id": 1,
-      "isbn": "978-2-123456-78-9",
+      "isbn": "99001708528",
       "isPublic": true,
       "addedAt": "2025-01-01T00:00:00.000Z"
     }
@@ -416,4 +416,4 @@ Content-Type: application/json
 - Toutes les entrées utilisateur sont validées
 - Protection contre les injections SQL
 - Échappement des caractères HTML
-- Validation des ISBN au format ISBN-10 ou ISBN-13
+- Validation des ISBN au format ISBN-10
