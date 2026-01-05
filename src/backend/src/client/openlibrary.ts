@@ -24,6 +24,7 @@ const openlibraryClient = {
       limit: String(params.limit || 20),
       offset: String(params.offset || 0),
       fields: "key,title,author_name,first_publish_year,isbn,cover_i",
+      lang: "fre",
     });
 
     const response = await fetch(
