@@ -37,6 +37,7 @@ export default function Research() {
     const fetchResults = async () => {
       setLoading(true);
       setError(null);
+      setData(null); // Reset data before new fetch
       try {
         const response = await fetch(
           `http://localhost:3000/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`
@@ -46,6 +47,7 @@ export default function Research() {
         }
         const result: SearchResponse = await response.json();
         setData(result);
+        console.log("Search results:", result);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Erreur inconnue");
       } finally {
