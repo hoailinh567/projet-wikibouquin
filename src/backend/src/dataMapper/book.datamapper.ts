@@ -23,8 +23,6 @@ const bookDataMapper = {
             return bookFromCache;
         }
 
-
-
         // Sinon, on récupère les données depuis OpenLibrary
         let rawBook = await openlibraryClient.getBookByIsbn(isbn);
         let authors = ["Auteur inconnu(e)"];
@@ -52,15 +50,11 @@ const bookDataMapper = {
             description = work.description;
         }
 
-        if (rawBook.isbn_10 === undefined || rawBook.isbn_10.length === 0) {
-            throw new Error("ISBN not found for the book.");
-        }
-
         const book: Book = {
             title: rawBook.title,
             authors: authors,
             publish_date: rawBook.publish_date || "",
-            isbn: rawBook.isbn_10[0],
+            isbn: isbn,
             number_of_pages: rawBook.number_of_pages || 0,
             cover: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
             description: description,

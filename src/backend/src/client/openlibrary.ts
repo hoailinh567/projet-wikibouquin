@@ -1,3 +1,6 @@
+import { isValidIsbn } from "../validation/book.validator.ts";
+
+
 type SearchParams = {
   q: string;
   limit?: number;
@@ -19,15 +22,11 @@ type SearchResult = {
 
 const openlibraryClient = {
   async search(params: SearchParams): Promise<SearchResult> {
-    // Add language:fre to query to filter only French editions
-    const queryWithLang = `${params.q} language:fre`;
-
     const searchParams = new URLSearchParams({
-      q: queryWithLang,
+      q: params.q,
       limit: String(params.limit || 20),
       offset: String(params.offset || 0),
       fields: "key,title,author_name,first_publish_year,isbn,cover_i",
-      lang: "fre",
     });
 
     const response = await fetch(
@@ -42,10 +41,32 @@ const openlibraryClient = {
     }
 
     const data = await response.json();
+
+    // Filtrer les livres qui ont au moins un ISBN-10 valide avec Zod
+    const filteredDocs = data.docs.filter((doc: any) => {
+      // Vérifier la présence d'une cover
+      if (!doc.cover_i) {
+      return false;
+      }
+      // Vérifier la présence d'ISBN
+      if (!doc.isbn || doc.isbn.length === 0 ) {
+        return false;
+      }
+      
+      // Vérifier si au moins un ISBN dans le tableau est un ISBN-10 valide
+      return doc.isbn.some((isbn: string) => {
+      // Nettoyer l'ISBN (enlever espaces, tirets)
+      const cleanIsbn = isbn.replace(/[-\s]/g, '');
+      // Validation avec schéma Zod
+      const result = isValidIsbn.safeParse({ isbn: cleanIsbn });
+      return result.success;
+      });
+    });
+
     return {
-      numFound: data.numFound,
+      numFound: filteredDocs.length, // Nombre réel de livres affichables
       start: data.start,
-      docs: data.docs,
+      docs: filteredDocs,
     };
   },
 
