@@ -18,6 +18,7 @@ type SearchResponse = {
 const searchDataMapper = {
     async search(query: string, limit: number = 20, offset: number = 0): Promise<SearchResponse> {
         const cacheKey = `search:${query}:${limit}:${offset}`;
+        // search:misa:20:0
 
         // Try to get from cache
         const cachedResult = await get<SearchResponse>(cacheKey);
@@ -26,7 +27,7 @@ const searchDataMapper = {
         }
 
         // Fetch more results to compensate for filtering
-        const rawResult = await openlibraryClient.search({ q: query, limit: limit * 2, offset });
+        const rawResult = await openlibraryClient.search({ q: query, limit: limit, offset });
 
         // Transform and filter results - only keep books with valid ISBN
         const books: SearchBook[] = rawResult.docs

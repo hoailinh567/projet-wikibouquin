@@ -20,7 +20,7 @@ const authorDataMapper = {
             name: rawAuthor.name || "Auteur inconnu"
         };
 
-        // Stockage du livre dans le cache Redis avec un TTL de 1 mois
+        // Stockage de l'auteur dans le cache Redis avec un TTL de 1 mois
         set<Author>(`author:${key}`, author, 2629800);
 
         return author;
