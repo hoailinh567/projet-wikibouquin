@@ -76,7 +76,7 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
               : addBookToCollection
             : handleUnauthClick
         }
-        className="bg-[#6C7A89] text-white px-4 py-2 rounded hover:bg-[#07315f] transition cursor-pointer"
+        className="bg-[#6C7A89] text-white text-sm md:text-base px-4 py-2 w-full sm:w-auto rounded hover:bg-[#07315f] transition cursor-pointer"
       >
         {hasBook ? "Retirer de ma collection" : "Ajouter à ma collection"}
       </button>

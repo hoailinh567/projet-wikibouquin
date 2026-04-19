@@ -72,17 +72,17 @@ function Account() {
   };
 
   return (
-    <div className="grow max-w-4xl mx-auto p-5 mt-10 font-playfair">
-      <h2 className="text-4xl font-bold mb-10 text-center text-gray-800">
+    <div className="grow max-w-4xl mx-auto p-4 md:p-5 mt-6 md:mt-10 font-playfair">
+      <h2 className="text-2xl md:text-4xl font-bold mb-6 md:mb-10 text-center text-gray-800">
         Bienvenue dans votre espace personnel
       </h2>
 
-      <div className="bg-linear-to-br from-white to-blue-50 p-8 rounded-2xl shadow-lg border border-gray-100 mx-auto max-w-xl">
-        <h3 className="text-2xl font-semibold mb-6 text-blue-700 text-center">
+      <div className="bg-linear-to-br from-white to-blue-50 p-4 md:p-8 rounded-2xl shadow-lg border border-gray-100 mx-auto max-w-xl">
+        <h3 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 text-blue-700 text-center">
           Informations personnelles
         </h3>
 
-        <div className="space-y-5 text-lg">
+        <div className="space-y-5 text-base md:text-lg">
           <div className="flex items-center gap-3">
             <span className="text-blue-600 text-2xl">👤</span>
             <p>
@@ -103,7 +103,7 @@ function Account() {
         </div>
 
         {/* Formulaire changement de mot de passe */}
-        <h3 className="text-xl font-semibold mt-10 mb-4 text-blue-700">
+        <h3 className="text-lg md:text-xl font-semibold mt-6 md:mt-10 mb-3 md:mb-4 text-blue-700">
           Changer le mot de passe
         </h3>
 
