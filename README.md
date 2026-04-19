@@ -29,7 +29,7 @@ Analyse des risques :
 - Profil public partageable via lien
 
 **Recherche et consultation de livres :**
-- Recherche de livres par nom, auteur ou ISBN
+- Recherche de livres par nom, auteur ou ISBN-10
 - Consultation de la page de détail d'un livre
 - Intégration avec l'API externe de livres
 
@@ -40,15 +40,12 @@ Analyse des risques :
 - Consultation de sa propre collection
 - Consultation des collections publiques d'autres utilisateurs
 
-**Administration de base :**
-- Modification du mot de passe d'un utilisateur
-- Modification du nom de profil d'un utilisateur
-
 ### Evolutions potentielles
 
 - Renforcement du rôle d'administrateur avec plus de possibilités (suppression d'utilisateurs, modération, statistiques)
 - Possibilité de créer plusieurs collections par utilisateur avec visibilité publique/privée par collection
 - Suivi avancé des livres : statut de lecture (lu, en cours, à lire), page actuelle, dates d'achat/début/fin de lecture
+- Administrateur : mettre à jour les informations de base (nom de profil, mot de passe).
 
 ## Architecture
 

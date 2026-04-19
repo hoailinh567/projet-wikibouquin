@@ -51,7 +51,7 @@ Ce document présente le dictionnaire de données du projet WikiBouquin, détail
 
 | Attribut | Type | Contraintes | Description |
 |----------|------|-------------|-------------|
-| `isbn` | VARCHAR(17) | NOT NULL | ISBN du livre (format ISBN-10 ou ISBN-13). Partie de la clé primaire composite avec `collection_id`. |
+| `isbn` | VARCHAR(17) | NOT NULL | ISBN du livre (format ISBN-10). Partie de la clé primaire composite avec `collection_id`. |
 | `date_ajout` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date d’ajout du livre dans la collection |
 | `is_visible` | BOOLEAN | NOT NULL, DEFAULT TRUE | Indique si le livre est visible publiquement ou non |
 | `collection_id` | INT | NOT NULL, FOREIGN KEY REFERENCES collection(id) ON DELETE CASCADE | Identifiant de la collection à laquelle appartient le livre. Partie de la clé primaire composite avec `isbn`. |
@@ -94,7 +94,7 @@ utilisateur ←→ livre (relation indirecte via collection)
 | `date_creation` | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date de création du rôle |
 
 **Description :**
-- L'entité `role` centralise les profils fonctionnels du système. Dans le modèle actuel, chaque `utilisateur` référence un seul rôle via la colonne `role_id` (FK vers `role(id)`).
+- L'entité `role` centralise les profils fonctionnels du système. Dans le modèle actuel, chaque `utilisateur` référence un seul rôle via la colonne `role_id` (FK vers `role(id)`). Tous les utilisateurs créés reçoivent le rôle utilisateur par défaut, et que les accès administrateur sont gérés directement en base de données pour l'instant.
 
 ### 🎯 Rôle utilisateur (modèle à rôle unique)
 
