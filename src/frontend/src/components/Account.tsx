@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 type User = {
@@ -10,14 +12,24 @@ type User = {
 
 function Account() {
   const [data, setData] = useState<User>({} as User);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
+  const [formSuccess, setFormSuccess] = useState(false);
+  const { isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate("/signin");
+    }
+  }, [isAuthenticated, isLoading, navigate]);
   const myProfile = async () => {
     try {
-      const response = await fetchWithAuth(
-        `http://localhost:3000/api/me`,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetchWithAuth(`http://localhost:3000/api/account`, {
+        headers: { "Content-Type": "application/json" },
+      });
       console.log(response);
 
       setData(await response.json());
@@ -30,25 +42,49 @@ function Account() {
     myProfile();
   }, []);
 
+  const handleUpdatePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+    setFormSuccess(false);
+
+    const response = await fetch("http://localhost:3000/api/update-password", {
+      method: "PATCH",
+      body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      const errors: { message: string }[] = Array.isArray(body) ? body : [];
+      setFormError(errors.length ? errors.map((e) => e.message).join("\n") : (body?.error ?? "Une erreur est survenue."));
+      return;
+    }
+
+    setFormSuccess(true);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
   return (
     <div className="grow max-w-4xl mx-auto p-5 mt-10 font-playfair">
-
       <h2 className="text-4xl font-bold mb-10 text-center text-gray-800">
         Bienvenue dans votre espace personnel
       </h2>
 
       <div className="bg-gradient-to-br from-white to-blue-50 p-8 rounded-2xl shadow-lg border border-gray-100 mx-auto max-w-xl">
-
         <h3 className="text-2xl font-semibold mb-6 text-blue-700 text-center">
           Informations personnelles
         </h3>
 
         <div className="space-y-5 text-lg">
-
           <div className="flex items-center gap-3">
             <span className="text-blue-600 text-2xl">👤</span>
             <p>
-              <span className="font-bold text-gray-700">Nom d'utilisateur :</span>{" "}
+              <span className="font-bold text-gray-700">
+                Nom d'utilisateur :
+              </span>{" "}
               <span className="text-gray-900">{data.username}</span>
             </p>
           </div>
@@ -67,52 +103,67 @@ function Account() {
           Changer le mot de passe
         </h3>
 
-        <form className="space-y-4">
-
+        <form className="space-y-4" onSubmit={handleUpdatePasswordSubmit}>
           <div>
-            <label className="font-semibold text-gray-700">Mot de passe actuel</label>
+            <label className="font-semibold text-gray-700">
+              Mot de passe actuel
+            </label>
             <input
               type="password"
               className="w-full p-2 border rounded"
-              value=""
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
               required
             />
           </div>
 
           <div>
-            <label className="font-semibold text-gray-700">Nouveau mot de passe</label>
+            <label className="font-semibold text-gray-700">
+              Nouveau mot de passe
+            </label>
             <input
               type="password"
               className="w-full p-2 border rounded"
-              value=""
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               required
             />
           </div>
 
           <div>
-            <label className="font-semibold text-gray-700">Confirmer le mot de passe</label>
+            <label className="font-semibold text-gray-700">
+              Confirmer le mot de passe
+            </label>
             <input
               type="password"
               className="w-full p-2 border rounded"
-              value=""
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>
+
+          {formError && (
+            <ul className="text-red-600 text-sm list-disc list-inside">
+              {formError.split("\n").map((msg, i) => (
+                <li key={i}>{msg}</li>
+              ))}
+            </ul>
+          )}
+          {formSuccess && (
+            <p className="text-green-600 text-sm">Mot de passe mis à jour avec succès.</p>
+          )}
 
           <button
             type="submit"
-            className="bg-[#6C7A89] w-full py-2 text-white rounded-lg hover:bg-[#07315f] transition"
+            className="bg-[#6C7A89] w-full py-2 text-white rounded-lg hover:bg-[#07315f] transition cursor-pointer"
           >
             Mettre à jour le mot de passe
           </button>
-
         </form>
-
       </div>
     </div>
   );
-
-  }
+}
 
 export default Account;
-
