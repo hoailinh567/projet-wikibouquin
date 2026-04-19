@@ -8,6 +8,8 @@ import roleDatamapper from "../dataMapper/role.datamapper.ts";
 import { isValidSignin } from "../validation/signin.validator.ts";
 import type { PublicUser } from "../models/user.ts";
 import collectionDataMapper from "../dataMapper/collection.datamapper.ts";
+import { isValidUpdatePassword } from "../validation/update.password.validator.ts";
+import type { UpdatePasswordData } from "../validation/update.password.validator.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'unsafe-secret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'unsafe-refresh-secret';
@@ -201,7 +203,54 @@ const authController = {
         });
 
         res.json({ success: true, message: 'Déconnexion réussie' });
-    }
+    },
+
+    // Récupère le compte de l'utilisateur connecté pour le page "Mon compte"
+    account(req: Request, res: Response) {
+        const user = req.user
+        if (!user) {
+            res.status(500).json({ error: "no user" })
+        }
+
+        res.json(user);
+  },
+
+    async updatePassword(req: Request, res: Response) {
+      const publicUser = req.user
+      if (!publicUser) {
+          return res.status(500).json({ error: "no user" })
+      }
+
+      const user = await userDataMapper.getUserByEmail(publicUser.email)
+      // Vérifier si c'est User? sinon retourne error
+      if (!user) {
+        return res.status(500).json({ error: "no user" })
+      }
+
+      const updatePasswordData = isValidUpdatePassword.safeParse(req.body)
+      if (!updatePasswordData.success) {
+        return res.status(400).contentType('json').send(updatePasswordData.error.message);
+      }
+
+      const { currentPassword, newPassword } =  updatePasswordData.data as UpdatePasswordData;
+
+      const isCurrentPasswordOk = await argon2.verify(user.password_hash, currentPassword)
+      // Si c'est pas OK, retourn error
+      if (!isCurrentPasswordOk) {
+          return res
+              .status(403)
+              .contentType("json")
+              .send({ error: "Mot de passe actuel incorrect." });
+      }
+
+      const hashedPassword = await argon2.hash(newPassword);
+      const updatedUser = await userDataMapper.updatePassword(user.email, hashedPassword)
+      if (!updatedUser) {
+        return res.status(500).json({ error: "un problème est survenu" })
+      }
+
+      res.json(updatedUser);
+    },
 }
 
-export default authController; 
+export default authController;

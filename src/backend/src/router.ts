@@ -12,13 +12,14 @@ router.post('/api/signup', authController.signUp);
 router.post('/api/signin', authController.signIn);
 router.post('/api/refresh', authController.refresh);
 router.post('/api/logout', authController.logout);
+router.get('/api/account', authenticate, authController.account);
+router.patch('/api/update-password', authenticate, authController.updatePassword)
 
 // App
 router.get('/api/search', bookController.search);
 router.get('/api/book/:isbn', bookController.getBookByIsbn);
 
 // User
-router.get('/api/me', authenticate, profileController.getMyProfile);
 router.get('/api/profile/:username', profileController.getUserProfile);
 
 // Collection

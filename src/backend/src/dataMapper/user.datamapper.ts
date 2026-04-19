@@ -46,7 +46,7 @@ const userDataMapper = {
         );
         return rows[0];
     },
-    
+
     // get user by email for login
     async getUserByEmail(email: string): Promise<User> {
         const { rows } = await client.query(
@@ -72,6 +72,20 @@ const userDataMapper = {
 
         return rows[0];
     },
+
+    async updatePassword(email: string, newPassword: string): Promise<User> {
+      const { rows } = await client.query(
+        `
+        UPDATE "user"
+        SET password_hash = $1
+        WHERE email = $2
+        RETURNING id, username, email, role_id
+        `,
+        [newPassword, email]
+      );
+
+      return rows[0];
+    }
 };
 
 export default userDataMapper;
