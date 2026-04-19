@@ -27,7 +27,7 @@ function Account() {
   }, [isAuthenticated, isLoading, navigate]);
   const myProfile = async () => {
     try {
-      const response = await fetchWithAuth(`http://localhost:3000/api/account`, {
+      const response = await fetchWithAuth(`/api/account`, {
         headers: { "Content-Type": "application/json" },
       });
       console.log(response);
@@ -47,7 +47,7 @@ function Account() {
     setFormError(null);
     setFormSuccess(false);
 
-    const response = await fetch("http://localhost:3000/api/update-password", {
+    const response = await fetch("/api/update-password", {
       method: "PATCH",
       body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
       headers: { "Content-Type": "application/json" },
@@ -57,7 +57,11 @@ function Account() {
     if (!response.ok) {
       const body = await response.json().catch(() => null);
       const errors: { message: string }[] = Array.isArray(body) ? body : [];
-      setFormError(errors.length ? errors.map((e) => e.message).join("\n") : (body?.error ?? "Une erreur est survenue."));
+      setFormError(
+        errors.length
+          ? errors.map((e) => e.message).join("\n")
+          : (body?.error ?? "Une erreur est survenue."),
+      );
       return;
     }
 
@@ -73,7 +77,7 @@ function Account() {
         Bienvenue dans votre espace personnel
       </h2>
 
-      <div className="bg-gradient-to-br from-white to-blue-50 p-8 rounded-2xl shadow-lg border border-gray-100 mx-auto max-w-xl">
+      <div className="bg-linear-to-br from-white to-blue-50 p-8 rounded-2xl shadow-lg border border-gray-100 mx-auto max-w-xl">
         <h3 className="text-2xl font-semibold mb-6 text-blue-700 text-center">
           Informations personnelles
         </h3>
@@ -151,7 +155,9 @@ function Account() {
             </ul>
           )}
           {formSuccess && (
-            <p className="text-green-600 text-sm">Mot de passe mis à jour avec succès.</p>
+            <p className="text-green-600 text-sm">
+              Mot de passe mis à jour avec succès.
+            </p>
           )}
 
           <button

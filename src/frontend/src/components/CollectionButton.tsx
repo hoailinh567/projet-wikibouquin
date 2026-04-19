@@ -16,7 +16,7 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   const addBookToCollection = async () => {
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3000/api/edit-my-collection/add`,
+        `/api/edit-my-collection/add`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -41,7 +41,7 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   const removeBookFromCollection = async () => {
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3000/api/edit-my-collection/delete`,
+        `/api/edit-my-collection/delete`,
         {
           method: "DELETE",
           body: JSON.stringify({

@@ -21,7 +21,7 @@ function UserProfile() {
   const { data, loading, error, execute } = useFetch<UserProfileData>();
 
   useEffect(() => {
-    execute(`http://localhost:3000/api/profile/${username}`, { credentials: 'include' });
+    execute(`/api/profile/${username}`, { credentials: 'include' });
   }, [username, execute]);
 
   if (loading) return <Spinner />;

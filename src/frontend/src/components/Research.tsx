@@ -40,7 +40,7 @@ export default function Research() {
       setData(null); // Reset data before new fetch
       try {
         const response = await fetch(
-          `http://localhost:3000/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`
+          `/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`
         );
         if (!response.ok) {
           throw new Error("Erreur lors de la recherche");

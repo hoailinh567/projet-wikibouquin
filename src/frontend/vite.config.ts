@@ -9,7 +9,13 @@ export default defineConfig({
     tailwindcss(),
   ],
   server: {
-    host: 'localhost', // Force l'utilisation de localhost pour les cookies
+    host: 'localhost',
     port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      }
+    }
   }
 })

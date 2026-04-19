@@ -22,7 +22,7 @@ function EditMyCollection() {
     setLoading(true);
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3000/api/edit-my-collection`
+        `/api/edit-my-collection`
       );
       if (!response.ok) {
         if (response.status === 401) {
@@ -60,7 +60,7 @@ function EditMyCollection() {
     const collectionId = user?.collection_ids[0];
     try {
       // Appel API pour changer la visibilité
-      const response = await fetchWithAuth(`http://localhost:3000/api/edit-my-collection/update-visibility`, {
+      const response = await fetchWithAuth(`/api/edit-my-collection/update-visibility`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -101,7 +101,7 @@ function EditMyCollection() {
 
     try {
       const response = await fetchWithAuth(
-        `http://localhost:3000/api/edit-my-collection/delete`,
+        `/api/edit-my-collection/delete`,
         {
           method: "DELETE",
           body: JSON.stringify({

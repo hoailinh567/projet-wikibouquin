@@ -19,7 +19,7 @@ export async function fetchWithAuth(
   if (response.status === 401) {
     try {
       // Appeler l'endpoint de refresh
-      const refreshResponse = await fetch("http://localhost:3000/api/refresh", {
+      const refreshResponse = await fetch("/api/refresh", {
         method: "POST",
         credentials: "include",
       });

@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Utiliser fetchWithAuth qui gère automatiquement le refresh du token
       const response = await fetchWithAuth(
-        "http://localhost:3000/api/account"
+        "/api/account"
       );
 
       if (response.ok) {
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch("http://localhost:3000/api/logout", {
+      await fetch("/api/logout", {
         method: "POST",
         credentials: "include",
       });

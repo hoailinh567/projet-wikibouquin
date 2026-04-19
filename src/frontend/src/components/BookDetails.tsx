@@ -28,7 +28,7 @@ function BookDetails() {
   // Function pour vérifier qu'on a le livre ou pas
   const checkUserHasBook = useCallback(async () => {
     try {
-      const response = await fetchWithAuth(`http://localhost:3000/api/has-book/${isbn}`);
+      const response = await fetchWithAuth(`/api/has-book/${isbn}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -44,7 +44,7 @@ function BookDetails() {
 
   useEffect(() => {
     // Fetch book details using the ISBN from Props
-    execute(`http://localhost:3000/api/book/${isbn}`);
+    execute(`/api/book/${isbn}`);
 
     // Check if the current logged in user has the book in their collection
     checkUserHasBook();

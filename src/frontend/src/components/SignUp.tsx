@@ -38,7 +38,7 @@ function SignUp() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      const response = await fetch("http://localhost:3000/api/signup", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         body: JSON.stringify({ username, email, password, confirmPassword }),
         headers: { "Content-Type": "application/json" },
