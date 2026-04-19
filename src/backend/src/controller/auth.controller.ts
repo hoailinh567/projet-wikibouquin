@@ -169,7 +169,7 @@ const authController = {
             const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as PublicUser
 
             const newAccesToken = jwt.sign(
-                { id: decoded.id, username: decoded.username, role_id: decoded.role_id },
+                { id: decoded.id, username: decoded.username, email: decoded.email, role_id: decoded.role_id, collection_ids: decoded.collection_ids },
                 JWT_SECRET,
                 { expiresIn: '15m' }
             )
@@ -209,11 +209,11 @@ const authController = {
     account(req: Request, res: Response) {
         const user = req.user
         if (!user) {
-            res.status(500).json({ error: "no user" })
+            return res.status(500).json({ error: "no user" })
         }
 
         res.json(user);
-  },
+    },
 
     async updatePassword(req: Request, res: Response) {
       const publicUser = req.user
