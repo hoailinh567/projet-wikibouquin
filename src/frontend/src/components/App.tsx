@@ -12,6 +12,7 @@ import Account from "./Account";
 import Research from "./Research";
 import NewArrival from "./NewArrival";
 import NotFound from "./Errors/NotFound";
+import AboutUs from "./AboutUs";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/profile/:username" element={<UserProfile />} />
             <Route path="/research" element={<Research />} />
             <Route path="/nouveautes" element={<NewArrival />} />
+            <Route path="/about-us" element={<AboutUs />} />
             {/* wildcard redirect vers /404 pour toutes les routes inconnues */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -20,7 +20,10 @@ function Header() {
   // Fermer le popup si clic à l'extérieur
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (popupRef.current && !(popupRef.current as HTMLElement).contains(event.target as Node)) {
+      if (
+        popupRef.current &&
+        !(popupRef.current as HTMLElement).contains(event.target as Node)
+      ) {
         setIsPopupOpen(false);
       }
     };
@@ -34,11 +37,12 @@ function Header() {
     <header className="p-3 md:p-4 bg-[#f5f0eb]">
       <div className="flex justify-between items-center font-playfair-sc text-sm md:text-lg font-bold mb-3">
         <div className="flex gap-2 md:gap-4">
-          <Link 
-          to="/nouveautes" className="hover:text-[#07315f] transition">
-          Nouveautés
+          <Link to="/nouveautes" className="hover:text-[#07315f] transition">
+            Nouveautés
           </Link>
-          <a href="#" className="hover:text-[#07315f] transition">Qui sommes-nous ?</a>
+          <Link to="/about-us" className="hover:text-[#07315f] transition">
+            Qui sommes-nous ?
+          </Link>
         </div>
 
         <div className="relative flex items-center gap-2" ref={popupRef}>
@@ -51,13 +55,16 @@ function Header() {
               alt="icone profile"
               className="h-6 w-6 md:h-8 md:w-8 rounded-full object-cover border border-gray-300 inline-block"
             />
-            <span className="hidden sm:inline">{isAuthenticated && user ? user.username : "Mon profil"}</span>
+            <span className="hidden sm:inline">
+              {isAuthenticated && user ? user.username : "Mon profil"}
+            </span>
           </button>
           <div
             className={`absolute top-full right-0 mt-2 min-w-fit whitespace-nowrap bg-white border border-gray-300 rounded shadow-lg z-50 transform transition-all duration-200 ease-out
-              ${isPopupOpen
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-95 pointer-events-none"
+              ${
+                isPopupOpen
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-95 pointer-events-none"
               }
             `}
           >
@@ -125,10 +132,15 @@ function Header() {
             alt="logo WikiBouquin"
             className="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover inline"
           />
-          <h1 className="text-xl md:text-3xl font-bold font-playfair-sc whitespace-nowrap">Wiki Bouquin</h1>
+          <h1 className="text-xl md:text-3xl font-bold font-playfair-sc whitespace-nowrap">
+            Wiki Bouquin
+          </h1>
         </a>
 
-        <form onSubmit={handleSearch} className="flex w-full md:max-w-[600px] lg:max-w-[800px]">
+        <form
+          onSubmit={handleSearch}
+          className="flex w-full md:max-w-[600px] lg:max-w-[800px]"
+        >
           <input
             type="text"
             placeholder="Rechercher un livre, un auteur..."
@@ -136,7 +148,10 @@ function Header() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="grow border bg-gray-50 border-gray-300 rounded-l-full px-3 md:px-4 py-2 focus:outline-none text-xs md:text-sm font-playfair"
           />
-          <button type="submit" className="flex items-center justify-center bg-[#6C7A89] px-3 md:px-4 py-2 rounded-r-full hover:bg-[#07315f] transition">
+          <button
+            type="submit"
+            className="flex items-center justify-center bg-[#6C7A89] px-3 md:px-4 py-2 rounded-r-full hover:bg-[#07315f] transition"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
