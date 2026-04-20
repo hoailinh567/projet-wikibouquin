@@ -18,7 +18,6 @@ type SearchResponse = {
 const searchDataMapper = {
     async search(query: string, limit: number = 20, offset: number = 0): Promise<SearchResponse> {
         const cacheKey = `search:${query}:${limit}:${offset}`;
-        // search:misa:20:0
 
         // Try to get from cache
         const cachedResult = await get<SearchResponse>(cacheKey);

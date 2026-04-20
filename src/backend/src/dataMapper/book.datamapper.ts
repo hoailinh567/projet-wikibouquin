@@ -56,7 +56,9 @@ const bookDataMapper = {
             publish_date: rawBook.publish_date || "",
             isbn: isbn,
             number_of_pages: rawBook.number_of_pages || 0,
-            cover: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
+            cover: rawBook.covers && rawBook.covers.length > 0
+                ? `https://covers.openlibrary.org/b/id/${rawBook.covers[0]}-L.jpg`
+                : `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
             description: description,
         };
 
