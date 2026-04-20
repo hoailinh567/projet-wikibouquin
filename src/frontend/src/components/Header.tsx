@@ -143,7 +143,7 @@ function Header() {
         >
           <input
             type="text"
-            placeholder="Rechercher un livre, un auteur..."
+            placeholder="Rechercher un livre par son nom, un auteur, ISBN-10, mot de clé, ..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="grow border bg-gray-50 border-gray-300 rounded-l-full px-3 md:px-4 py-2 focus:outline-none text-xs md:text-sm font-playfair"

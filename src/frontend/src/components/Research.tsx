@@ -40,7 +40,7 @@ export default function Research() {
       setData(null); // Reset data before new fetch
       try {
         const response = await fetch(
-          `/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`
+          `/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
         );
         if (!response.ok) {
           throw new Error("Erreur lors de la recherche");
@@ -83,7 +83,7 @@ export default function Research() {
 
   if (!query) {
     return (
-      <div className="grow max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#6B5B4C] mb-6">
           Recherche
         </h1>
@@ -95,7 +95,7 @@ export default function Research() {
   }
 
   return (
-    <div className="grow max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">
+    <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-4 md:mt-6 font-playfair">
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-[#6B5B4C] mb-6">
         Résultats pour "{query}"
       </h1>
@@ -106,18 +106,19 @@ export default function Research() {
         </div>
       )}
 
-      {error && (
-        <p className="text-center text-red-600 mb-6">{error}</p>
-      )}
+      {error && <p className="text-center text-red-600 mb-6">{error}</p>}
 
       {!loading && data && (
         <>
           <p className="text-center text-gray-600 mb-6">
-            {data.numFound} résultat{data.numFound > 1 ? "s" : ""} trouvé{data.numFound > 1 ? "s" : ""}
+            {data.numFound} résultat{data.numFound > 1 ? "s" : ""} trouvé
+            {data.numFound > 1 ? "s" : ""}
           </p>
 
           {data.books.length === 0 ? (
-            <p className="text-center text-gray-500">Aucun livre trouvé pour cette recherche.</p>
+            <p className="text-center text-gray-500">
+              Aucun livre trouvé pour cette recherche.
+            </p>
           ) : (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
