@@ -16,7 +16,6 @@ type SearchResult = {
     author_name?: string[];
     first_publish_year?: number;
     isbn?: string[];
-    cover_i?: number;
   }>;
 };
 
@@ -26,7 +25,7 @@ const openlibraryClient = {
       q: params.q,
       limit: String(params.limit || 20),
       offset: String(params.offset || 0),
-      fields: "key,title,author_name,first_publish_year,isbn,cover_i",
+      fields: "key,title,author_name,first_publish_year,isbn",
     });
 
     const response = await fetch(
@@ -44,10 +43,6 @@ const openlibraryClient = {
 
     // Filtrer les livres qui ont au moins un ISBN-10 valide avec Zod
     const filteredDocs = data.docs.filter((doc: any) => {
-      // Vérifier la présence d'une cover
-      if (!doc.cover_i) {
-      return false;
-      }
       // Vérifier la présence d'ISBN
       if (!doc.isbn || doc.isbn.length === 0 ) {
         return false;

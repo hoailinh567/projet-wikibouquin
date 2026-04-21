@@ -40,10 +40,7 @@ const searchDataMapper = {
                     authors: doc.author_name || ["Auteur inconnu(e)"],
                     publishYear: doc.first_publish_year || null,
                     isbn,
-                    // Prefer cover_i (guaranteed to exist), fallback to ISBN-based cover
-                    cover: doc.cover_i
-                        ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
-                        : `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`,
+                    cover: `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`,
                 };
             });
 
