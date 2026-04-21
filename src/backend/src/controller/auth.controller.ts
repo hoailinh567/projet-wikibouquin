@@ -14,6 +14,13 @@ import type { UpdatePasswordData } from "../validation/update.password.validator
 const JWT_SECRET = process.env.JWT_SECRET || 'unsafe-secret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'unsafe-refresh-secret';
 
+const isProduction = process.env.NODE_ENV === 'production';
+const baseCookieOptions = {
+    httpOnly: true,
+    sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
+    secure: isProduction,
+};
+
 const authController = {
     async signUp(req: Request, res: Response) {
         const signUpData = isValidSignup.safeParse(req.body);
@@ -131,11 +138,7 @@ const authController = {
         res.cookie(
             'accessToken',
             accessToken,
-            {
-                httpOnly: true,
-                sameSite: 'lax', // 'lax' permet les cookies entre ports différents en dev
-                maxAge: 15 * 60 * 1000 // 15min = 15 x 60 (s) x 1000 (ms)
-            }
+            { ...baseCookieOptions, maxAge: 15 * 60 * 1000 }
         )
 
         // RefreshToken pour demander un nouveau accessToken s'il a dépassé 15min
@@ -149,7 +152,7 @@ const authController = {
         res.cookie(
             'refreshToken',
             refreshToken,
-            { httpOnly: true, sameSite: 'lax', maxAge: 30 * 24 * 60 * 60 * 1000 }
+            { ...baseCookieOptions, maxAge: 30 * 24 * 60 * 60 * 1000 }
         )
 
         res.json({
@@ -177,11 +180,7 @@ const authController = {
             res.cookie(
                 'accessToken',
                 newAccesToken,
-                {
-                    httpOnly: true,
-                    sameSite: 'lax',
-                    maxAge: 15 * 60 * 1000 // 15min = 15 x 60 (s) x 1000 (ms)
-                }
+                { ...baseCookieOptions, maxAge: 15 * 60 * 1000 }
             );
 
             res.json({ success: true })
@@ -192,15 +191,8 @@ const authController = {
 
     async logout(_req: Request, res: Response) {
         // Supprimer les cookies accessToken et refreshToken
-        res.clearCookie('accessToken', {
-            httpOnly: true,
-            sameSite: 'lax'
-        });
-
-        res.clearCookie('refreshToken', {
-            httpOnly: true,
-            sameSite: 'lax'
-        });
+        res.clearCookie('accessToken', baseCookieOptions);
+        res.clearCookie('refreshToken', baseCookieOptions);
 
         res.json({ success: true, message: 'Déconnexion réussie' });
     },
