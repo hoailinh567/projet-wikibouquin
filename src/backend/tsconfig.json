@@ -3,8 +3,6 @@
     "target": "esnext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "rootDir": "./src",
-    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -15,8 +13,8 @@
     "noUnusedParameters": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "typeRoots": ["./@types", "./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src", "@types"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

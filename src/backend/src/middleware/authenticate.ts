@@ -21,7 +21,7 @@ const authenticate = async (
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET) as PublicUser;
-        req.user = decoded
+        res.locals.user = decoded
         next();
     } catch (err) {
         return res.status(401).json({ error: 'Invalid token' });

@@ -206,8 +206,8 @@ const authController = {
     },
 
     // Récupère le compte de l'utilisateur connecté pour le page "Mon compte"
-    account(req: Request, res: Response) {
-        const user = req.user
+    account(_req: Request, res: Response) {
+        const user = res.locals.user as PublicUser
         if (!user) {
             return res.status(500).json({ error: "no user" })
         }
@@ -216,7 +216,7 @@ const authController = {
     },
 
     async updatePassword(req: Request, res: Response) {
-      const publicUser = req.user
+      const publicUser = res.locals.user as PublicUser
       if (!publicUser) {
           return res.status(500).json({ error: "no user" })
       }

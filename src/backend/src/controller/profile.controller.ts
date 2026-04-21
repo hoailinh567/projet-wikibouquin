@@ -5,7 +5,7 @@ import bookDataMapper from "../dataMapper/book.datamapper.ts";
 
 const profileController = {
   // Récupère le profil d'un utilisateur par son username pour la page "Profil public"
-  async getUserProfile(req: Request, res: Response) {
+  async getUserProfile(req: Request<{ username: string }>, res: Response) {
     const { username } = req.params;
     const user = await userDataMapper.getUserByUsername(username);
     if (!user) {

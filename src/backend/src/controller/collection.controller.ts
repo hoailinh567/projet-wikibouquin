@@ -1,12 +1,13 @@
 import type { Request, Response } from "express";
+import type { PublicUser } from "../models/user.ts";
 import collectionDataMapper from "../dataMapper/collection.datamapper.ts";
 import { addOrDeleteBookRequest } from "../validation/collection.validator.ts";
 import bookDataMapper from "../dataMapper/book.datamapper.ts";
 import { isValidIsbn } from "../validation/book.validator.ts";
 
 const collectionController = {
-    async editMyCollection(req: Request, res: Response) {
-        const user = req.user
+    async editMyCollection(_req: Request, res: Response) {
+        const user = res.locals.user as PublicUser
         if (!user) {
             return res.status(500).json({ error: "no user" })
         }
@@ -39,7 +40,7 @@ const collectionController = {
     },
 
     async addBook(req: Request, res: Response) {
-        const user = req.user
+        const user = res.locals.user as PublicUser
         if (!user) {
             return res.status(500).json({ error: "no user" })
         }
@@ -63,7 +64,7 @@ const collectionController = {
     },
 
     async deleteBook(req: Request, res: Response) {
-        const user = req.user
+        const user = res.locals.user as PublicUser
         if (!user) {
             return res.status(500).json({ error: "no user" })
         }
@@ -87,8 +88,8 @@ const collectionController = {
     },
 
     // Vérifier si un livre est déjà dans la collection: Boolean pour savoir si on affiche "ajouter" ou "retirer"
-    async hasBook(req: Request, res: Response) {
-        const user = req.user;
+    async hasBook(req: Request<{ isbn: string }>, res: Response) {
+        const user = res.locals.user as PublicUser;
         if (!user) {
             return res.status(500).json({ error: "no user" });
         }
@@ -119,7 +120,7 @@ const collectionController = {
 
     // Mettre à jour la visibilité d'un livre: publique/privée
     async toggleBookVisility(req: Request, res: Response) {
-        const user = req.user;
+        const user = res.locals.user as PublicUser;
         if (!user) {
             return res.status(500).json({ error: "no user" });
         }

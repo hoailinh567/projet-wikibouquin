@@ -4,7 +4,7 @@ import bookDataMapper from "../dataMapper/book.datamapper.ts";
 import searchDataMapper from "../dataMapper/search.datamapper.ts";
 
 const bookController = {
-  async getBookByIsbn(req: Request, res: Response) {
+  async getBookByIsbn(req: Request<{ isbn: string }>, res: Response) {
     const { isbn } = req.params;
 
     // Validation avec Zod

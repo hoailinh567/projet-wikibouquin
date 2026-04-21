@@ -124,7 +124,7 @@ const collectionDataMapper = {
     },
 
     async deleteBook(isbn: string, collectionId: number): Promise<Boolean> {
-        const { rows } = await client.query(
+        await client.query(
             `
             DELETE FROM "book"
             WHERE isbn=$1 AND collection_id=$2
