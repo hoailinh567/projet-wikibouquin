@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { API_URL } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -16,7 +17,7 @@ function SignIn() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/signin`, {
+      const response = await fetch(`${API_URL}/api/signin`, {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: { "Content-Type": "application/json" },

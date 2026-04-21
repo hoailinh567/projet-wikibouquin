@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
+import { API_URL } from "../utils/api";
 
 interface User {
   id: number;
@@ -39,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Utiliser fetchWithAuth qui gère automatiquement le refresh du token
       const response = await fetchWithAuth(
-        "/api/account"
+        `${API_URL}/api/account`
       );
 
       if (response.ok) {
@@ -62,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch("/api/logout", {
+      await fetch(`${API_URL}/api/logout`, {
         method: "POST",
         credentials: "include",
       });

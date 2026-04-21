@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { API_URL } from "../utils/api";
 import Card from "./Card";
 import Spinner from "./Spinner";
 
@@ -40,7 +41,7 @@ export default function Research() {
       setData(null); // Reset data before new fetch
       try {
         const response = await fetch(
-          `/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
+          `${API_URL}/api/search?q=${encodeURIComponent(query)}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
         );
         if (!response.ok) {
           throw new Error("Erreur lors de la recherche");

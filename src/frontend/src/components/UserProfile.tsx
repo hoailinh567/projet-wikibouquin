@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { API_URL } from "../utils/api";
 import { useParams } from "react-router-dom";
 import Card from "./Card";
 import { useFetch } from "../hooks/useFetch";
@@ -21,7 +22,7 @@ function UserProfile() {
   const { data, loading, error, execute } = useFetch<UserProfileData>();
 
   useEffect(() => {
-    execute(`/api/profile/${username}`, { credentials: 'include' });
+    execute(`${API_URL}/api/profile/${username}`, { credentials: 'include' });
   }, [username, execute]);
 
   if (loading) return <Spinner />;

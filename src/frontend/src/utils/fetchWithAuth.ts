@@ -1,7 +1,5 @@
-/**
- * Fonction wrapper pour fetch qui gère automatiquement le refresh du token
- * Si une requête échoue avec 401, elle tente de rafraîchir le token et réessaye
- */
+import { API_URL } from './api';
+
 export async function fetchWithAuth(
   url: string,
   options: RequestInit = {}
@@ -19,7 +17,7 @@ export async function fetchWithAuth(
   if (response.status === 401) {
     try {
       // Appeler l'endpoint de refresh
-      const refreshResponse = await fetch("/api/refresh", {
+      const refreshResponse = await fetch(`${API_URL}/api/refresh`, {
         method: "POST",
         credentials: "include",
       });

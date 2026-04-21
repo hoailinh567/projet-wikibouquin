@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
+import { API_URL } from "../utils/api";
 
 type User = {
   id: Number;
@@ -27,7 +28,7 @@ function Account() {
   }, [isAuthenticated, isLoading, navigate]);
   const myProfile = async () => {
     try {
-      const response = await fetchWithAuth(`/api/account`, {
+      const response = await fetchWithAuth(`${API_URL}/api/account`, {
         headers: { "Content-Type": "application/json" },
       });
       console.log(response);
@@ -47,7 +48,7 @@ function Account() {
     setFormError(null);
     setFormSuccess(false);
 
-    const response = await fetch("/api/update-password", {
+    const response = await fetch(`${API_URL}/api/update-password`, {
       method: "PATCH",
       body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
       headers: { "Content-Type": "application/json" },

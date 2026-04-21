@@ -1,4 +1,5 @@
 import { fetchWithAuth } from "../utils/fetchWithAuth";
+import { API_URL } from "../utils/api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +17,7 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   const addBookToCollection = async () => {
     try {
       const response = await fetchWithAuth(
-        `/api/edit-my-collection/add`,
+        `${API_URL}/api/edit-my-collection/add`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -41,7 +42,7 @@ function CollectionButton({ hasBook, setHasBook, isbn }: Props) {
   const removeBookFromCollection = async () => {
     try {
       const response = await fetchWithAuth(
-        `/api/edit-my-collection/delete`,
+        `${API_URL}/api/edit-my-collection/delete`,
         {
           method: "DELETE",
           body: JSON.stringify({

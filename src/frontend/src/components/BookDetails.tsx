@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { API_URL } from "../utils/api";
 import CollectionButton from "./CollectionButton";
 import { useParams } from "react-router-dom";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
@@ -28,7 +29,7 @@ function BookDetails() {
   // Function pour vérifier qu'on a le livre ou pas
   const checkUserHasBook = useCallback(async () => {
     try {
-      const response = await fetchWithAuth(`/api/has-book/${isbn}`);
+      const response = await fetchWithAuth(`${API_URL}/api/has-book/${isbn}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -44,7 +45,7 @@ function BookDetails() {
 
   useEffect(() => {
     // Fetch book details using the ISBN from Props
-    execute(`/api/book/${isbn}`);
+    execute(`${API_URL}/api/book/${isbn}`);
 
     // Check if the current logged in user has the book in their collection
     checkUserHasBook();
