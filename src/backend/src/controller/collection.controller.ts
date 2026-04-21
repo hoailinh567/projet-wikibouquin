@@ -36,8 +36,6 @@ const collectionController = {
         }
 
         res.json(bookCollectionWithDetails);
-
-        res.json(collection);
     },
 
     async addBook(req: Request, res: Response) {

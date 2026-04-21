@@ -38,18 +38,23 @@ function SignUp() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        body: JSON.stringify({ username, email, password, confirmPassword }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      try {
+        const response = await fetch("/api/signup", {
+          method: "POST",
+          body: JSON.stringify({ username, email, password, confirmPassword }),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) {
+          setErrors({ form: `Erreur lors de l'inscription (${response.status})` });
+          return;
+        }
+
+        navigate("/signin");
+      } catch {
+        setErrors({ form: "Erreur réseau, veuillez réessayer." });
       }
-
-      navigate("/signin");
     }
   };
 
@@ -188,6 +193,10 @@ function SignUp() {
             <p className="text-red-500 text-xs md:text-sm mt-1">
               {errors.terms}
             </p>
+          )}
+
+          {errors.form && (
+            <p className="text-red-500 text-xs md:text-sm">{errors.form}</p>
           )}
 
           <button

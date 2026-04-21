@@ -21,7 +21,7 @@ const authorDataMapper = {
         };
 
         // Stockage de l'auteur dans le cache Redis avec un TTL de 1 mois
-        set<Author>(`author:${key}`, author, 2629800);
+        await set<Author>(`author:${key}`, author, 2629800);
 
         return author;
     }

@@ -63,7 +63,7 @@ const bookDataMapper = {
         };
 
         // Stockage du livre dans le cache Redis avec un TTL de 1 mois
-        set<Book>(`book:${isbn}`, book, 2629800);
+        await set<Book>(`book:${isbn}`, book, 2629800);
 
         return book;
     }

@@ -132,7 +132,7 @@ const collectionDataMapper = {
             [isbn, collectionId]
         )
 
-        return rows[0];
+        return true;
     },
 
     // Vérifie si un livre est dans une collection de l'utilisateur
@@ -149,7 +149,7 @@ const collectionDataMapper = {
         return parseInt(rows[0].count, 10) > 0;
     },
 
-    async toggleBookVisility(isbn: string, collection_id: number, is_visible: boolean): Promise<BookInCollection> {
+    async toggleBookVisility(isbn: string, collection_id: number, is_visible: boolean): Promise<BookInCollection | null> {
         const { rows } = await client.query(
             `
             UPDATE "book"

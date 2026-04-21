@@ -26,7 +26,7 @@ const workDataMapper = {
         };
 
         // Stockage description du work dans le cache Redis avec un TTL de 1 mois
-        set<Work>(`work:${key}`, work, 2629800);
+        await set<Work>(`work:${key}`, work, 2629800);
 
         return work;
     }
