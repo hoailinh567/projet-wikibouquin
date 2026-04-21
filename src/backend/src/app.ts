@@ -5,8 +5,13 @@ import router from "./router.ts";
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Autoriser les deux pour la flexibilité
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(cookieParser());
