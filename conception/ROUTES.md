@@ -2,79 +2,75 @@
 
 ## Routes Frontend (React Router)
 
-### 🌐 Routes publiques
+### Routes publiques
 *Accessibles sans authentification*
 
 | Route | Description |
 |-------|-------------|
 | `/` | Page d'accueil avec recherche de livres |
-| `/register` | Création de compte |
-| `/login` | Connexion |
-| `/search?q={query}` | Résultats de recherche par nom, auteur ou ISBN |
+| `/signup` | Création de compte |
+| `/signin` | Connexion |
+| `/research?q={query}` | Résultats de recherche par nom, auteur ou ISBN |
 | `/book/:isbn` | Détail d'un livre (par ISBN) |
-| `/user/:username` | Profil public d'un utilisateur |
+| `/profile/:username` | Profil public d'un utilisateur |
+| `/qui-nous-sommes` | Page de présentation globale |
+| `/nouveautes` | Les nouveautés des livres |
 
-### 🔒 Routes privées
+### Routes privées
 *Nécessitent une authentification*
 
 | Route | Description |
 |-------|-------------|
-| `/profile/password` | Changement de mot de passe |
-| `/collection` | Ma collection de livres |
-
-### 👑 Routes administrateur
-*Nécessitent le rôle admin*
-
-| Route | Description |
-|-------|-------------|
-| `/admin/users/:id/password` | Modification du mot de passe d'un utilisateur |
-| `/admin/users/:id/profile` | Modification du nom de profil d'un utilisateur |
+| `/account` | Changement de mot de passe |
+| `/edit-my-collection` | Ma collection de livres |
 
 ---
 
-## 🔌 API REST Endpoints - MVP
+## API REST Endpoints - MVP
 
-### 📋 Table des matières API
-- [🔐 Authentification](#authentification)
-- [👤 Profils utilisateurs](#profils-utilisateurs)  
-- [📚 Recherche de livres](#recherche-de-livres)
-- [📖 Gestion des collections](#gestion-des-collections)
-- [⚙️ Administration](#administration)
+### Table des matières API
+- [Authentification](#authentification)
+- [Livres](#livres)
+- [Profils utilisateurs](#profils-utilisateurs)
+- [Gestion des collections](#gestion-des-collections)
+
+> Les JWT sont stockés dans des cookies HttpOnly (`accessToken` / `refreshToken`). Les routes protégées ne nécessitent pas de header `Authorization` — le cookie est envoyé automatiquement.
 
 ---
 
-### 🔐 Authentification
+### Authentification
 
 #### Création de compte
 ```http
-POST /auth/register
+POST /api/signup
 Content-Type: application/json
 
 {
+  "username": "nom_utilisateur",
   "email": "user@example.com",
   "password": "motdepasse",
-  "username": "nom_utilisateur"
+  "confirmPassword": "motdepasse"
 }
 
 Response 201:
 {
-  "success": true,
-  "message": "Compte créé avec succès",
-  "data": {
-    "user": {
-      "id": 1,
-      "email": "user@example.com",
-      "username": "nom_utilisateur",
-      "role": "user"
-    },
-    "token": "jwt_token_here"
-  }
+  "message": "Utilisateur créé avec succès.",
+  "user": {
+    "id": 1,
+    "username": "nom_utilisateur",
+    "email": "user@example.com"
+  },
+  "collection": { ... }
 }
+
+Response 409:
+{ "error": "Cet email est déjà pris." }
+{ "error": "Ce nom d'utilisateur est déjà pris." }
 ```
 
 #### Connexion
 ```http
-POST /auth/login
+POST /api/signin
 Content-Type: application/json
 
 {
@@ -84,336 +80,238 @@ Content-Type: application/json
 
 Response 200:
 {
-  "success": true,
-  "message": "Connexion réussie",
-  "data": {
-    "user": {
-      "id": 1,
-      "email": "user@example.com",
-      "username": "nom_utilisateur",
-      "role": "user"
-    },
-    "token": "jwt_token_here"
+  "user": {
+    "id": 1,
+    "username": "nom_utilisateur",
+    "email": "user@example.com",
+    "role_id": 1,
+    "collection_ids": [1]
   }
 }
+// + cookies HttpOnly : accessToken (15min), refreshToken (30j)
+
+Response 403:
+{ "error": "Mot de passe incorrect." }
+```
+
+#### Rafraîchir le token
+```http
+POST /api/refresh
+// Cookie refreshToken envoyé automatiquement
+
+Response 200:
+{ "success": true }
+// + nouveau cookie accessToken (15min)
+
+Response 401:
+{ "error": "invalid refresh token" }
 ```
 
 #### Déconnexion
 ```http
-POST /auth/logout
-Authorization: Bearer {token}
+POST /api/logout
 
 Response 200:
-{
-  "success": true,
-  "message": "Déconnexion réussie"
-}
+{ "success": true, "message": "Déconnexion réussie" }
+// Cookies accessToken et refreshToken supprimés
 ```
 
----
-
-### 👤 Profils utilisateurs
-
-#### Consulter un profil public
+#### Mon compte
 ```http
-GET /users/:username
+GET /api/account
+// Cookie accessToken requis
 
 Response 200:
 {
-  "success": true,
-  "data": {
-    "user": {
-      "id": 1,
-      "username": "nom_utilisateur",
-      "createdAt": "2025-01-01T00:00:00.000Z",
-      "publicBooksCount": 25
-    }
-  }
+  "id": 1,
+  "username": "nom_utilisateur",
+  "email": "user@example.com",
+  "role_id": 1,
+  "collection_ids": [1]
 }
 ```
 
 #### Modifier son mot de passe
 ```http
-PUT /users/password
-Authorization: Bearer {token}
+PATCH /api/update-password
+// Cookie accessToken requis
 Content-Type: application/json
 
 {
   "currentPassword": "ancien_mot_de_passe",
-  "newPassword": "nouveau_mot_de_passe"
+  "newPassword": "nouveau_mot_de_passe",
+  "confirmNewPassword": "nouveau_mot_de_passe"
 }
 
 Response 200:
-{
-  "success": true,
-  "message": "Mot de passe modifié avec succès"
-}
+{ ...utilisateur mis à jour }
+
+Response 403:
+{ "error": "Mot de passe actuel incorrect." }
 ```
 
 ---
 
-### 📚 Recherche de livres
+### Livres
 
 #### Rechercher des livres
 ```http
-GET /books/search?q={query}&page=1&limit=20
+GET /api/search?q={query}&limit=20&offset=0
 
 Response 200:
 {
-  "success": true,
-  "data": {
-    "books": [
-      {
-        "isbn": "9001708528",
-        "title": "Le Petit Prince",
-        "author": "Antoine de Saint-Exupéry",
-        "publisher": "Gallimard",
-        "publishedDate": "1943",
-        "description": "Un conte poétique et philosophique...",
-        "cover": "https://covers.example.com/cover.jpg",
-        "pageCount": 96
-      }
-    ],
-    "pagination": {
-      "currentPage": 1,
-      "totalPages": 5,
-      "totalItems": 100,
-      "limit": 20
-    }
-  }
-}
-```
-
-#### Détail d'un livre
-```http
-GET /books/:isbn
-
-Response 200:
-{
-  "success": true,
-  "data": {
-    "book": {
-      "isbn": "9001708528",
-      "title": "Le Petit Prince",
-      "author": "Antoine de Saint-Exupéry",
-      "publisher": "Gallimard",
-      "publishedDate": "1943",
-      "description": "Un conte poétique et philosophique...",
-      "cover": "https://covers.example.com/cover.jpg",
-      "pageCount": 100,
-      "categories": ["Fiction", "Jeunesse"],
-      "language": "fr"
-    }
-  }
-}
-```
-
----
-
-### 📖 Gestion des collections
-
-#### Ma collection personnelle
-```http
-GET /collections/my
-Authorization: Bearer {token}
-
-Response 200:
-{
-  "success": true,
-  "data": {
-    "collection": [
-      {
-        "id": 1,
-        "isbn": "978-2-123456-78-9",
-        "title": "Le Petit Prince",
-        "author": "Antoine de Saint-Exupéry",
-        "cover": "https://covers.example.com/cover.jpg",
-        "isPublic": true,
-        "addedAt": "2025-01-01T00:00:00.000Z"
-      }
-    ],
-    "totalBooks": 1
-  }
-}
-```
-
-#### Collection publique d'un utilisateur
-```http
-GET /collections/user/:username
-
-Response 200:
-{
-  "success": true,
-  "data": {
-    "user": {
-      "username": "nom_utilisateur"
-    },
-    "collection": [
-      {
-        "isbn": "9001708528",
-        "title": "Le Petit Prince",
-        "author": "Antoine de Saint-Exupéry",
-        "cover": "https://covers.example.com/cover.jpg",
-        "addedAt": "2025-01-01T00:00:00.000Z"
-      }
-    ],
-    "totalBooks": 1
-  }
-}
-```
-
-#### Ajouter un livre à sa collection
-```http
-POST /collections/books
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "isbn": "9001708528",
-  "isPublic": true
-}
-
-Response 201:
-{
-  "success": true,
-  "message": "Livre ajouté à la collection",
-  "data": {
-    "collectionItem": {
-      "id": 1,
-      "isbn": "99001708528",
-      "isPublic": true,
-      "addedAt": "2025-01-01T00:00:00.000Z"
-    }
-  }
-}
-#### Modifier la visibilité d'un livre
-```http
-PUT /collections/books/:isbn
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "isPublic": false
-}
-
-Response 200:
-{
-  "success": true,
-  "message": "Visibilité du livre mise à jour"
-}
-```
-
-#### Supprimer un livre de sa collection
-```http
-DELETE /collections/books/:isbn
-Authorization: Bearer {token}
-
-Response 200:
-{
-  "success": true,
-  "message": "Livre retiré de la collection"
-}
-```
-
----
-
-### ⚙️ Administration
-*Réservé aux administrateurs*
-
-#### Modifier le mot de passe d'un utilisateur
-```http
-PUT /admin/users/:id/password
-Authorization: Bearer {admin_token}
-Content-Type: application/json
-
-{
-  "newPassword": "nouveau_mot_de_passe"
-}
-
-Response 200:
-{
-  "success": true,
-  "message": "Mot de passe utilisateur modifié"
-}
-```
-
-#### Modifier le profil d'un utilisateur
-```http
-PUT /admin/users/:id/profile
-Authorization: Bearer {admin_token}
-Content-Type: application/json
-
-{
-  "username": "nouveau_nom"
-}
-
-Response 200:
-{
-  "success": true,
-  "message": "Profil utilisateur modifié"
-}
-```
-
----
-
-## ⚠️ Codes d'erreur standardisés
-
-```http
-400 Bad Request
-{
-  "success": false,
-  "message": "Données invalides",
-  "errors": [
+  "numFound": 100,
+  "docs": [
     {
-      "field": "email",
-      "message": "Format d'email invalide"
+      "title": "Le Petit Prince",
+      "author_name": ["Antoine de Saint-Exupéry"],
+      "isbn": ["2070612759"],
+      "cover_i": 12345
     }
   ]
 }
+```
 
-401 Unauthorized
+#### Détail d'un livre par ISBN
+```http
+GET /api/book/:isbn
+
+Response 200:
 {
-  "success": false,
-  "message": "Token d'authentification requis"
+  "title": "Le Petit Prince",
+  "authors": ["Antoine de Saint-Exupéry"],
+  "publish_date": "1943",
+  "isbn": "2070612759",
+  "number_of_pages": 96,
+  "cover": "https://covers.openlibrary.org/b/id/12345-L.jpg",
+  "description": "Un conte poétique et philosophique..."
 }
 
-403 Forbidden
-{
-  "success": false,
-  "message": "Permissions insuffisantes"
-}
-
-404 Not Found
-{
-  "success": false,
-  "message": "Ressource non trouvée"
-}
-
-409 Conflict
-{
-  "success": false,
-  "message": "Email déjà utilisé"
-}
-
-500 Internal Server Error
-{
-  "success": false,
-  "message": "Erreur interne du serveur"
-}
+Response 404:
+{ "message": "Livre avec l'ISBN {isbn} introuvable" }
 ```
 
 ---
 
-## 🔒 Sécurité et authentification
+### Profils utilisateurs
 
-### Headers requis
+#### Consulter un profil public
 ```http
-Authorization: Bearer {jwt_token}
-Content-Type: application/json
+GET /api/profile/:username
+
+Response 200:
+[
+  {
+    "id": 1,
+    "title": "Le Petit Prince",
+    "cover": "https://covers.openlibrary.org/b/id/12345-L.jpg",
+    "isbn": "2070612759"
+  }
+]
+
+Response 404:
+{ "error": "User not found" }
 ```
 
-### Validation des données
-- Toutes les entrées utilisateur sont validées
-- Protection contre les injections SQL
-- Échappement des caractères HTML
-- Validation des ISBN au format ISBN-10
+---
+
+### Gestion des collections
+
+#### Ma collection (privée)
+```http
+GET /api/edit-my-collection
+// Cookie accessToken requis
+
+Response 200:
+[
+  {
+    "id": 1,
+    "title": "Le Petit Prince",
+    "cover": "https://covers.openlibrary.org/b/id/12345-L.jpg",
+    "isbn": "2070612759",
+    "is_visible": true
+  }
+]
+```
+
+#### Ajouter un livre
+```http
+POST /api/edit-my-collection/add
+// Cookie accessToken requis
+Content-Type: application/json
+
+{
+  "isbn": "2070612759",
+  "collection_id": 1
+}
+
+Response 200:
+{ ...livre ajouté }
+
+Response 401:
+{ "error": "no" }
+```
+
+#### Supprimer un livre
+```http
+DELETE /api/edit-my-collection/delete
+// Cookie accessToken requis
+Content-Type: application/json
+
+{
+  "isbn": "2070612759",
+  "collection_id": 1
+}
+
+Response 200:
+{ ...résultat suppression }
+```
+
+#### Vérifier si un livre est dans ma collection
+```http
+GET /api/has-book/:isbn
+// Cookie accessToken requis
+
+Response 200:
+true  // ou false
+```
+
+#### Modifier la visibilité d'un livre
+```http
+PATCH /api/edit-my-collection/update-visibility
+// Cookie accessToken requis
+Content-Type: application/json
+
+{
+  "isbn": "2070612759",
+  "collection_id": 1,
+  "is_visible": false
+}
+
+Response 200:
+{ ...collection mise à jour }
+```
+
+---
+
+## Codes d'erreur
+
+| Code | Signification |
+|------|--------------|
+| 400 | Données invalides (validation Zod) |
+| 401 | Token manquant ou invalide |
+| 403 | Mot de passe incorrect / accès refusé |
+| 404 | Ressource non trouvée |
+| 409 | Email ou username déjà utilisé |
+| 500 | Erreur interne du serveur |
+
+---
+
+## Sécurité
+
+- JWT stockés en cookies **HttpOnly** (inaccessibles depuis JavaScript)
+- `accessToken` : durée de vie **15 minutes**
+- `refreshToken` : durée de vie **30 jours**
+- Mots de passe hachés avec **Argon2**
+- Validation des entrées avec **Zod** avant tout traitement
+- ISBN validés au format **ISBN-10**
