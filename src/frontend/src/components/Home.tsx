@@ -6,22 +6,11 @@ function Home() {
       <div className="flex flex-col lg:flex-row m-4 md:m-8 lg:m-15 gap-4 md:gap-8 lg:gap-15">
         {/* Section bienvenue */}
         <div className="w-full lg:basis-auto">
-          <div className="flex flex-row-reverse w-full min-h-[200px] md:min-h-[300px] lg:min-h-full bg-[url('/bg-home.jpg')] bg-cover bg-center bg-no-repeat rounded-2xl p-4 md:p-6 lg:p-5">
-            <div className="w-full lg:w-1/2 text-shadow-lg italic">
-              <h1 className="text-xl text-center md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
-                Bienvenue sur WikiBouquin !
-              </h1>
-              <p className="text-sm md:text-base text-left">
-                L’endroit où les livres se cachent… jusqu’à ce que vous les
-                trouviez ! Recherchez vos livres préférés et ajoutez-les
-                tranquillement à votre collection personnelle. Certains livres
-                restent bien au chaud, visibles seulement par ceux qui ont le
-                droit. Envie de partager ? Faites circuler vos coups de cœur
-                avec les autres lecteurs. Et pour une belle surprise, jetez un
-                œil à côté … votre prochain coup de cœur vous y attend ...
-              </p>
-            </div>
-          </div>
+          <img
+            src="/bg-home.jpg"
+            alt="background-home WikiBouquin"
+            className="w-full h-auto rounded-2xl"
+          />
         </div>
 
         {/* Section coups de coeur */}
