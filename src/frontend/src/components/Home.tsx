@@ -20,14 +20,14 @@ function Home() {
           </h1>
           <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8 w-full">
             <Card
-              title="Pourquoi je suis devenu une fille"
-              pictureUrl="https://covers.openlibrary.org/b/isbn/2330014880-M.jpg"
-              isbn="2330014880"
+              title="The Champs-Elysées"
+              pictureUrl="https://covers.openlibrary.org/b/isbn/2080107240-M.jpg"
+              isbn="2080107240"
             />
             <Card
-              title="Raison et sentiments"
-              pictureUrl="https://covers.openlibrary.org/b/isbn/2909240258-M.jpg"
-              isbn="2909240258"
+              title="La servante écarlate"
+              pictureUrl="https://covers.openlibrary.org/b/isbn/2221203321-M.jpg"
+              isbn="2221203321"
             />
           </div>
         </div>

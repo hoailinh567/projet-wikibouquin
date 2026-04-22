@@ -30,7 +30,7 @@ function App() {
             <Route path="/profile/:username" element={<UserProfile />} />
             <Route path="/research" element={<Research />} />
             <Route path="/nouveautes" element={<NewArrival />} />
-            <Route path="/qui-nous-sommes" element={<AboutUs />} />
+            <Route path="/qui-sommes-nous" element={<AboutUs />} />
             {/* wildcard redirect vers /404 pour toutes les routes inconnues */}
             <Route path="*" element={<NotFound />} />
           </Routes>

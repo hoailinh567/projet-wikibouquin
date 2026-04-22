@@ -40,7 +40,7 @@ function Header() {
           <Link to="/nouveautes" className="hover:text-[#07315f] transition">
             Nouveautés
           </Link>
-          <Link to="/about-us" className="hover:text-[#07315f] transition">
+          <Link to="/qui-sommes-nous" className="hover:text-[#07315f] transition">
             Qui sommes-nous ?
           </Link>
         </div>
