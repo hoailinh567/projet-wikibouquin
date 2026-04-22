@@ -6,10 +6,6 @@ services:
       - 3000:3000
     env_file:
       - .env.docker
-    environment:
-      PORT: 3000
-      REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgres://wikibouquin_user:securepassword123@db:5432/wikibouquin
     depends_on:
       db:
         condition: service_healthy
@@ -21,8 +17,8 @@ services:
     container_name: frontend
     ports:
       - 5173:5173
-    environment:
-      API_TARGET: http://backend:3000
+    env_file:
+      - .env.docker
     depends_on:
       - backend
 
