@@ -13,7 +13,7 @@
 | `/research?q={query}` | Résultats de recherche par nom, auteur ou ISBN |
 | `/book/:isbn` | Détail d'un livre (par ISBN) |
 | `/profile/:username` | Profil public d'un utilisateur |
-| `/qui-nous-sommes` | Page de présentation globale |
+| `/qui-sommes-nous` | Page de présentation globale |
 | `/nouveautes` | Les nouveautés des livres |
 
 ### Routes privées

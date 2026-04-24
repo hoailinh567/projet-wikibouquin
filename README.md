@@ -1,8 +1,11 @@
-# Projet WikiBouquin - Cahier des charges
+# Wiki Bouquin
+Lien du site : [https://wikibouquin.onrender.com/](https://wikibouquin.onrender.com)
 
-WikiBouquin est une plateforme web qui permet de rechercher et consulter tous les livres disponibles dans le monde, sans aucune limite géographique.
+Wiki Bouquin est une plateforme web qui permet de rechercher et consulter tous les livres disponibles dans le monde, sans aucune limite géographique.
 Les utilisateurs peuvent créer un compte personnel afin de constituer leur propre collection numérique de livres.
 Chaque utilisateur possède un profil unique qu’il peut partager via un lien public, facilitant ainsi la découverte de nouvelles lectures.
+
+## Cahier des charges
 
 Le projet répond au besoin d’un accès centralisé, libre et communautaire à l’ensemble des livres existants.
 Il vise à simplifier la recherche, la gestion et le partage de collections littéraires personnelles.
@@ -18,9 +21,9 @@ Analyse des risques :
 | Performance du moteur de recherche  | Les recherches pourraient devenir lentes avec l’augmentation du nombre de livres ou d’utilisateurs. | Optimisation des index et requêtes, utilisation de caches.    | Moyenne    | Élevé   | Moyenne-Haute |
 | Protection des comptes utilisateurs | Risque de compromission des données sensibles des utilisateurs (emails, mots de passe).      | Chiffrement renforcé des informations sensibles, sauvegardes régulières. | Moyenne    | Élevé   | Haute    |
 
-## Fonctionnalités
+### Fonctionnalités
 
-### MVP
+#### MVP
 
 **Gestion des utilisateurs :**
 - Création de compte (email, mot de passe, nom de profil)
@@ -40,14 +43,14 @@ Analyse des risques :
 - Consultation de sa propre collection
 - Consultation des collections publiques d'autres utilisateurs
 
-### Evolutions potentielles
+#### Evolutions potentielles
 
 - Renforcement du rôle d'administrateur avec plus de possibilités (suppression d'utilisateurs, modération, statistiques)
 - Possibilité de créer plusieurs collections par utilisateur avec visibilité publique/privée par collection
 - Suivi avancé des livres : statut de lecture (lu, en cours, à lire), page actuelle, dates d'achat/début/fin de lecture
 - Administrateur : mettre à jour les informations de base (nom de profil, mot de passe).
 
-## Architecture
+### Architecture
 
 **Frontend Web Responsive :**
 - Un site web responsive pour assurer une expérience utilisateur optimale sur tous les appareils (desktop, tablette, mobile)
@@ -75,7 +78,7 @@ Analyse des risques :
   - Simplifier la gestion des dépendances
   - Permettre un déploiement cohérent et reproductible
 
-## Technologies
+### Technologies
 
 **Frontend :**
 - **React** : Framework JavaScript populaire offrant une grande flexibilité, une vaste communauté et un écosystème riche de composants réutilisables
@@ -85,7 +88,7 @@ Analyse des risques :
 - **Node.js** : Environnement d'exécution JavaScript côté serveur permettant d'utiliser le même langage que le frontend
 - **Express.js** : Framework web minimaliste et flexible pour Node.js, facilitant la création d'APIs REST rapides et solides
 
-### Navigateurs compatibles
+#### Navigateurs compatibles
 
 L'application sera compatible avec les navigateurs modernes suivants :
 
@@ -100,20 +103,20 @@ L'application sera compatible avec les navigateurs modernes suivants :
 - Safari Mobile 14+
 - Firefox Mobile 88+
 
-## Arborescence
+### Arborescence
 
 La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](./conception/ROUTES.md).
 
-## User Stories
+### User Stories
 
-### Visiteur
+#### Visiteur
 
 - En tant que visiteur, je veux créer un compte avec email, mot de passe et nom de profil, afin d’accéder à ma collection personnelle.
  - En tant que visiteur, je veux consulter la page publique d’un utilisateur, afin de voir les livres qu’il a rendus publics.
  - En tant que visiteur, je veux rechercher un livre par son nom, son auteur ou son isbn.
  - En tant que visiteur, je veux consulter la page de détail d'un livre.
 
- ### Utilisteur
+ #### Utilisteur
 
  Toutes les User Stories des visiteurs s'appliquent également à l'utilisateur si applicable.
 
@@ -123,41 +126,43 @@ La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](./c
  - En tant qu’utilisateur, je veux ajouter un livre  à ma collection.
  - En tant qu’utilisateur, je veux supprimer un livre de ma collection, afin de garder mon catalogue à jour.
  - En tant qu’utilisateur, je veux définir la visibilité d’un livre (Public/Privé) dans ma collection, afin de contrôler ce qui est visible par les autres.
+ - En tant qu'utilisateur, je veux pourvoir partager ma collection avec d'autres personnes via un lien unique, afin de leur faire découvrir mes lectures.
 
-### Administrateur
+#### Administrateur (option d'évolutions)
 
 - En tant qu'administrateur, je veux changer le mot de passe de n'importe quel utilisateur afin d'aider un utilisateur bloqué.
 - En tant qu'administrateur, je veux changer le nom de profile d'un utilisateur afin de sécurisé mon site si un nom d'utilisateur est innaproprié ou si un utlisateur a besoin d'aide.
 
-## Documents de conception
+### Documents de conception
 
-### Le diagramme ERD (Entité-Relation-Diagram)
+#### Le diagramme ERD (Entité-Relation-Diagram)
 ![schéma de la base de données](./conception/schemas/erd.png)
 
-### Un diagramme de séquence d'une fonctionnalité complexe
+#### Un diagramme de séquence d'une fonctionnalité complexe
 Accéder à la page d'un livre avec cache "chaud" et "froid".
 
 ![Diagramme de séquence](./conception/schemas/sequence-get-book-cache.svg)
 
-### UML
+#### UML
 
 ![Diagramme UML](./conception/schemas/diagramme-user-stories.svg)
 
-### Le Dictionnaire de données : liste des entités et de leurs attributs
+#### Le Dictionnaire de données : liste des entités et de leurs attributs
 [DICTIONNAIRE_DONNEES.md](./conception/DICTIONNAIRE_DONNEES.md)
 
-### Diagramme de l'architecture de l'application 
+#### Diagramme de l'architecture de l'application 
 
 ![architecture](./conception/schemas/architecture.png)
 
-## Élément Graphique
+### Élément Graphique
 
-### Wireframes
+#### Wireframes
 
 ![wireframes](./conception/wireframes)
 
-### Maquette
-en cours ...
+#### Maquette
 
-### Charte Graphique
+![maquettes](./conception/maquettes)
+
+#### Charte Graphique
 ![Charte Graphique](./conception/charteGraphique.pdf)
