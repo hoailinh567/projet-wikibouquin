@@ -29,8 +29,8 @@ function App() {
             <Route path="/edit-my-collection" element={<EditMyCollection />} />
             <Route path="/profile/:username" element={<UserProfile />} />
             <Route path="/research" element={<Research />} />
-            <Route path="/nouveautes" element={<NewArrival />} />
-            <Route path="/qui-sommes-nous" element={<AboutUs />} />
+            <Route path="/new-arrival" element={<NewArrival />} />
+            <Route path="/about-us" element={<AboutUs />} />
             {/* wildcard redirect vers /404 pour toutes les routes inconnues */}
             <Route path="*" element={<NotFound />} />
           </Routes>
