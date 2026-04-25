@@ -37,10 +37,10 @@ function Header() {
     <header className="p-3 md:p-4 bg-[#f5f0eb]">
       <div className="flex justify-between items-center font-playfair-sc text-sm md:text-lg font-bold mb-3">
         <div className="flex gap-2 md:gap-4">
-          <Link to="/nouveautes" className="hover:text-[#07315f] transition">
+          <Link to="/new-arrival" className="hover:text-[#07315f] transition">
             Nouveautés
           </Link>
-          <Link to="/qui-sommes-nous" className="hover:text-[#07315f] transition">
+          <Link to="/about-us" className="hover:text-[#07315f] transition">
             Qui sommes-nous ?
           </Link>
         </div>
