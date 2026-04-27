@@ -125,7 +125,7 @@ const authController = {
         const CollectionIds = await collectionDataMapper.getCollectionsIdByUserId(user.id)
 
         // Recrée le même User sans le PW
-        const publicUser: PublicUser = { id: user.id, username: user.username, email: user.email, role_id: user.role_id, collection_ids: CollectionIds};
+        const publicUser: PublicUser = { id: user.id, username: user.username, email: user.email, role_id: user.role_id, collection_ids: CollectionIds };
 
         // Si tout va bien, créer JWT et Refresh JWT
         // Puis envoyer les 2 au frontend dans un cookie HttpOnly et sameSite + res.json()
@@ -160,8 +160,9 @@ const authController = {
         })
     },
 
+    // Utilise le refresh Token pour créer un nouveau acces token
+    // Appelé par le front quand middleware authenticate échoue
     async refresh(req: Request, res: Response) {
-        // Récupréré refreshToken crée après log in
         const refreshToken = req.cookies.refreshToken;
 
         if (!refreshToken) {
@@ -208,40 +209,40 @@ const authController = {
     },
 
     async updatePassword(req: Request, res: Response) {
-      const publicUser = res.locals.user as PublicUser
-      if (!publicUser) {
-          return res.status(500).json({ error: "no user" })
-      }
+        const publicUser = res.locals.user as PublicUser
+        if (!publicUser) {
+            return res.status(500).json({ error: "no user" })
+        }
 
-      const user = await userDataMapper.getUserByEmail(publicUser.email)
-      // Vérifier si c'est User? sinon retourne error
-      if (!user) {
-        return res.status(500).json({ error: "no user" })
-      }
+        const user = await userDataMapper.getUserByEmail(publicUser.email)
+        // Vérifier si c'est User? sinon retourne error
+        if (!user) {
+            return res.status(500).json({ error: "no user" })
+        }
 
-      const updatePasswordData = isValidUpdatePassword.safeParse(req.body)
-      if (!updatePasswordData.success) {
-        return res.status(400).contentType('json').send(updatePasswordData.error.message);
-      }
+        const updatePasswordData = isValidUpdatePassword.safeParse(req.body)
+        if (!updatePasswordData.success) {
+            return res.status(400).contentType('json').send(updatePasswordData.error.message);
+        }
 
-      const { currentPassword, newPassword } =  updatePasswordData.data as UpdatePasswordData;
+        const { currentPassword, newPassword } = updatePasswordData.data as UpdatePasswordData;
 
-      const isCurrentPasswordOk = await argon2.verify(user.password_hash, currentPassword)
-      // Si c'est pas OK, retourn error
-      if (!isCurrentPasswordOk) {
-          return res
-              .status(403)
-              .contentType("json")
-              .send({ error: "Mot de passe actuel incorrect." });
-      }
+        const isCurrentPasswordOk = await argon2.verify(user.password_hash, currentPassword)
+        // Si c'est pas OK, retourn error
+        if (!isCurrentPasswordOk) {
+            return res
+                .status(403)
+                .contentType("json")
+                .send({ error: "Mot de passe actuel incorrect." });
+        }
 
-      const hashedPassword = await argon2.hash(newPassword);
-      const updatedUser = await userDataMapper.updatePassword(user.email, hashedPassword)
-      if (!updatedUser) {
-        return res.status(500).json({ error: "un problème est survenu" })
-      }
+        const hashedPassword = await argon2.hash(newPassword);
+        const updatedUser = await userDataMapper.updatePassword(user.email, hashedPassword)
+        if (!updatedUser) {
+            return res.status(500).json({ error: "un problème est survenu" })
+        }
 
-      res.json(updatedUser);
+        res.json(updatedUser);
     },
 }
 

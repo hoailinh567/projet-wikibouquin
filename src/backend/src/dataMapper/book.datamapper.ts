@@ -28,9 +28,19 @@ const bookDataMapper = {
         let authors = ["Auteur inconnu(e)"];
 
         // S'il y a d'authors, on récupére le nom de l'auteur dans la derniere partie après le dernier "/"
+        // rawBook.authors exemple:
+        // [
+        //      {"key": "/authors/OL201562A"},
+        //      {"key": "/authors/another"},
+        // ],
         if (rawBook.authors) {
             authors = [];
             for (const rawAuthor of rawBook.authors) {
+                // premier tour de boucle: {"key": "/authors/OL201562A"}
+                // rawAuthor.key: "/authors/OL201562A"
+                // "/authors/OL201562A".split("/"): ["", "authors", "OL201562A"]
+                // ["", "authors", "OL201562A"].pop(): "OL201562A"
+                // authorKey: "OL201562A"
                 const authorKey = rawAuthor.key.split("/").pop();
                 // Attends le résultat de getAuthorByKey avant de continuer
                 const author = await authorDataMapper.getAuthorByKey(authorKey);
