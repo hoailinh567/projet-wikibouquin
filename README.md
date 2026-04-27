@@ -5,6 +5,12 @@ Wiki Bouquin est une plateforme web qui permet de rechercher et consulter tous l
 Les utilisateurs peuvent créer un compte personnel afin de constituer leur propre collection numérique de livres.
 Chaque utilisateur possède un profil unique qu’il peut partager via un lien public, facilitant ainsi la découverte de nouvelles lectures.
 
+## Installation
+Après avoir cloné ce projet :
+- Exécuter `pnpm install` dans les dossiers `frontend` et `backend`
+- Copier les fichiers `.env.dist` et `.env.docker.example`, puis remplacer les valeurs si nécessaire
+- Lancer `docker compose up -d --build`
+
 ## Cahier des charges
 
 Le projet répond au besoin d’un accès centralisé, libre et communautaire à l’ensemble des livres existants.

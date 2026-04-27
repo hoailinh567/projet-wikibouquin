@@ -81,7 +81,7 @@ const openlibraryClient = {
   },
 
   async getAuthorByKey(authorKey: string) {
-    const response = await fetch(`https://openlibrary.org/author/${authorKey}.json`, {
+    const response = await fetch(`https://openlibrary.org/authors/${authorKey}.json`, {
       headers: { "User-Agent": "Wikibouquin/1.0 (hoai-linh.nguyen@oclock.school)" },
     });
     if (!response.ok) {
