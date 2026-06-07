@@ -6,7 +6,7 @@ import { API_URL } from "../utils/api";
 
 type Book = {
   title: string;
-  author: string;
+  authors: string[];
   cover: string;
   isbn: string;
   is_visible: boolean;
@@ -22,9 +22,7 @@ function EditMyCollection() {
   const fetchMyCollection = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(
-        `${API_URL}/api/edit-my-collection`
-      );
+      const response = await fetchWithAuth(`${API_URL}/api/edit-my-collection`);
       if (!response.ok) {
         if (response.status === 401) {
           navigate("/signin");
@@ -61,16 +59,18 @@ function EditMyCollection() {
     const collectionId = user?.collection_ids[0];
     try {
       // Appel API pour changer la visibilité
-      const response = await fetchWithAuth(`${API_URL}/api/edit-my-collection/update-visibility`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          isbn: clickedBookIsbn,
-          collection_id: collectionId,
-          is_visible: newVisibility,
-        }),
-
-      });
+      const response = await fetchWithAuth(
+        `${API_URL}/api/edit-my-collection/update-visibility`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            isbn: clickedBookIsbn,
+            collection_id: collectionId,
+            is_visible: newVisibility,
+          }),
+        },
+      );
       if (!response.ok) {
         const text = await response.text().catch(() => "");
         console.error("toggleVisibility API failed:", response.status, text);
@@ -83,11 +83,14 @@ function EditMyCollection() {
       setBooks((currentBooks) =>
         currentBooks.map((b) =>
           b.isbn === clickedBookIsbn
-            ? { ...b, is_visible: data?.is_visible ?? data?.is_visible ?? newVisibility }
-            : b
-        )
+            ? {
+                ...b,
+                is_visible:
+                  data?.is_visible ?? data?.is_visible ?? newVisibility,
+              }
+            : b,
+        ),
       );
-
     } catch (err) {
       console.error("Erreur toggleVisibility:", err);
       alert("Impossible de changer la visibilité pour le moment.");
@@ -110,7 +113,7 @@ function EditMyCollection() {
             collection_id: user?.collection_ids[0],
           }),
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -119,7 +122,7 @@ function EditMyCollection() {
 
       // Mise à jour locale après succès
       setBooks((currentBooks) =>
-        currentBooks.filter((book) => book.isbn !== clickedBookIsbn)
+        currentBooks.filter((book) => book.isbn !== clickedBookIsbn),
       );
     } catch (err) {
       console.error("Erreur lors de la suppression :", err);
@@ -189,8 +192,9 @@ function EditMyCollection() {
                 {books.map((book, index) => (
                   <tr
                     key={book.isbn}
-                    className={`${index % 2 === 0 ? "bg-[#f5f0eb]" : "bg-white"
-                      } border-b border-gray-200 hover:bg-gray-100 transition`}
+                    className={`${
+                      index % 2 === 0 ? "bg-[#f5f0eb]" : "bg-white"
+                    } border-b border-gray-200 hover:bg-gray-100 transition`}
                   >
                     <td className="p-3 md:p-4">
                       <Link to={`/book/${book.isbn}`}>
@@ -205,7 +209,7 @@ function EditMyCollection() {
                       {book.title}
                     </td>
                     <td className="p-3 md:p-4 text-gray-600 text-sm md:text-base">
-                      {book.author}
+                      {book.authors.join(", ")}
                     </td>
                     <td className="p-3 md:p-4">
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3">
@@ -215,15 +219,17 @@ function EditMyCollection() {
                           </span>
                           <button
                             onClick={() => toggleVisibility(book.isbn)}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${book.is_visible ? "bg-[#6C7A89]" : "bg-gray-300"
-                              }`}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6C7A89] ${
+                              book.is_visible ? "bg-[#6C7A89]" : "bg-gray-300"
+                            }`}
                             aria-label="Toggle visibility"
                           >
                             <span
-                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.is_visible
-                                ? "translate-x-6"
-                                : "translate-x-1"
-                                }`}
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                book.is_visible
+                                  ? "translate-x-6"
+                                  : "translate-x-1"
+                              }`}
                             />
                           </button>
                         </div>
@@ -251,15 +257,17 @@ function EditMyCollection() {
               >
                 <div className="flex gap-4 mb-4">
                   <Link to={`/book/${book.isbn}`}>
-                  <img
-                    src={book.cover}
-                    alt={book.title}
-                    className="w-20 h-28 object-cover rounded shadow shrink-0"
-                  />
+                    <img
+                      src={book.cover}
+                      alt={book.title}
+                      className="w-20 h-28 object-cover rounded shadow shrink-0"
+                    />
                   </Link>
                   <div className="grow">
                     <h3 className="font-bold text-base mb-1">{book.title}</h3>
-                    <p className="text-sm text-gray-600">{book.author}</p>
+                    <p className="text-sm text-gray-600">
+                      {book.authors.join(", ")}
+                    </p>
                   </div>
                 </div>
 
@@ -272,12 +280,14 @@ function EditMyCollection() {
                       </span>
                       <button
                         onClick={() => toggleVisibility(book.isbn)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${book.is_visible ? "bg-[#6C7A89]" : "bg-gray-300"
-                          }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                          book.is_visible ? "bg-[#6C7A89]" : "bg-gray-300"
+                        }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${book.is_visible ? "translate-x-6" : "translate-x-1"
-                            }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            book.is_visible ? "translate-x-6" : "translate-x-1"
+                          }`}
                         />
                       </button>
                     </div>

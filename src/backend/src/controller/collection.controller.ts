@@ -32,6 +32,7 @@ const collectionController = {
                 cover: bookDetails.cover,
                 isbn: bookDetails.isbn,
                 is_visible: book.is_visible,
+                authors: bookDetails.authors,
             });
             i++;
         }
