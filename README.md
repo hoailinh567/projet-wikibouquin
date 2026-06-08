@@ -144,9 +144,6 @@ La liste des **routes** prévues est détaillée dans le fichier [ROUTES.md](./c
 
 ### Documents de conception
 
-#### Le diagramme ERD (Entité-Relation-Diagram)
-![schéma de la base de données](./conception/schemas/erd.png)
-
 #### Un diagramme de séquence d'une fonctionnalité complexe
 Accéder à la page d'un livre avec cache "chaud" et "froid".
 
