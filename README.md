@@ -1,9 +1,12 @@
 # Wiki Bouquin
-Lien du site : [https://wikibouquin.onrender.com/](https://wikibouquin.onrender.com)
 
 Wiki Bouquin est une plateforme web qui permet de rechercher et consulter tous les livres disponibles dans le monde, sans aucune limite géographique.
 Les utilisateurs peuvent créer un compte personnel afin de constituer leur propre collection numérique de livres.
 Chaque utilisateur possède un profil unique qu’il peut partager via un lien public, facilitant ainsi la découverte de nouvelles lectures.
+
+Lien du site : [https://wikibouquin.onrender.com/](https://wikibouquin.onrender.com)
+
+*Note : Projet hébergé gratuitement sur Render. Il est possible que la base de données soit parfois hors ligne. Pour un test complet, il est recommandé de le lancer en local avec Docker-> voir section [Installation](#installation)*
 
 ## Installation
 Après avoir cloné ce projet :
